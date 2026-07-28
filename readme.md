@@ -221,7 +221,7 @@ To package the add-on yourself:
 build.bat
 ```
 
-The build script reads the version from `googleTtsForNvda/manifest.ini`, builds all add-on locales non-interactively, checks Python and JavaScript syntax, verifies that no `.zvoice` voice packages are inside the source tree, removes generated `__pycache__` folders, and packages the add-on.
+The build script reads the version from `googleTtsForNvda/manifest.ini`, checks Python and JavaScript syntax, verifies that no `.zvoice` voice packages are inside the source tree, removes generated `__pycache__` folders, and packages the add-on. Translation/i18n generation is a separate step handled by `build_i18n.py`.
 
 The verified `.nvda-addon` package will be created in the `dist/` directory, with a name like:
 

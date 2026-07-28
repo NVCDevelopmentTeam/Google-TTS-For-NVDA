@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Google TTS For NVDA - Add-on Builder (WSL/Linux)
 #
-# Linux/WSL counterpart to build.bat. Mirrors the same 8 steps and the same
-# [n/8] / [ERROR] output so the two builds can be compared line for line.
+# Linux/WSL counterpart to build.bat. Mirrors the same 7 steps and the same
+# [n/7] / [ERROR] output so the two builds can be compared line for line.
 # WSL/Linux can build, check, and package the add-on, but NVDA and the
 # Chromium browser runtime only run on Windows -- this script cannot test
 # either. Keep build.bat and build.sh in sync when the build steps change.
@@ -39,7 +39,7 @@ echo "Version: $VERSION"
 echo
 
 # --------------- Clean build artifacts ---------------
-echo "[1/8] Cleaning build artifacts..."
+echo "[1/7] Cleaning build artifacts..."
 _clean_pycache
 if [ -f "googleTtsForNvda/googleTtsForNvda.nvda-addon" ]; then
     rm -f "googleTtsForNvda/googleTtsForNvda.nvda-addon"
@@ -49,7 +49,7 @@ echo "      Done."
 echo
 
 # --------------- Merge conflict marker check ---------------
-echo "[2/8] Checking for unresolved merge conflict markers..."
+echo "[2/7] Checking for unresolved merge conflict markers..."
 mapfile -t CONFLICT_FILES < <(find googleTtsForNvda -type f \( \
     -name '*.py' -o -name '*.js' -o -name '*.html' -o -name '*.ini' -o \
     -name '*.json' -o -name '*.bat' -o -name '*.md' -o -name '*.po' -o -name '*.pot' \))
@@ -70,26 +70,8 @@ fi
 echo "      Passed."
 echo
 
-# --------------- Build translations ---------------
-echo "[3/8] Building translations..."
-I18N_ARGS=(--all-languages)
-# On WSL, NVDA itself lives on the Windows side. If the Windows NVDA locale
-# folder is reachable through the /mnt/c mount, use it to validate language
-# codes; otherwise build_i18n.py just prints [WARN] and skips that check.
-WIN_NVDA_LOCALE_DIR="/mnt/c/Program Files/NVDA/locale"
-if [ -d "$WIN_NVDA_LOCALE_DIR" ]; then
-    I18N_ARGS+=(--nvda-locale-dir "$WIN_NVDA_LOCALE_DIR")
-fi
-if ! python3 build_i18n.py "${I18N_ARGS[@]}"; then
-    echo "[ERROR] Translation build failed."
-    EXIT_CODE=1
-    exit "$EXIT_CODE"
-fi
-echo "      Passed."
-echo
-
 # --------------- Python syntax check ---------------
-echo "[4/8] Checking Python syntax..."
+echo "[3/7] Checking Python syntax..."
 if ! python3 -m compileall -q googleTtsForNvda; then
     echo "[ERROR] Python syntax check failed."
     EXIT_CODE=1
@@ -99,7 +81,7 @@ echo "      Passed."
 echo
 
 # --------------- JavaScript syntax check ---------------
-echo "[5/8] Checking JavaScript syntax..."
+echo "[4/7] Checking JavaScript syntax..."
 if ! node --check googleTtsForNvda/synthDrivers/googleTtsForNvda/web/bridgeHarness.js; then
     echo "[ERROR] JavaScript syntax check failed."
     EXIT_CODE=1
@@ -109,7 +91,7 @@ echo "      Passed."
 echo
 
 # --------------- Verify no .zvoice in source ---------------
-echo "[6/8] Verifying no .zvoice files in source tree..."
+echo "[5/7] Verifying no .zvoice files in source tree..."
 mapfile -t ZVOICE_FILES < <(find googleTtsForNvda -name '*.zvoice' -type f)
 if [ "${#ZVOICE_FILES[@]}" -gt 0 ]; then
     for f in "${ZVOICE_FILES[@]}"; do
@@ -123,14 +105,14 @@ echo "      Clean - no .zvoice files found."
 echo
 
 # --------------- Clean __pycache__ created by compileall ---------------
-echo "[7/8] Cleaning __pycache__ created by syntax check..."
+echo "[6/7] Cleaning __pycache__ created by syntax check..."
 _clean_pycache
 echo "      Done."
 echo
 
 # --------------- Package the add-on ---------------
 OUTPUT="dist/googleTtsForNvda-$VERSION.nvda-addon"
-echo "[8/8] Packaging add-on to $OUTPUT ..."
+echo "[7/7] Packaging add-on to $OUTPUT ..."
 
 mkdir -p dist
 

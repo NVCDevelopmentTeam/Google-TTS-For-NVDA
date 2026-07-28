@@ -640,7 +640,7 @@ When modifying `voiceManager.py` or any UI:
 - Keep localized `readme.html` terminology aligned with the locale's `nvda.po` UI translations and, where a setting label comes from NVDA itself, with NVDA's own locale translation.
 - `languageSort.json` affects only Voice Manager display order for translated language names; it must not change displayed names, package IDs, catalog data, download behavior, removal behavior, or runtime JSON.
 - When source strings change, refresh the template and validate/build through `build_i18n.py` as described in `TRANSLATING.md`.
-- `build.bat` must keep using the non-interactive all-locale i18n path before packaging, then remove `__pycache__` created by syntax checks before packaging.
+- `build.bat` and `build.sh` must not run `build_i18n.py`; i18n is a separate explicit workflow. Release/package work that changes localized output should run `build_i18n.py` before invoking the package build script.
 - Generated `.mo` files are build outputs. Do not hand-edit them; update `nvda.po` and rebuild.
 - Keep all-locale/default choices first in the interactive i18n menu so blind translators can choose the broad safe option quickly.
 - Keep both `C:\Program Files\NVDA\locale` and `C:\Program Files (x86)\NVDA\locale` in NVDA locale discovery because supported NVDA versions can be x64 or older x86 installs.
@@ -678,9 +678,9 @@ Compress-Archive -Path googleTtsForNvda\* -DestinationPath dist\googleTtsForNvda
 
 ### Build script contract
 
-- `build.bat` is the release packaging entry point. It reads `version` from `googleTtsForNvda\manifest.ini`, cleans stale build artifacts and `__pycache__`, checks unresolved merge conflict markers, runs `python build_i18n.py --all-languages`, runs Python and JavaScript syntax checks, rejects `.zvoice` files in the source tree, packages `googleTtsForNvda\*` into `dist\googleTtsForNvda-<version>.nvda-addon`, and cleans `__pycache__` again before exit.
-- `build.sh` is the WSL/Linux equivalent entry point, kept in the repo root next to `build.bat`. It runs the same 8 steps in the same order and prints the same `[n/8]`/`[ERROR]` markers. When changing build steps, update both scripts together; `build.sh` cannot run or test NVDA/Chromium runtime behavior, only build/check/package.
-- Keep the build steps ordered so generated translations are present before syntax/package checks, and so `__pycache__` created by `compileall` is removed before packaging.
+- `build.bat` is the release packaging entry point. It reads `version` from `googleTtsForNvda\manifest.ini`, cleans stale build artifacts and `__pycache__`, checks unresolved merge conflict markers, runs Python and JavaScript syntax checks, rejects `.zvoice` files in the source tree, packages `googleTtsForNvda\*` into `dist\googleTtsForNvda-<version>.nvda-addon`, and cleans `__pycache__` again before exit.
+- `build.sh` is the WSL/Linux equivalent entry point, kept in the repo root next to `build.bat`. It runs the same 7 steps in the same order and prints the same `[n/7]`/`[ERROR]` markers. When changing build steps, update both scripts together; `build.sh` cannot run or test NVDA/Chromium runtime behavior, only build/check/package.
+- Keep the build steps ordered so syntax/package checks happen before packaging, and so `__pycache__` created by `compileall` is removed before packaging.
 - If adding a new source file type that can contain merge conflict markers or translatable/release content, update the `build.bat` conflict-marker scan patterns and the packaging/check instructions together, and mirror the same file-type list in `build.sh`.
 
 ### Required checks by change type
