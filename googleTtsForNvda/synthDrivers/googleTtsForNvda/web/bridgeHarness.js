@@ -5,6 +5,7 @@
 	let currentSessionToken = 0;
 	let currentMarkOffset = 0;
 	let currentOutputGain = 1;
+	let currentVolumeLevel = 1;
 	let currentTempoRate = 1;
 	let currentPostPitchFactor = 1;
 	let currentAgcGain = 1;
@@ -13,8 +14,11 @@
 	let stopped = false;
 	let initPromise = null;
 	let suppressBridgeAudio = false;
+	// First packets protect startup continuity; later packets reduce CDP/base64 overhead.
 	const firstAudioPacketSamples = 120;
-	const steadyAudioPacketSamples = 1200;
+	const earlyAudioPacketSamples = 1200;
+	const steadyAudioPacketSamples = 2400;
+	const earlyAudioPacketCount = 3;
 	const agcTargetRms = 0.18;
 	const agcSilenceFloor = 0.012;
 	const agcMinGain = 0.55;
@@ -51,6 +55,7 @@
 	let leadingBoundaryTrimBudget = 0;
 	let sawSynthesisEnd = false;
 	let synthesisEndAt = 0;
+	let synthesisErrorMessage = "";
 	let synthesisGenerating = false;
 	let currentAudioPort = null;
 	let currentEndResolver = null;
@@ -194,6 +199,14 @@
 		return Math.max(0, Math.min(2, gain));
 	}
 
+	function volumeLevelFromPayload(payload) {
+		const volume = Number(payload && payload.volume);
+		if (!Number.isFinite(volume)) {
+			return 1;
+		}
+		return Math.max(0, Math.min(1, volume));
+	}
+
 	function tempoRateFromPayload(payload) {
 		const rate = Number(payload && payload.artificialRate);
 		const artificialRate = Number.isFinite(rate) ? Math.max(0.5, Math.min(2.2, rate)) : 1;
@@ -210,7 +223,7 @@
 	}
 
 	function updateAgcGain(buffers, sampleCount) {
-		if (!sampleCount || !currentOutputGain) {
+		if (!sampleCount || !currentOutputGain || !currentVolumeLevel) {
 			return;
 		}
 		let sumSquares = 0;
@@ -223,7 +236,8 @@
 		if (!Number.isFinite(rms) || rms < agcSilenceFloor) {
 			return;
 		}
-		let targetGain = agcTargetRms / (rms * currentOutputGain);
+		const targetRms = agcTargetRms * currentVolumeLevel;
+		let targetGain = targetRms / (rms * currentOutputGain);
 		targetGain = Math.max(agcMinGain, Math.min(agcMaxGain, targetGain));
 		if (targetGain < currentAgcGain) {
 			currentAgcGain = Math.max(targetGain, currentAgcGain - agcAttackStep);
@@ -296,15 +310,14 @@
 
 	function buffersToPcmBase64(buffers, sampleCount) {
 		const bytes = new Uint8Array(sampleCount * 2);
-		const view = new DataView(bytes.buffer);
+		const pcm = new Int16Array(bytes.buffer);
 		let outputIndex = 0;
 		updateAgcGain(buffers, sampleCount);
 		for (const buffer of buffers) {
 			for (let inputIndex = 0; inputIndex < buffer.length; inputIndex++) {
 				const gain = gainForSample(buffer[inputIndex]);
 				const sample = limitSample(buffer[inputIndex] * gain);
-				view.setInt16(outputIndex * 2, sample < 0 ? sample * 0x8000 : sample * 0x7fff, true);
-				outputIndex++;
+				pcm[outputIndex++] = sample < 0 ? sample * 0x8000 : sample * 0x7fff;
 			}
 		}
 		return fastUint8ToBase64(bytes);
@@ -504,10 +517,10 @@
 
 	function appendSamples(first, second) {
 		if (!first.length) {
-			return second.slice();
+			return second;
 		}
 		if (!second.length) {
-			return first.slice();
+			return first;
 		}
 		const joined = new Float32Array(first.length + second.length);
 		joined.set(first, 0);
@@ -540,6 +553,16 @@
 		return index < 0 ? new Float32Array(0) : samples.subarray(0, index + 1);
 	}
 
+	function audioPacketSampleTarget() {
+		if (emittedAudioPackets === 0) {
+			return firstAudioPacketSamples;
+		}
+		if (emittedAudioPackets < earlyAudioPacketCount) {
+			return earlyAudioPacketSamples;
+		}
+		return steadyAudioPacketSamples;
+	}
+
 	function queueAudioPacket(samples, sessionToken = currentSessionToken) {
 		if (!isCurrentSession(sessionToken)) {
 			return;
@@ -547,9 +570,9 @@
 		if (!samples.length) {
 			return;
 		}
-		pendingAudioBuffers.push(samples.slice());
+		pendingAudioBuffers.push(samples);
 		pendingAudioSampleCount += samples.length;
-		const packetSamples = emittedAudioPackets === 0 ? firstAudioPacketSamples : steadyAudioPacketSamples;
+		const packetSamples = audioPacketSampleTarget();
 		if (pendingAudioSampleCount >= packetSamples) {
 			flushAudioQueue(sessionToken);
 		}
@@ -572,7 +595,10 @@
 			return;
 		}
 		if (event.type === "error") {
-			emit({ type: "error", message: "Browser speech synthesis failed." });
+			synthesisErrorMessage = event.message || "Browser speech synthesis failed.";
+			if (currentEndResolver) {
+				currentEndResolver();
+			}
 		}
 	}
 
@@ -723,6 +749,9 @@
 	async function waitForSynthesisComplete(timeoutMs) {
 		const startedAt = performance.now();
 		while (performance.now() - startedAt < timeoutMs) {
+			if (synthesisErrorMessage) {
+				throw new Error(synthesisErrorMessage);
+			}
 			if (stopped) {
 				return;
 			}
@@ -803,6 +832,8 @@
 		currentSessionToken++;
 		stopped = true;
 		synthesisGenerating = false;
+		synthesisErrorMessage = "";
+		currentVolumeLevel = 0;
 		smoothSegmentBoundaries = false;
 		if (currentEndResolver) {
 			currentEndResolver();
@@ -830,11 +861,13 @@
 	window.googleTtsForNvdaPreload = async function googleTtsForNvdaPreload(payload) {
 		const sessionToken = beginSession(payload.sessionId, true);
 		currentOutputGain = 0;
+		currentVolumeLevel = 0;
 		try {
 			lastChunkAt = 0;
 			stopped = false;
 			sawSynthesisEnd = false;
 			synthesisEndAt = 0;
+			synthesisErrorMessage = "";
 			synthesisGenerating = false;
 			resetAudioQueue();
 			currentTempoRate = 1;
@@ -862,6 +895,9 @@
 				});
 			} finally {
 				synthesisGenerating = false;
+			}
+			if (synthesisErrorMessage) {
+				throw new Error(synthesisErrorMessage);
 			}
 			if (!isCurrentSession(sessionToken)) {
 				return { success: false, preloaded: false, cancelled: true };
@@ -904,10 +940,12 @@
 			const hasHiddenSegments = textSegments.length > 1;
 			const sessionToken = beginSession(sessionId, false);
 			currentMarkOffset = 0;
+			currentVolumeLevel = volumeLevelFromPayload(payload);
 			currentOutputGain = outputGainFromPayload(payload);
 			lastChunkAt = 0;
 			stopped = false;
 			sawSynthesisEnd = false;
+			synthesisErrorMessage = "";
 			synthesisGenerating = false;
 			resetAudioQueue();
 			currentPostPitchFactor = postPitchFactorFromPayload(payload);
@@ -922,6 +960,7 @@
 				lastChunkAt = 0;
 				sawSynthesisEnd = false;
 				synthesisEndAt = 0;
+				synthesisErrorMessage = "";
 				synthesisGenerating = true;
 				try {
 					await engine.onSpeak(textSegment, {

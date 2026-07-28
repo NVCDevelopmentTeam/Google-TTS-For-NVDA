@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 import base64
+import binascii
 from contextlib import suppress
 import http.server
 import json
@@ -56,6 +57,7 @@ BINDING_NAME = "googleTtsForNvdaBridge"
 SAMPLE_RATE = 24000
 RECV_POLL_TIMEOUT = 0.001
 STARTUP_POLL_INTERVAL = 0.01
+BROWSER_WINDOW_HIDE_POLL_INTERVAL_SECONDS = 0.15
 STOP_EXPRESSION = "window.googleTtsForNvdaStop && window.googleTtsForNvdaStop()"
 LOCAL_CACHE_DIR_NAME = "googleTtsForNvda"
 CHROME_PROFILE_DIR_NAME = "chromeProfiles"
@@ -63,6 +65,8 @@ EDGE_PROFILE_DIR_NAME = "edgeProfiles"
 BRAVE_PROFILE_DIR_NAME = "braveProfiles"
 PERSISTENT_PROFILE_DIR_NAME = "persistentSession"
 PERSISTENT_PROFILE_MAX_BYTES = 500 * 1024 * 1024
+PERSISTENT_PROFILE_SIZE_CHECK_FILE_NAME = "profileSizeCheck.json"
+PERSISTENT_PROFILE_SIZE_CHECK_INTERVAL_SECONDS = 24 * 60 * 60
 RUNTIME_MEMORY_STARTUP_GRACE_SECONDS = 90
 RUNTIME_MEMORY_CHECK_INTERVAL_SECONDS = 30
 RUNTIME_PRIVATE_BYTES_RECYCLE_THRESHOLD = 1280 * 1024 * 1024
@@ -770,6 +774,7 @@ class CdpDispatcher:
 		self._pendingEvents: dict[int, threading.Event] = {}
 		self._responses: dict[int, dict[str, Any]] = {}
 		self._eventHandlers: dict[int, Callable[[dict[str, Any]], None]] = {}
+		self._handlerErrors: dict[int, BaseException] = {}
 		self._stopped = threading.Event()
 		self._readerThread: threading.Thread | None = None
 
@@ -792,6 +797,7 @@ class CdpDispatcher:
 				event.set()
 			self._pendingEvents.clear()
 			self._eventHandlers.clear()
+			self._handlerErrors.clear()
 
 	def send(self, command: dict[str, Any]) -> None:
 		payload = json.dumps(command)
@@ -810,11 +816,11 @@ class CdpDispatcher:
 				self._eventHandlers[msgId] = eventHandler
 		return event
 
-	def unregister_request(self, msgId: int) -> dict[str, Any] | None:
+	def unregister_request(self, msgId: int) -> tuple[dict[str, Any] | None, BaseException | None]:
 		with self._stateLock:
 			self._pendingEvents.pop(msgId, None)
 			self._eventHandlers.pop(msgId, None)
-			return self._responses.pop(msgId, None)
+			return self._responses.pop(msgId, None), self._handlerErrors.pop(msgId, None)
 
 	def _reader_loop(self) -> None:
 		try:
@@ -833,16 +839,21 @@ class CdpDispatcher:
 					continue
 
 				with self._stateLock:
-					handlers = list(self._eventHandlers.values())
+					handlers = list(self._eventHandlers.items())
 					msgId = message.get("id")
 					event = self._pendingEvents.get(msgId) if msgId is not None else None
 					if event is not None and msgId is not None:
 						self._responses[msgId] = message
 
-				for handler in handlers:
+				for handlerMsgId, handler in handlers:
 					try:
 						handler(message)
-					except Exception:
+					except Exception as exc:
+						with self._stateLock:
+							self._handlerErrors.setdefault(handlerMsgId, exc)
+							handlerEvent = self._pendingEvents.get(handlerMsgId)
+							if handlerEvent is not None:
+								handlerEvent.set()
 						log.debug("Error in CDP event handler", exc_info=True)
 
 				if event is not None:
@@ -1081,10 +1092,14 @@ class BrowserProcessManager:
 				_("The Chromium browser runtime is not ready yet."),
 				"Browser DevTools port is not ready.",
 			)
+		lastWindowHideAt = 0.0
 		for attempt in range(200):
 			_raise_if_cancelled(cancelEvent)
 			if chromeProcess is not None:
-				_hide_chrome_windows(chromeProcess.pid)
+				now = time.monotonic()
+				if now - lastWindowHideAt >= BROWSER_WINDOW_HIDE_POLL_INTERVAL_SECONDS:
+					_hide_chrome_windows(chromeProcess.pid)
+					lastWindowHideAt = now
 			try:
 				targets = _read_json_endpoint(debugPort, "/json/list", timeout=0.5)
 			except (OSError, TimeoutError, urllib.error.URLError, json.JSONDecodeError):
@@ -1214,6 +1229,33 @@ class BrowserProcessManager:
 			return BRAVE_PROFILE_DIR_NAME
 		return CHROME_PROFILE_DIR_NAME
 
+	def _persistent_profile_size_check_due(self, root: Path) -> bool:
+		try:
+			raw = json.loads((root / PERSISTENT_PROFILE_SIZE_CHECK_FILE_NAME).read_text(encoding="utf-8"))
+		except (OSError, json.JSONDecodeError):
+			return True
+		if not isinstance(raw, dict):
+			return True
+		checkedAt = raw.get("checkedAt")
+		if not isinstance(checkedAt, (int, float)):
+			return True
+		elapsed = time.time() - float(checkedAt)
+		return not (0 <= elapsed < PERSISTENT_PROFILE_SIZE_CHECK_INTERVAL_SECONDS)
+
+	def _remember_persistent_profile_size_check(self, root: Path, totalSize: int, reset: bool) -> None:
+		payload = {
+			"checkedAt": time.time(),
+			"totalSize": totalSize,
+			"reset": reset,
+		}
+		try:
+			(root / PERSISTENT_PROFILE_SIZE_CHECK_FILE_NAME).write_text(
+				json.dumps(payload, separators=(",", ":")),
+				encoding="utf-8",
+			)
+		except OSError:
+			pass
+
 	def _cleanup_old_browser_profiles(
 		self,
 		root: Path,
@@ -1233,7 +1275,7 @@ class BrowserProcessManager:
 				continue
 		# Guard against unbounded persistent profile growth.
 		persistent = root / PERSISTENT_PROFILE_DIR_NAME
-		if persistent.is_dir():
+		if persistent.is_dir() and self._persistent_profile_size_check_due(root):
 			try:
 				totalSize = 0
 				for candidate in persistent.rglob("*"):
@@ -1243,12 +1285,15 @@ class BrowserProcessManager:
 					totalSize += candidate.stat().st_size
 					if totalSize > PERSISTENT_PROFILE_MAX_BYTES:
 						break
-				if totalSize > PERSISTENT_PROFILE_MAX_BYTES:
+				profileReset = totalSize > PERSISTENT_PROFILE_MAX_BYTES
+				if profileReset:
 					log.debug(
 						"Persistent %s browser profile exceeds 500 MB (%d bytes), resetting.",
 						runtime, totalSize,
 					)
 					shutil.rmtree(persistent, ignore_errors=True)
+				if not profileReset:
+					self._remember_persistent_profile_size_check(root, totalSize, False)
 			except OSError:
 				pass
 
@@ -1305,10 +1350,14 @@ class BrowserProcessManager:
 			)
 			loggedReadError = True
 
+		lastWindowHideAt = 0.0
 		for attempt in range(400):
 			_raise_if_cancelled(cancelEvent)
 			if self._chromeProcess is not None:
-				_hide_chrome_windows(self._chromeProcess.pid)
+				now = time.monotonic()
+				if now - lastWindowHideAt >= BROWSER_WINDOW_HIDE_POLL_INTERVAL_SECONDS:
+					_hide_chrome_windows(self._chromeProcess.pid)
+					lastWindowHideAt = now
 			if self._chromeProcess is not None and self._chromeProcess.poll() is not None:
 				exitCode = self._chromeProcess.returncode
 				self._chromeProcess = None
@@ -1432,6 +1481,7 @@ class CdpClient:
 		command = {"id": msgId, "method": method, "params": params or {}}
 		event = dispatcher.register_request(msgId, eventHandler=eventHandler)
 		response: dict[str, Any] | None = None
+		handlerError: BaseException | None = None
 		try:
 			try:
 				dispatcher.send(command)
@@ -1454,8 +1504,15 @@ class CdpClient:
 					f"Timed out waiting for {method}.",
 				)
 		finally:
-			response = dispatcher.unregister_request(msgId)
+			response, handlerError = dispatcher.unregister_request(msgId)
 
+		if handlerError is not None:
+			if cancelEvent is not None and cancelEvent.is_set():
+				raise CdpCancelled()
+			if onCancelCallback is not None:
+				with suppress(Exception):
+					onCancelCallback()
+			raise handlerError
 		if response is None:
 			if cancelEvent is not None and cancelEvent.is_set():
 				raise CdpCancelled()
@@ -1611,6 +1668,13 @@ class WasmTtsEngineBridge:
 		startedAt = time.perf_counter()
 		firstAudioAt: float | None = None
 
+		def fail_speech_event(detail: str) -> None:
+			state["error"] = detail
+			raise _friendly_cdp_error(
+				_("Google TTS For NVDA could not speak this text."),
+				detail,
+			)
+
 		def handle_event(message: dict[str, Any]) -> None:
 			nonlocal firstAudioAt
 			if message.get("method") != "Runtime.bindingCalled":
@@ -1632,9 +1696,22 @@ class WasmTtsEngineBridge:
 					(time.perf_counter() - startedAt) * 1000,
 				)
 			elif eventType == "audio":
+				if state.get("error"):
+					return
 				if cancelEvent is not None and cancelEvent.is_set():
 					return
-				audio = base64.b64decode(str(event.get("data") or ""))
+				try:
+					sampleRate = int(event.get("sampleRate") or SAMPLE_RATE)
+				except (TypeError, ValueError):
+					fail_speech_event("Invalid browser audio sample rate.")
+				if sampleRate != SAMPLE_RATE:
+					fail_speech_event(f"Unexpected browser audio sample rate: {sampleRate}.")
+				try:
+					audio = base64.b64decode(str(event.get("data") or ""), validate=True)
+				except (binascii.Error, ValueError):
+					fail_speech_event("Invalid browser audio payload.")
+				if len(audio) % 2:
+					fail_speech_event("Invalid browser audio payload length.")
 				if audio:
 					if cancelEvent is not None and cancelEvent.is_set():
 						return
@@ -1657,10 +1734,7 @@ class WasmTtsEngineBridge:
 				state["done"] = True
 			elif eventType == "error":
 				detail = str(event.get("message") or "Browser speech synthesis failed.")
-				raise _friendly_cdp_error(
-					_("Google TTS For NVDA could not speak this text."),
-					detail,
-				)
+				fail_speech_event(detail)
 
 		expression = f"window.googleTtsForNvdaSpeak({json.dumps(payload, ensure_ascii=False)})"
 		self._runtimeBusy = cancelEvent is not None
@@ -1688,6 +1762,11 @@ class WasmTtsEngineBridge:
 			raise _friendly_cdp_error(
 				_("Google TTS For NVDA could not start speech in the Chromium browser runtime."),
 				result.get("description") or "Browser speech evaluation failed.",
+			)
+		if state.get("error"):
+			raise _friendly_cdp_error(
+				_("Google TTS For NVDA could not speak this text."),
+				str(state["error"]),
 			)
 		value = result.get("value")
 		if isinstance(value, dict):
@@ -1859,17 +1938,31 @@ class ChromeTtsBridge:
 			while True:
 				runtime: str | None = None
 				try:
+					startedAt = time.perf_counter()
 					wsUrl = self._process_manager.start_and_get_websocket_url(
 						cancelEvent=cancelEvent,
 						skipRuntimes=skipRuntimes,
 					)
+					websocketReadyAt = time.perf_counter()
 					runtime = self._process_manager.profile_runtime
 					self._cdp_client.connect(wsUrl)
+					cdpConnectedAt = time.perf_counter()
 					self._engine.enable_cdp_domains(cancelEvent=cancelEvent)
+					cdpDomainsEnabledAt = time.perf_counter()
 					self._engine.wait_until_ready(cancelEvent=cancelEvent)
+					harnessReadyAt = time.perf_counter()
 					self._runtimeReadyAt = time.monotonic()
 					self._lastMemoryCheckAt = self._runtimeReadyAt
 					self._highMemorySampleCount = 0
+					log.debug(
+						"Google TTS %s browser startup timings: browser target %.1f ms, CDP connect %.1f ms, CDP domains %.1f ms, harness ready %.1f ms, total %.1f ms.",
+						runtime or "unknown",
+						(websocketReadyAt - startedAt) * 1000,
+						(cdpConnectedAt - websocketReadyAt) * 1000,
+						(cdpDomainsEnabledAt - cdpConnectedAt) * 1000,
+						(harnessReadyAt - cdpDomainsEnabledAt) * 1000,
+						(harnessReadyAt - startedAt) * 1000,
+					)
 					return
 				except CdpCancelled:
 					self._cdp_client.close()

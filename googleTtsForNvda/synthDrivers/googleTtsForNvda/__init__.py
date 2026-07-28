@@ -49,10 +49,13 @@ addonHandler.initTranslation()
 
 
 _SHORT_CACHE_MAX_CHARS = 5000
+_SHORT_CACHE_MAX_HIDDEN_SEGMENTS = 24
 _SHORT_CACHE_MAX_ITEMS = 4096
 _SHORT_CACHE_MAX_BYTES = 150 * 1024 * 1024
+_SHORT_CACHE_STATS_LOG_INTERVAL = 256
 _OUTPUT_GAIN_MAKEUP = 2.0
-_PROTECTED_ENGINE_RATE = 1.0
+# SeaNet can handle mild native speedup; keep JS tempo processing for higher rates.
+_PROTECTED_ENGINE_RATE = 1.18
 _MIN_ARTIFICIAL_RATE = 0.5
 _MAX_ARTIFICIAL_RATE = 2.2
 _PAUSE_MODE_DO_NOT_SHORTEN = "0"
@@ -70,14 +73,14 @@ _IndexMarker = tuple[Any, int]
 _FAST_FIRST_SEGMENT_MIN_CHARS = 30
 _REGULAR_SEGMENT_MIN_CHARS = 110
 _FAST_FIRST_SEGMENT_MAX_CHARS = 64
-_REGULAR_SEGMENT_MAX_CHARS = 180
+_REGULAR_SEGMENT_MAX_CHARS = 240
 _SEAMLESS_UTTERANCE_MAX_CHARS = 900
 _FAST_SOFT_PHRASE_SEGMENT_MIN_CHARS = 30
 _FAST_SOFT_PHRASE_SEGMENT_MAX_CHARS = 90
 _FAST_SOFT_PHRASE_SEGMENT_LOOKAHEAD = 40
-_SOFT_PHRASE_SEGMENT_MIN_CHARS = 80
-_SOFT_PHRASE_SEGMENT_MAX_CHARS = 170
-_SOFT_PHRASE_SEGMENT_LOOKAHEAD = 40
+_SOFT_PHRASE_SEGMENT_MIN_CHARS = 100
+_SOFT_PHRASE_SEGMENT_MAX_CHARS = 240
+_SOFT_PHRASE_SEGMENT_LOOKAHEAD = 55
 _UI_SUMMARY_SEGMENT_MIN_CHARS = 90
 _UI_SUMMARY_SEGMENT_MAX_CHARS = 135
 _UI_SUMMARY_SEGMENT_LOOKAHEAD = 30
@@ -87,7 +90,7 @@ _UI_BOUNDARY_LOOKAHEAD = 45
 _URL_TOKEN_SEGMENT_MAX_CHARS = 220
 _FORCED_SEGMENT_MIN_CHARS = 32
 _FORCED_SEGMENT_FORWARD_LOOKAHEAD = 24
-_FORCED_SEGMENT_HARD_MAX_CHARS = 256
+_FORCED_SEGMENT_HARD_MAX_CHARS = 320
 _PRELOAD_RESUME_DELAY_SECONDS = 0.45
 _NO_SPACE_SCRIPT_SIGNAL_MIN_CHARS = 12
 _NO_SPACE_SCRIPT_SIGNAL_MIN_RATIO = 0.55
@@ -241,6 +244,17 @@ def _pcm_bytes_for_milliseconds(milliseconds: int) -> int:
 
 def _align_pcm_bytes(byteCount: int) -> int:
 	return max(0, int(byteCount) - (int(byteCount) % _BYTES_PER_SAMPLE))
+
+
+def _pcm_has_audible_sample(pcm: bytes) -> bool:
+	pcmLength = _align_pcm_bytes(len(pcm))
+	if pcmLength <= 0:
+		return False
+	samples = memoryview(pcm)[:pcmLength].cast("h")
+	for sample in samples:
+		if sample < -_SILENCE_SAMPLE_THRESHOLD or sample > _SILENCE_SAMPLE_THRESHOLD:
+			return True
+	return False
 
 
 class _PcmSilenceShortener:
@@ -574,6 +588,9 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		self._cacheLock = threading.RLock()
 		self._shortAudioCache: OrderedDict[tuple[Any, ...], bytes] = OrderedDict()
 		self._shortAudioCacheBytes = 0
+		self._shortAudioCacheHits = 0
+		self._shortAudioCacheMisses = 0
+		self._shortAudioCacheEvictions = 0
 		self._audioChunksSinceDeviceCheck = 0
 		self._worker = threading.Thread(
 			name="googleTtsForNvda.speech",
@@ -1613,7 +1630,13 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 			and speechResult.get("done") is True
 			and not speechResult.get("cancelled")
 		)
-		if cacheKey is not None and speechComplete and not cancelEvent.is_set() and len(audio) >= 64:
+		if (
+			cacheKey is not None
+			and speechComplete
+			and not cancelEvent.is_set()
+			and len(audio) >= 64
+			and _pcm_has_audible_sample(audio)
+		):
 			self._put_cached_audio(cacheKey, audio)
 
 	def _feed_audio(self, pcm: bytes) -> None:
@@ -1703,6 +1726,11 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 	) -> tuple[Any, ...] | None:
 		if len(text) > _SHORT_CACHE_MAX_CHARS:
 			return None
+		if hiddenSegments:
+			if len(hiddenSegments) > _SHORT_CACHE_MAX_HIDDEN_SEGMENTS:
+				return None
+			if len(text) + sum(len(segment) for segment in hiddenSegments) > _SHORT_CACHE_MAX_CHARS:
+				return None
 		return (
 			text,
 			tuple(hiddenSegments or ()),
@@ -1720,8 +1748,10 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		with self._cacheLock:
 			audio = self._shortAudioCache.get(key)
 			if audio is not None:
+				self._shortAudioCacheHits += 1
 				self._shortAudioCache.move_to_end(key)
 				return audio
+			self._shortAudioCacheMisses += 1
 		return None
 
 	def _put_cached_audio(self, key: tuple[Any, ...], audio: bytes) -> None:
@@ -1736,20 +1766,47 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 			self._shortAudioCache[key] = audio
 			self._shortAudioCacheBytes += len(audio)
 			self._shortAudioCache.move_to_end(key)
+			evictionsBefore = self._shortAudioCacheEvictions
 			while (
 				len(self._shortAudioCache) > _SHORT_CACHE_MAX_ITEMS
 				or self._shortAudioCacheBytes > _SHORT_CACHE_MAX_BYTES
 			):
 				_, removedAudio = self._shortAudioCache.popitem(last=False)
 				self._shortAudioCacheBytes -= len(removedAudio)
+				self._shortAudioCacheEvictions += 1
+			if (
+				self._shortAudioCacheEvictions != evictionsBefore
+				and self._shortAudioCacheEvictions
+				and self._shortAudioCacheEvictions % _SHORT_CACHE_STATS_LOG_INTERVAL == 0
+			):
+				log.debug(
+					"Google TTS short audio cache stats: items=%d, bytes=%d, hits=%d, misses=%d, evictions=%d",
+					len(self._shortAudioCache),
+					self._shortAudioCacheBytes,
+					self._shortAudioCacheHits,
+					self._shortAudioCacheMisses,
+					self._shortAudioCacheEvictions,
+				)
 
 	def _clear_short_audio_cache(self) -> None:
 		cacheLock = getattr(self, "_cacheLock", None)
 		if cacheLock is None:
 			return
 		with cacheLock:
+			if self._shortAudioCache:
+				log.debug(
+					"Clearing Google TTS short audio cache: items=%d, bytes=%d, hits=%d, misses=%d, evictions=%d",
+					len(self._shortAudioCache),
+					self._shortAudioCacheBytes,
+					getattr(self, "_shortAudioCacheHits", 0),
+					getattr(self, "_shortAudioCacheMisses", 0),
+					getattr(self, "_shortAudioCacheEvictions", 0),
+				)
 			self._shortAudioCache.clear()
 			self._shortAudioCacheBytes = 0
+			self._shortAudioCacheHits = 0
+			self._shortAudioCacheMisses = 0
+			self._shortAudioCacheEvictions = 0
 
 	def _feed_silence(self, milliseconds: int) -> None:
 		if milliseconds <= 0:

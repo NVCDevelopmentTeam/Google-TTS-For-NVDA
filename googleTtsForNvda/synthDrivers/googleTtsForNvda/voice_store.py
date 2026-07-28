@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import stat as stat_module
 import tempfile
 import threading
 import urllib.request
@@ -27,6 +28,8 @@ ProgressCallback = Callable[[int | None, str], None]
 _verifiedPackageCache: dict[str, tuple[int, int]] = {}
 _persistentVerifiedPackageCache: dict[str, dict[str, object]] | None = None
 _verificationCacheLock = threading.RLock()
+_dataRootCache: Path | None = None
+_voiceDirCache: Path | None = None
 _VERIFICATION_CACHE_VERSION = 1
 _VERIFICATION_CACHE_FILE = "verified_voices.json"
 
@@ -44,7 +47,11 @@ def _default_config_path() -> Path:
 
 
 def data_root() -> Path:
-	root = _default_config_path() / "googleTtsForNvda"
+	global _dataRootCache
+	with _verificationCacheLock:
+		if _dataRootCache is None:
+			_dataRootCache = _default_config_path() / "googleTtsForNvda"
+		root = _dataRootCache
 	root.mkdir(parents=True, exist_ok=True)
 	return root
 
@@ -54,7 +61,11 @@ def _verification_cache_path() -> Path:
 
 
 def voice_dir() -> Path:
-	path = data_root() / "voices"
+	global _voiceDirCache
+	with _verificationCacheLock:
+		if _voiceDirCache is None:
+			_voiceDirCache = data_root() / "voices"
+		path = _voiceDirCache
 	path.mkdir(parents=True, exist_ok=True)
 	return path
 
@@ -79,7 +90,13 @@ def _load_persistent_verification_cache() -> dict[str, dict[str, object]]:
 		cachePath = _verification_cache_path()
 		try:
 			raw = json.loads(cachePath.read_text(encoding="utf-8"))
-		except (OSError, json.JSONDecodeError):
+		except FileNotFoundError:
+			_persistentVerifiedPackageCache = {}
+			return _persistentVerifiedPackageCache
+		except OSError:
+			_persistentVerifiedPackageCache = {}
+			return _persistentVerifiedPackageCache
+		except json.JSONDecodeError:
 			_persistentVerifiedPackageCache = {}
 			_save_persistent_verification_cache()
 			return _persistentVerifiedPackageCache
@@ -129,12 +146,17 @@ def _persistent_cache_matches(package: VoicePackage, stat: os.stat_result) -> bo
 	)
 
 
-def _remember_verified_package(package: VoicePackage, stat: os.stat_result, actualHash: str | None = None) -> None:
+def _remember_verified_package(
+	package: VoicePackage,
+	stat: os.stat_result,
+	actualHash: str | None = None,
+	savePersistent: bool = True,
+) -> bool:
 	cacheKey = (stat.st_size, stat.st_mtime_ns)
 	with _verificationCacheLock:
 		_verifiedPackageCache[package.id] = cacheKey
 	if not package.sha256Checksum or actualHash is None:
-		return
+		return False
 	cache = _load_persistent_verification_cache()
 	cache[package.id] = {
 		"fileName": package.fileName,
@@ -143,46 +165,96 @@ def _remember_verified_package(package: VoicePackage, stat: os.stat_result, actu
 		"expectedSha256": package.sha256Checksum.lower(),
 		"verifiedSha256": actualHash.lower(),
 	}
-	_save_persistent_verification_cache()
+	if savePersistent:
+		_save_persistent_verification_cache()
+	return True
 
 
-def _forget_verified_package(packageId: str) -> None:
+def _forget_verified_package(packageId: str, savePersistent: bool = True) -> bool:
 	with _verificationCacheLock:
 		_verifiedPackageCache.pop(packageId, None)
 		cache = _load_persistent_verification_cache()
 		if packageId not in cache:
-			return
+			return False
 		cache.pop(packageId, None)
-	_save_persistent_verification_cache()
-
-
-def is_package_installed(package: VoicePackage) -> bool:
-	path = package_file(package)
-	if not path.is_file():
-		_forget_verified_package(package.id)
-		return False
-	stat = path.stat()
-	cacheKey = (stat.st_size, stat.st_mtime_ns)
-	if package.compressedSize and stat.st_size != package.compressedSize:
-		_forget_verified_package(package.id)
-		return False
-	with _verificationCacheLock:
-		if _verifiedPackageCache.get(package.id) == cacheKey:
-			return True
-	if _persistent_cache_matches(package, stat):
-		with _verificationCacheLock:
-			_verifiedPackageCache[package.id] = cacheKey
-		return True
-	actualHash = sha256(path).lower() if package.sha256Checksum else None
-	if actualHash is not None and actualHash != package.sha256Checksum.lower():
-		_forget_verified_package(package.id)
-		return False
-	_remember_verified_package(package, stat, actualHash)
+	if savePersistent:
+		_save_persistent_verification_cache()
 	return True
 
 
+def _check_package_file_installed(
+	package: VoicePackage,
+	path: Path,
+	stat: os.stat_result | None = None,
+	savePersistent: bool = True,
+) -> tuple[bool, bool]:
+	if stat is None:
+		if not path.is_file():
+			return False, _forget_verified_package(package.id, savePersistent=savePersistent)
+		stat = path.stat()
+	cacheKey = (stat.st_size, stat.st_mtime_ns)
+	if package.compressedSize and stat.st_size != package.compressedSize:
+		return False, _forget_verified_package(package.id, savePersistent=savePersistent)
+	with _verificationCacheLock:
+		if _verifiedPackageCache.get(package.id) == cacheKey:
+			return True, False
+	if _persistent_cache_matches(package, stat):
+		with _verificationCacheLock:
+			_verifiedPackageCache[package.id] = cacheKey
+		return True, False
+	actualHash = sha256(path).lower() if package.sha256Checksum else None
+	if actualHash is not None and actualHash != package.sha256Checksum.lower():
+		return False, _forget_verified_package(package.id, savePersistent=savePersistent)
+	return True, _remember_verified_package(package, stat, actualHash, savePersistent=savePersistent)
+
+
+def is_package_installed(package: VoicePackage) -> bool:
+	installed, _cacheUpdated = _check_package_file_installed(package, package_file(package))
+	return installed
+
+
+def _voice_files_by_name() -> dict[str, tuple[Path, os.stat_result]]:
+	try:
+		children = tuple(voice_dir().iterdir())
+	except OSError:
+		return {}
+	files: dict[str, tuple[Path, os.stat_result]] = {}
+	for child in children:
+		try:
+			stat = child.stat()
+		except OSError:
+			continue
+		if not stat_module.S_ISREG(stat.st_mode):
+			continue
+		files[child.name] = (child, stat)
+	return files
+
+
 def physically_installed_packages(catalog: VoiceCatalog) -> list[VoicePackage]:
-	return [package for package in catalog.packages if is_package_installed(package)]
+	filesByName = _voice_files_by_name()
+	installed: list[VoicePackage] = []
+	verificationCacheUpdated = False
+	for package in catalog.packages:
+		fileInfo = filesByName.get(package.fileName)
+		if fileInfo is None:
+			verificationCacheUpdated = (
+				_forget_verified_package(package.id, savePersistent=False)
+				or verificationCacheUpdated
+			)
+			continue
+		path, stat = fileInfo
+		packageInstalled, cacheUpdated = _check_package_file_installed(
+			package,
+			path,
+			stat,
+			savePersistent=False,
+		)
+		if packageInstalled:
+			installed.append(package)
+		verificationCacheUpdated = verificationCacheUpdated or cacheUpdated
+	if verificationCacheUpdated:
+		_save_persistent_verification_cache()
+	return installed
 
 
 def usable_installed_packages(packages: list[VoicePackage]) -> list[VoicePackage]:
