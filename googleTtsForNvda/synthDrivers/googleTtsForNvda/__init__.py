@@ -17,6 +17,7 @@ import addonHandler
 import config
 import globalVars
 import languageHandler
+import nvwave
 import synthDriverHandler
 import wx
 from autoSettingsUtils.driverSetting import DriverSetting
@@ -774,10 +775,32 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		self._player.pause(switch)
 
 	def _current_output_device(self) -> str:
+		for section in ("audio", "speech"):
+			try:
+				return str(config.conf[section]["outputDevice"])
+			except Exception:
+				continue
+		return self._default_output_device()
+
+	def _default_output_device(self) -> str:
 		try:
-			return str(config.conf["audio"]["outputDevice"])
+			return str(config.conf.getConfigValidation(("audio", "outputDevice")).default)
+		except Exception:
+			pass
+		try:
+			return str(config.conf.getConfigValidation(("speech", "outputDevice")).default)
 		except Exception:
 			return getattr(WavePlayer, "DEFAULT_DEVICE_KEY", "default")
+
+	def _audio_device_error(self) -> bool:
+		audioDeviceError = getattr(nvwave, "audioDeviceError", None)
+		if not callable(audioDeviceError):
+			return False
+		try:
+			return bool(audioDeviceError())
+		except Exception:
+			log.debug("Could not query NVDA audio device error state.", exc_info=True)
+			return False
 
 	def _create_wave_player(self, outputDevice: str) -> WavePlayer:
 		try:
@@ -796,7 +819,8 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 
 	def _ensure_current_output_device(self) -> None:
 		outputDevice = self._current_output_device()
-		if outputDevice == self._playerOutputDevice:
+		deviceError = self._audio_device_error()
+		if outputDevice == self._playerOutputDevice and not deviceError:
 			return
 		with suppress(Exception):
 			self._player.close()
