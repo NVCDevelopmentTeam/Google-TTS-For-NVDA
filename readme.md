@@ -10,10 +10,10 @@ This project was created to make Google's high-quality local WebAssembly Text-to
 
 ## Current Status
 
-Latest stable release: **Google TTS For NVDA 0.5**, last updated on **July 22, 2026**.
+Latest stable release: **Google TTS For NVDA 0.5.5**, last updated on **July 30, 2026**.
 
-* Full change log for version 0.5: [Google TTS For NVDA v0.5 release notes](https://github.com/nguyenanhduc09/Google-TTS-For-NVDA/releases/tag/v0.5)
-* Download the latest stable add-on package: [googleTtsForNvda-0.5.nvda-addon](https://github.com/nguyenanhduc09/Google-TTS-For-NVDA/releases/download/v0.5/googleTtsForNvda-0.5.nvda-addon)
+* Full change log for version 0.5.5: [Google TTS For NVDA v0.5.5 release notes](https://github.com/nguyenanhduc09/Google-TTS-For-NVDA/releases/tag/v0.5.5)
+* Download the latest stable add-on package: [googleTtsForNvda-0.5.5.nvda-addon](https://github.com/nguyenanhduc09/Google-TTS-For-NVDA/releases/download/v0.5.5/googleTtsForNvda-0.5.5.nvda-addon)
 
 ---
 
