@@ -78,6 +78,7 @@ CONFIG_AUTO_LANGUAGE_DETECTION = "autoLanguageDetection"
 CONFIG_AUTO_LANGUAGE_PREFERRED = "autoLanguagePreferred"
 CONFIG_AUTO_LANGUAGE_CANDIDATES = "autoLanguageCandidates"
 CONFIG_AUTO_LANGUAGE_PROFILES = "autoLanguageProfiles"
+CONFIG_KEEP_BROWSER_RUNTIME_READY = "keepBrowserRuntimeReady"
 BROWSER_RUNTIME_EDGE = "edge"
 BROWSER_RUNTIME_CHROME = "chrome"
 BROWSER_RUNTIME_BRAVE = "brave"
@@ -86,6 +87,7 @@ DEFAULT_AUTO_LANGUAGE_DETECTION = False
 DEFAULT_AUTO_LANGUAGE_PREFERRED = ""
 DEFAULT_AUTO_LANGUAGE_CANDIDATES = ""
 DEFAULT_AUTO_LANGUAGE_PROFILES = ""
+DEFAULT_KEEP_BROWSER_RUNTIME_READY = False
 BROWSER_RUNTIME_LABELS = {
 	BROWSER_RUNTIME_EDGE: "Microsoft Edge",
 	BROWSER_RUNTIME_CHROME: "Google Chrome",
@@ -135,7 +137,7 @@ class _ThreadingTcpServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 
 
 class _BridgeRequestHandler(http.server.SimpleHTTPRequestHandler):
-	server_version = "GoogleTtsForNvda/0.5.5"
+	server_version = "GoogleTtsForNvda/0.6"
 	extensions_map = {
 		**http.server.SimpleHTTPRequestHandler.extensions_map,
 		".wasm": "application/wasm",
@@ -484,22 +486,41 @@ def configured_browser_runtime() -> str:
 		return DEFAULT_BROWSER_RUNTIME
 
 
-def set_configured_browser_runtime(runtime: str) -> str:
-	runtime = _normalize_browser_runtime(runtime)
+def _set_config_value(key: str, value: Any) -> None:
 	if config is None:
-		return runtime
+		return
 	try:
-		config.conf[CONFIG_SECTION][CONFIG_BROWSER_RUNTIME] = runtime
+		config.conf[CONFIG_SECTION][key] = value
 	except Exception:
 		pass
 	try:
 		baseProfile = config.conf.profiles[0]
 		if CONFIG_SECTION not in baseProfile:
 			baseProfile[CONFIG_SECTION] = {}
-		baseProfile[CONFIG_SECTION][CONFIG_BROWSER_RUNTIME] = runtime
+		baseProfile[CONFIG_SECTION][key] = value
 	except Exception:
 		pass
+
+
+def set_configured_browser_runtime(runtime: str) -> str:
+	runtime = _normalize_browser_runtime(runtime)
+	_set_config_value(CONFIG_BROWSER_RUNTIME, runtime)
 	return runtime
+
+
+def configured_keep_browser_runtime_ready() -> bool:
+	if config is None:
+		return DEFAULT_KEEP_BROWSER_RUNTIME_READY
+	try:
+		return bool(config.conf[CONFIG_SECTION][CONFIG_KEEP_BROWSER_RUNTIME_READY])
+	except Exception:
+		return DEFAULT_KEEP_BROWSER_RUNTIME_READY
+
+
+def set_keep_browser_runtime_ready(enabled: bool) -> bool:
+	enabled = bool(enabled)
+	_set_config_value(CONFIG_KEEP_BROWSER_RUNTIME_READY, enabled)
+	return enabled
 
 
 def _runtime_fallback_order(runtime: str | None = None) -> tuple[str, ...]:
@@ -1001,6 +1022,7 @@ class BrowserProcessManager:
 				browserPath,
 				"--headless=new",
 				"--remote-debugging-port=0",
+				"--remote-debugging-address=127.0.0.1",
 				"--remote-allow-origins=*",
 				f"--user-data-dir={profileDir}",
 				"--no-first-run",

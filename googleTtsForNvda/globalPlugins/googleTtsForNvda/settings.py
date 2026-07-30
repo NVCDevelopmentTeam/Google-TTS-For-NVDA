@@ -18,7 +18,7 @@ import wx
 
 from synthDrivers.googleTtsForNvda import bridge as browserBridge
 from synthDrivers.googleTtsForNvda.catalog import Speaker, VoiceCatalog
-from synthDrivers.googleTtsForNvda import voice_store
+from synthDrivers.googleTtsForNvda import standby, voice_store
 from . import updateGui
 from .uiUtils import bind_read_only_text_focus_announcement, resize_read_only_text_for_content
 from .voiceManager import get_language_display_name, _visible_language_sort_key
@@ -134,6 +134,15 @@ def _save_browser_runtime(runtime: str) -> None:
 			runtime=_runtime_label(saved),
 		),
 	)
+	standby.refresh_async("Chromium browser runtime setting changed")
+
+
+def _configured_keep_browser_runtime_ready() -> bool:
+	return browserBridge.configured_keep_browser_runtime_ready()
+
+
+def _save_keep_browser_runtime_ready(enabled: bool) -> None:
+	browserBridge.set_keep_browser_runtime_ready(enabled)
 
 
 def _schedule_runtime_change_after_synth_switch(runtime: str, parent: wx.Window | None = None) -> None:
@@ -216,6 +225,7 @@ class GoogleTtsSettingsPanel(SettingsPanel):
 		self._runtimeValues = list(browserBridge.BROWSER_RUNTIMES)
 		self._refresh_runtime_snapshot()
 		self._savedRuntime = self._runtimeSnapshot["selectedRuntime"]
+		self._savedKeepBrowserRuntimeReady = _configured_keep_browser_runtime_ready()
 		self._speakersByLanguage = self._installed_speakers_by_language()
 		self._languageValues = list(self._speakersByLanguage)
 		self._languageCounts = {
@@ -260,6 +270,20 @@ class GoogleTtsSettingsPanel(SettingsPanel):
 		)
 		self.effectiveRuntimeText.SetName(_("Chromium browser runtime status"))
 		bind_read_only_text_focus_announcement(self.effectiveRuntimeText, minLines=2, maxLines=5)
+		self.keepBrowserRuntimeReadyCheck = runtimeGroup.addCheckBox(
+			_("&Keep Google TTS browser runtime ready in the background")
+		)
+		self.keepBrowserRuntimeReadyCheck.SetName(_("Keep Google TTS browser runtime ready in the background"))
+		self.keepBrowserRuntimeReadyCheck.SetValue(self._savedKeepBrowserRuntimeReady)
+		self.keepBrowserRuntimeReadyCheck.Bind(wx.EVT_CHECKBOX, self.on_keep_browser_runtime_ready_changed)
+		self.keepBrowserRuntimeReadyStatusText = runtimeGroup.addLabeledControl(
+			_("Background browser runtime status") + ":",
+			wx.TextCtrl,
+			value=self._keep_browser_runtime_ready_status_message(),
+			style=wx.TE_READONLY | wx.TE_MULTILINE | wx.TE_WORDWRAP,
+		)
+		self.keepBrowserRuntimeReadyStatusText.SetName(_("Background browser runtime status"))
+		bind_read_only_text_focus_announcement(self.keepBrowserRuntimeReadyStatusText, minLines=2, maxLines=5)
 
 		autoLanguageGroup = self._add_settings_group(helper, _("Automatic language profile"))
 		self._autoLanguageSizer = autoLanguageGroup.sizer
@@ -409,6 +433,11 @@ class GoogleTtsSettingsPanel(SettingsPanel):
 		self._store_selected_auto_language_profile(self._selectedAutoLanguageProfileIndex)
 		self._save_auto_language_settings()
 		updateGui.set_automatic_update_check_enabled(self.autoUpdateCheck.GetValue())
+		_save_keep_browser_runtime_ready(self.keepBrowserRuntimeReadyCheck.GetValue())
+		self._savedKeepBrowserRuntimeReady = self.keepBrowserRuntimeReadyCheck.GetValue()
+		if _is_google_synth_current():
+			standby.note_synth_active()
+		standby.refresh_async("Google TTS standby browser runtime setting changed")
 		self._refresh_runtime_snapshot(self._savedRuntime)
 		if selectedRuntime == self._savedRuntime:
 			return
@@ -461,6 +490,28 @@ class GoogleTtsSettingsPanel(SettingsPanel):
 
 	def on_runtime_choice_changed(self, evt: wx.CommandEvent) -> None:
 		self._refresh_runtime_status(self._selected_runtime_choice())
+
+	def on_keep_browser_runtime_ready_changed(self, evt: wx.CommandEvent) -> None:
+		self._refresh_keep_browser_runtime_ready_status()
+
+	def _keep_browser_runtime_ready_status_message(self) -> str:
+		if not self.keepBrowserRuntimeReadyCheck.GetValue():
+			return _(
+				"Off. Google TTS For NVDA will start the browser runtime only when you choose Google TTS as the current synthesizer."
+			)
+		if _is_google_synth_current():
+			return _(
+				"On. Google TTS For NVDA is the current synthesizer, so no separate background browser runtime will be started."
+			)
+		return _(
+			"On. After you press OK or Apply, Google TTS For NVDA can keep the browser runtime ready in the background. "
+			"This may use more memory and keep runtime files open until you turn it off or exit NVDA."
+		)
+
+	def _refresh_keep_browser_runtime_ready_status(self) -> None:
+		self.keepBrowserRuntimeReadyStatusText.SetValue(self._keep_browser_runtime_ready_status_message())
+		resize_read_only_text_for_content(self.keepBrowserRuntimeReadyStatusText, minLines=2, maxLines=5)
+		self._refresh_settings_layout()
 
 	def _refresh_runtime_status(self, runtime: str) -> None:
 		self._refresh_runtime_snapshot(runtime)

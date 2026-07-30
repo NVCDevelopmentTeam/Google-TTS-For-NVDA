@@ -22,7 +22,7 @@ from logHandler import log
 
 from synthDrivers.googleTtsForNvda import bridge as browserBridge
 from synthDrivers.googleTtsForNvda.catalog import VoiceCatalog, VoicePackage, is_package_supported_by_engine
-from synthDrivers.googleTtsForNvda import voice_store
+from synthDrivers.googleTtsForNvda import standby, voice_store
 
 
 addonHandler.initTranslation()
@@ -997,6 +997,12 @@ class VoiceManagerDialog(nvdaControls.DPIScaledDialog):
 		except Exception:
 			log.debug("Could not warm Google TTS voice after package change.", exc_info=True)
 
+	def _refresh_standby_google_synth_runtime(self) -> None:
+		try:
+			standby.refresh_async("Google TTS voice packages changed")
+		except Exception:
+			log.debug("Could not refresh Google TTS standby browser runtime after package change.", exc_info=True)
+
 	def _on_check_all(
 		self,
 		listCtrl: wx.ListCtrl,
@@ -1179,6 +1185,7 @@ class VoiceManagerDialog(nvdaControls.DPIScaledDialog):
 				)
 			if succeededIds:
 				self._warm_current_google_synth_voice()
+				self._refresh_standby_google_synth_runtime()
 			self.set_status(message, 100, announce=True)
 			self._focus_active_page()
 
@@ -1272,6 +1279,8 @@ class VoiceManagerDialog(nvdaControls.DPIScaledDialog):
 				self._apply_reset_voice_to_current_synth(resetVoice)
 			if resetProfileCount:
 				self._warm_current_google_synth_voice()
+			if removedIds:
+				self._refresh_standby_google_synth_runtime()
 			if failed:
 				message = _(
 					"Removed {succeeded} of {total} packages. Could not remove: {failList}. First error: {reason}"

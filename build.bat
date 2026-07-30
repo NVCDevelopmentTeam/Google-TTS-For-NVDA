@@ -46,7 +46,7 @@ echo.
 
 :: --------------- Merge conflict marker check ---------------
 echo [2/7] Checking for unresolved merge conflict markers...
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$patterns = '*.py','*.js','*.html','*.ini','*.json','*.bat','*.md','*.po','*.pot'; $files = @(Get-ChildItem -Path 'googleTtsForNvda' -Recurse -File -Include $patterns); $files += Get-Item 'build.bat','AGENTS.md','readme.md','TRANSLATING.md','build_i18n.py'; $matches = $files | Select-String -Pattern '^(<<<<<<<|=======|>>>>>>>)'; if ($matches) { $matches | ForEach-Object { Write-Host ('      [ERROR] {0}:{1}: {2}' -f $_.Path, $_.LineNumber, $_.Line.Trim()) }; exit 1 }"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$patterns = '*.py','*.js','*.html','*.ini','*.json','*.bat','*.md','*.po','*.pot'; $files = @(Get-ChildItem -Path 'googleTtsForNvda' -Recurse -File -Include $patterns); $files += Get-Item 'build.bat','build.sh','AGENTS.md','readme.md','TRANSLATING.md','build_i18n.py'; $matches = $files | Select-String -Pattern '^(<<<<<<<|=======|>>>>>>>)'; if ($matches) { $matches | ForEach-Object { Write-Host ('      [ERROR] {0}:{1}: {2}' -f $_.Path, $_.LineNumber, $_.Line.Trim()) }; exit 1 }"
 if errorlevel 1 (
     echo [ERROR] Unresolved merge conflict markers found.
     set "EXIT_CODE=1"

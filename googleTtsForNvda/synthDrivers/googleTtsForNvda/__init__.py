@@ -43,7 +43,7 @@ from .bridge import (
 	edge_webview2_blocks_effective_runtime,
 )
 from .catalog import EngineLibraryError, VoiceCatalog
-from . import language_detector, voice_store
+from . import language_detector, standby, voice_store
 
 
 addonHandler.initTranslation()
@@ -579,9 +579,9 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		self._variantsByLanguage: dict[str, OrderedDict[str, VoiceInfo]] = {}
 		self.availableVoices = self._build_available_voices()
 		self.availableLanguages = set(self._speakersByLanguage)
-		self._bridge = ChromeTtsBridge(self.catalog)
 		self._playerOutputDevice = self._current_output_device()
 		self._player = self._create_wave_player(self._playerOutputDevice)
+		self._bridge = standby.claim_bridge(self.catalog) or ChromeTtsBridge(self.catalog)
 		self._speechCondition = threading.Condition()
 		self._speechQueue: deque[_SpeechRequest] = deque()
 		self._activeCancelEvent: threading.Event | None = None
@@ -736,10 +736,35 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		self._shutdownEvent.set()
 		with self._speechCondition:
 			self._speechCondition.notify_all()
-		with suppress(Exception):
-			self._bridge.terminate()
+		bridgeReusable = self._bridge_safe_for_standby_release()
+		bridgeReleased = False
+		releaseFailed = False
+		if bridgeReusable:
+			try:
+				bridgeReleased = standby.release_synth_bridge(self._bridge, self.catalog)
+			except Exception:
+				releaseFailed = True
+				log.debug("Could not release idle Google TTS browser runtime to standby.", exc_info=True)
+		if not bridgeReleased:
+			with suppress(Exception):
+				self._bridge.terminate()
+			if not bridgeReusable or releaseFailed:
+				reason = (
+					"Google TTS synth released a busy browser runtime"
+					if not bridgeReusable
+					else "Google TTS synth could not release its browser runtime to standby"
+				)
+				with suppress(Exception):
+					standby.release_synth_without_bridge(reason)
 		with suppress(Exception):
 			self._player.close()
+
+	def _bridge_safe_for_standby_release(self) -> bool:
+		warmupThread = getattr(self, "_warmupThread", None)
+		if warmupThread is not None and warmupThread.is_alive():
+			return False
+		with self._speechCondition:
+			return self._activeCancelEvent is None and not self._speechQueue
 
 	def speak(self, speechSequence: list[Any], *args: Any, **kwargs: Any) -> None:
 		sequence = list(speechSequence)

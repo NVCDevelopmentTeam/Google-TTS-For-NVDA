@@ -29,16 +29,18 @@ from synthDrivers.googleTtsForNvda.bridge import (
 	CONFIG_AUTO_LANGUAGE_PREFERRED,
 	CONFIG_AUTO_LANGUAGE_PROFILES,
 	CONFIG_BROWSER_RUNTIME,
+	CONFIG_KEEP_BROWSER_RUNTIME_READY,
 	CONFIG_SECTION,
 	DEFAULT_AUTO_LANGUAGE_CANDIDATES,
 	DEFAULT_AUTO_LANGUAGE_DETECTION,
 	DEFAULT_AUTO_LANGUAGE_PREFERRED,
 	DEFAULT_AUTO_LANGUAGE_PROFILES,
 	DEFAULT_BROWSER_RUNTIME,
+	DEFAULT_KEEP_BROWSER_RUNTIME_READY,
 	edge_webview2_blocks_effective_runtime,
 )
 from synthDrivers.googleTtsForNvda.catalog import EngineLibraryError, VoiceCatalog
-from synthDrivers.googleTtsForNvda import voice_store
+from synthDrivers.googleTtsForNvda import standby, voice_store
 
 from . import updater, updateGui
 from .settings import GoogleTtsSettingsPanel
@@ -55,6 +57,7 @@ config.conf.spec[CONFIG_SECTION] = {
 	CONFIG_AUTO_LANGUAGE_PROFILES: f"string(default={DEFAULT_AUTO_LANGUAGE_PROFILES})",
 	updateGui.CONFIG_AUTO_UPDATE_CHECK: f"boolean(default={str(updateGui.DEFAULT_AUTO_UPDATE_CHECK).lower()})",
 	CONFIG_BROWSER_RUNTIME: f"string(default={DEFAULT_BROWSER_RUNTIME})",
+	CONFIG_KEEP_BROWSER_RUNTIME_READY: f"boolean(default={str(DEFAULT_KEEP_BROWSER_RUNTIME_READY).lower()})",
 }
 
 SYNTH_NAME = "googleTtsForNvda"
@@ -1280,6 +1283,15 @@ def _open_google_tts_settings() -> None:
 	gui.mainFrame.popupSettingsDialog(gui.settingsDialogs.NVDASettingsDialog, GoogleTtsSettingsPanel)
 
 
+def _refresh_standby_runtime(reason: str) -> None:
+	try:
+		if getattr(synthDriverHandler.getSynth(), "name", "") == SYNTH_NAME:
+			standby.note_synth_active()
+		standby.refresh_async(reason)
+	except Exception:
+		log.debug("Could not refresh Google TTS standby browser runtime.", exc_info=True)
+
+
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	scriptCategory = _("Google TTS For NVDA")
 
@@ -1288,6 +1300,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.voiceManagerMenuItem: wx.MenuItem | None = None
 		self._startupUpdateCheckRegistered = False
 		if not globalVars.appArgs.secure:
+			standby.initialize()
 			_patch_synth_selection()
 			_patch_read_only_text_setting()
 			_patch_voice_dictionary_dialog()
@@ -1319,9 +1332,14 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			updateGui.start_automatic_update_check()
 		except Exception:
 			log.debug("Could not start Google TTS For NVDA automatic update check.", exc_info=True)
+		_refresh_standby_runtime("NVDA startup")
 
 	def terminate(self, *args: Any, **kwargs: Any) -> None:
 		_close_voice_manager()
+		try:
+			standby.terminate()
+		except Exception:
+			log.debug("Could not terminate Google TTS standby browser runtime.", exc_info=True)
 		if self._startupUpdateCheckRegistered:
 			try:
 				import core

@@ -73,6 +73,8 @@
 	<ul>
 		<li><strong>Chromium browser runtime:</strong> Choose Google Chrome, Microsoft Edge, or Brave as the background Chromium browser runtime for the add-on. The settings panel displays browser availability.</li>
 		<li><strong>Chromium browser runtime status:</strong> Review the selected runtime, browser availability, and the active fallback runtime when one is used.</li>
+		<li><strong>Keep Google TTS browser runtime ready in the background:</strong> Turn on to let Google TTS prepare the browser runtime and current voice package while another synthesizer is active, so switching back to Google TTS can be faster. This setting is off by default. After you turn it on and press OK or Apply, it may use more memory and keep runtime files open until you turn it off or exit NVDA.</li>
+		<li><strong>Background browser runtime status:</strong> Review whether this setting is off, unnecessary because Google TTS is already the current synthesizer, or waiting to start after you press OK or Apply.</li>
 		<li><strong>Use automatic language profiles:</strong> Enable automatic profile selection and open the profile controls described below.</li>
 		<li><strong>Preferred profile language:</strong> Choose the enabled profile language used when a sentence is unclear. This list can be empty until at least one language profile is enabled.</li>
 		<li><strong>Automatic language profile:</strong> Choose which installed language profile to edit.</li>
@@ -137,6 +139,13 @@
 	</ul>
 
 	<h2>Change Log</h2>
+	<h3>Version 0.6 (2026-07-30)</h3>
+	<ul>
+		<li><strong>Faster synthesizer switching:</strong> Added an optional setting to make Google TTS ready faster when switching from another synthesizer. This setting is off by default; when turned on, it may use more memory while NVDA is running.</li>
+		<li><strong>Background preparation:</strong> When this setting is enabled, Google TTS updates its background preparation after you change the selected Chromium browser runtime or install/remove voice packages.</li>
+		<li><strong>Switching reliability:</strong> Improved reliability when switching away from Google TTS, especially while speech or voice preparation is still stopping.</li>
+	</ul>
+
 	<h3>Version 0.5.5 (2026-07-23)</h3>
 	<ul>
 		<li><strong>Automatic Language Profiles:</strong> Improved automatic language profile matching across CLD2 and Google TTS language-code aliases, including Filipino/Tagalog, Javanese, legacy Hebrew codes, Norwegian variants, Arabic, and Simplified, Traditional, and Cantonese Chinese mappings.</li>
@@ -185,6 +194,6 @@
 	<ul>
 		<li>Initial release.</li>
 	</ul>
-	<p>Last edited on 2026-07-23</p>
+	<p>Last edited on 2026-07-30</p>
 </body>
 </html>

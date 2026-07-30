@@ -39,6 +39,7 @@ When writing documentation, release notes, commit messages, or user-facing summa
 1. Identify the affected layer:
    - NVDA synth driver: `googleTtsForNvda/synthDrivers/googleTtsForNvda/__init__.py`
    - Browser/CDP bridge: `googleTtsForNvda/synthDrivers/googleTtsForNvda/bridge.py`
+   - Standby browser runtime readiness: `googleTtsForNvda/synthDrivers/googleTtsForNvda/standby.py`
    - Voice catalog and storage: `googleTtsForNvda/synthDrivers/googleTtsForNvda/catalog.py`, `googleTtsForNvda/synthDrivers/googleTtsForNvda/voice_store.py`
    - Browser harness: `googleTtsForNvda/synthDrivers/googleTtsForNvda/web/bridgeHarness.js`, `googleTtsForNvda/synthDrivers/googleTtsForNvda/web/index.html`
    - Voice Manager UI: `googleTtsForNvda/globalPlugins/googleTtsForNvda/voiceManager.py`
@@ -85,6 +86,7 @@ Google-TTS-For-NVDA/
 │  ├─ synthDrivers/googleTtsForNvda/
 │  │  ├─ __init__.py        SynthDriver; NVDA integration and settings ring
 │  │  ├─ bridge.py          ChromeTtsBridge; HTTP server, browser lifecycle, CDP/WS
+│  │  ├─ standby.py         Optional background browser-runtime readiness manager
 │  │  ├─ catalog.py         VoiceCatalog, VoicePackage, Speaker models
 │  │  ├─ language_detector.py
 │  │  │                    CLD2-backed language detection with x86/x64 DLL selection
@@ -177,12 +179,18 @@ This add-on depends on a supported Chromium browser runtime, such as Google Chro
 - Runtime status and settings UI may use executable/WebView2 snapshots, but the speech path must validate runtime usability from process startup through page WebSocket discovery and CDP/harness readiness.
 - Browser-runtime code map:
   - `bridge.py` runtime constants and labels: `BROWSER_RUNTIME_CHROME`, `BROWSER_RUNTIME_EDGE`, `BROWSER_RUNTIME_BRAVE`, `BROWSER_RUNTIMES`, `DEFAULT_BROWSER_RUNTIME`, and `BROWSER_RUNTIME_LABELS`.
+  - `bridge.py` runtime configuration persistence: `CONFIG_BROWSER_RUNTIME`, `CONFIG_KEEP_BROWSER_RUNTIME_READY`, `DEFAULT_KEEP_BROWSER_RUNTIME_READY`, `_set_config_value()`, `configured_browser_runtime()`, `set_configured_browser_runtime()`, `configured_keep_browser_runtime_ready()`, and `set_keep_browser_runtime_ready()`.
   - `bridge.py` availability and fallback selection: `_runtime_fallback_order()`, `_browser_candidates()`, `browser_path_for_runtime()`, `browser_executable_available()`, `edge_webview2_available()`, `browser_runtime_available()`, `browser_availability()`, `_browser_choices()`, `_find_browser_choice()`, `browser_runtime_snapshot()`, `find_browser()`, `effective_browser_runtime()`, and `edge_webview2_blocks_effective_runtime()`.
   - `bridge.py` CDP connection and harness readiness: `CdpDispatcher`, `CdpClient.request()`, `_friendly_cdp_error()`, `_TRANSIENT_RUNTIME_EVALUATE_ERRORS`, `_is_transient_runtime_evaluate_error()`, `WasmTtsEngineBridge.enable_cdp_domains()`, `WasmTtsEngineBridge.wait_until_ready()`, and `ChromeTtsBridge.ensure_connection()`.
   - `bridge.py` startup cancellation path: `ChromeTtsBridge.speak()`, `ChromeTtsBridge.preload_voice()`, `ChromeTtsBridge.ensure_connection()`, `BrowserProcessManager.start_and_get_websocket_url()`, `WasmTtsEngineBridge.enable_cdp_domains()`, `WasmTtsEngineBridge.wait_until_ready()`, and `CdpClient.request()`.
   - `bridge.py` runtime health and recycle: `RUNTIME_MEMORY_STARTUP_GRACE_SECONDS`, `RUNTIME_MEMORY_CHECK_INTERVAL_SECONDS`, `RUNTIME_PRIVATE_BYTES_RECYCLE_THRESHOLD`, `RUNTIME_WORKING_SET_BYTES_RECYCLE_THRESHOLD`, `RUNTIME_MEMORY_RECYCLE_CONFIRMATIONS`, `_runtime_error_requires_recycle()`, `_process_tree_memory_usage()`, `BrowserProcessManager.browser_memory_usage()`, `WasmTtsEngineBridge.runtime_busy`, `ChromeTtsBridge._mark_runtime_error_for_recycle()`, `ChromeTtsBridge._mark_memory_recycle_if_needed_locked()`, and `ChromeTtsBridge.maybe_recycle_runtime()`.
   - `__init__.py` synth-side recycle scheduling: `SynthDriver._maybe_recycle_bridge_after_request()`.
+  - `__init__.py` synth/standby handoff: `SynthDriver.__init__()`, `SynthDriver.terminate()`, and `SynthDriver._bridge_safe_for_standby_release()`.
   - `settings.py` runtime settings UI: `_runtime_label()`, `_save_browser_runtime()`, `_schedule_runtime_change_after_synth_switch()`, `_clear_pending_runtime_change()`, `_apply_runtime_after_synth_switch()`, `GoogleTtsSettingsPanel._selected_runtime_choice()`, `GoogleTtsSettingsPanel._refresh_runtime_snapshot()`, `GoogleTtsSettingsPanel._format_runtime_choice()`, `GoogleTtsSettingsPanel.on_runtime_choice_changed()`, `GoogleTtsSettingsPanel._refresh_runtime_status()`, `GoogleTtsSettingsPanel._effective_runtime_message()`, and `GoogleTtsSettingsPanel._select_saved_runtime()`.
+  - `settings.py` runtime-ready settings UI: `_configured_keep_browser_runtime_ready()`, `_save_keep_browser_runtime_ready()`, `GoogleTtsSettingsPanel.on_keep_browser_runtime_ready_changed()`, `GoogleTtsSettingsPanel._keep_browser_runtime_ready_status_message()`, and `GoogleTtsSettingsPanel._refresh_keep_browser_runtime_ready_status()`.
+  - `standby.py` background runtime readiness: `keep_browser_runtime_ready_enabled()`, `_installed_catalog()`, `_catalog_signature()`, `_current_speech_state()`, `_warmup_voice_ids()`, `_speech_options()`, `_warmup_options()`, `_refresh_reason_requires_runtime_restart()`, `_DirectoryChangeWatcher`, `_StandbyRuntimeManager`, `initialize()`, `refresh_async()`, `claim_bridge()`, `note_synth_active()`, `release_synth_bridge()`, `release_synth_without_bridge()`, and `terminate()`.
+  - `globalPlugins/googleTtsForNvda/__init__.py` standby lifecycle integration: `_refresh_standby_runtime()`, `GlobalPlugin.__init__()`, `GlobalPlugin._on_post_nvda_startup()`, and `GlobalPlugin.terminate()`.
+  - `voiceManager.py` package-change standby refresh: `VoiceManagerDialog._refresh_standby_google_synth_runtime()`.
   - `bridge.py` browser profile roots and profile selection: `BrowserProcessManager._browser_profile_root()`, `BrowserProcessManager._browser_profile_dir_name()`, `_profileRuntime`, `CHROME_PROFILE_DIR_NAME`, `EDGE_PROFILE_DIR_NAME`, and `BRAVE_PROFILE_DIR_NAME`.
   - `bridge.py` browser profile startup, fallback, and cleanup: `BrowserProcessManager.start_browser()`, `BrowserProcessManager.start_and_get_websocket_url()`, `BrowserProcessManager._browser_choices_or_raise()`, `BrowserProcessManager._start_browser_choice()`, `BrowserProcessManager._start_first_available_browser()`, `BrowserProcessManager._read_devtools_port()`, `_BrowserProfileInUseError`, `_browser_profile_in_use_error()`, `_get_browser_profile_dir()`, `_cleanup_old_browser_profiles()`, `_release_chrome_profile()`, and `_remove_chrome_profile()`.
   - `bridge.py` persistent profile size throttling: `PERSISTENT_PROFILE_MAX_BYTES`, `PERSISTENT_PROFILE_SIZE_CHECK_FILE_NAME`, `PERSISTENT_PROFILE_SIZE_CHECK_INTERVAL_SECONDS`, `_persistent_profile_size_check_due()`, and `_remember_persistent_profile_size_check()`.
@@ -197,6 +205,12 @@ This add-on depends on a supported Chromium browser runtime, such as Google Chro
   - Runtime/CDP timeout or closed-WebSocket failures should mark the Chromium runtime for urgent recycle after the current speech request.
   - Memory threshold recycling should ignore normal Chromium/WASM cold-start spikes, require confirmed high-memory samples after the startup grace/interval, and recycle only when the synth worker reports an idle queue.
   - `SynthDriver._maybe_recycle_bridge_after_request()` should run after each non-cancelled speech request, with browser termination kept off NVDA's main thread and away from active audio callbacks.
+  - `keepBrowserRuntimeReady` must default to `False`, must be saved through `bridge.py:set_keep_browser_runtime_ready()` so it follows the same active-config/base-profile path as `set_configured_browser_runtime()`, must be gated through `standby.keep_browser_runtime_ready_enabled()`, and must stay disabled in secure mode.
+  - Standby refresh must be event-driven from Settings OK/Apply, NVDA startup, synth handoff, Voice Manager package changes, and `_DirectoryChangeWatcher`. Do not add periodic voice-folder rescans.
+  - `standby.claim_bridge()` may hand off only a ready bridge whose `_catalog_signature(catalog)` matches the current installed package/runtime state.
+  - `SynthDriver.terminate()` must call `SynthDriver._bridge_safe_for_standby_release()` before `standby.release_synth_bridge()`. Busy speech queues, active cancel events, or live warmup threads must terminate their bridge and use `standby.release_synth_without_bridge()` instead.
+  - Standby warmup/preload must use installed packages and `ChromeTtsBridge.preload_voice()` only. It must never call `voice_store.download_package()`.
+  - `BrowserProcessManager._start_browser_choice()` should bind DevTools to localhost with `--remote-debugging-address=127.0.0.1`.
   - Keep the fallback order Chrome, Edge, then Brave unless changing the product decision. If the saved runtime is Brave and Brave is unavailable, fallback must still find Chrome or Edge when they are usable.
   - `browser_runtime_snapshot()` is for UI/status snapshots only and must not make Chrome or Brave depend on WebView2.
   - Runtime status controls must use focusable read-only text sized through `bind_read_only_text_focus_announcement()`. Runtime choice preview may refresh immediately, but saving still happens only through Settings OK/Apply.
@@ -682,6 +696,7 @@ Compress-Archive -Path googleTtsForNvda\* -DestinationPath dist\googleTtsForNvda
 
 - `build.bat` is the release packaging entry point. It reads `version` from `googleTtsForNvda\manifest.ini`, cleans stale build artifacts and `__pycache__`, checks unresolved merge conflict markers, runs Python and JavaScript syntax checks, rejects `.zvoice` files in the source tree, packages `googleTtsForNvda\*` into `dist\googleTtsForNvda-<version>.nvda-addon`, and cleans `__pycache__` again before exit.
 - `build.sh` is the WSL/Linux equivalent entry point, kept in the repo root next to `build.bat`. It runs the same 7 steps in the same order and prints the same `[n/7]`/`[ERROR]` markers. When changing build steps, update both scripts together; `build.sh` cannot run or test NVDA/Chromium runtime behavior, only build/check/package.
+- Conflict-marker scan targets live in the root file lists in `build.bat` and `build.sh`; keep `build.sh` included in the Windows `build.bat` scan.
 - Keep the build steps ordered so syntax/package checks happen before packaging, and so `__pycache__` created by `compileall` is removed before packaging.
 - If adding a new source file type that can contain merge conflict markers or translatable/release content, update the `build.bat` conflict-marker scan patterns and the packaging/check instructions together, and mirror the same file-type list in `build.sh`.
 

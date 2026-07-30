@@ -3,10 +3,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Google TTS Cho NVDA 0.5.5\n"
+"Project-Id-Version: Google TTS Cho NVDA 0.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-10 00:00+0700\n"
-"PO-Revision-Date: 2026-07-24 13:44+0700\n"
+"PO-Revision-Date: 2026-07-30 20:52+0700\n"
 "Last-Translator: Nguyễn Anh Đức, Đào Đức Trung và Phạm Hùng Vương\n"
 "Language-Team: Vietnamese\n"
 "Language: vi\n"
@@ -95,6 +95,24 @@ msgstr "Runtime trình duyệt nhân Chromium"
 
 msgid "Chromium browser runtime status"
 msgstr "Trạng thái runtime trình duyệt nhân Chromium"
+
+msgid "&Keep Google TTS browser runtime ready in the background"
+msgstr "Giữ runtime trình duyệt của Google TTS sẵn sàng trong &nền"
+
+msgid "Keep Google TTS browser runtime ready in the background"
+msgstr "Giữ runtime trình duyệt của Google TTS sẵn sàng trong nền"
+
+msgid "Background browser runtime status"
+msgstr "Trạng thái runtime trình duyệt trong nền"
+
+msgid "Off. Google TTS For NVDA will start the browser runtime only when you choose Google TTS as the current synthesizer."
+msgstr "Tắt. Google TTS Cho NVDA sẽ chỉ khởi động runtime trình duyệt khi bạn chọn Google TTS làm bộ đọc hiện tại."
+
+msgid "On. Google TTS For NVDA is the current synthesizer, so no separate background browser runtime will be started."
+msgstr "Bật. Google TTS Cho NVDA là bộ đọc hiện tại, nên sẽ không khởi động runtime trình duyệt riêng trong nền."
+
+msgid "On. After you press OK or Apply, Google TTS For NVDA can keep the browser runtime ready in the background. This may use more memory and keep runtime files open until you turn it off or exit NVDA."
+msgstr "Bật. Sau khi bạn nhấn Đồng ý hoặc Áp dụng, Google TTS Cho NVDA có thể giữ runtime trình duyệt sẵn sàng trong nền. Việc này có thể dùng thêm bộ nhớ và giữ một số tập tin runtime đang được sử dụng cho đến khi bạn tắt tùy chọn này hoặc thoát NVDA."
 
 msgid "Bulgarian"
 msgstr "Tiếng Bulgaria"
@@ -963,10 +981,12 @@ msgstr "Rút ngắn tất cả khoảng lặng"
 
 #: manifest.ini:changelog
 msgid ""
-"Version 0.5.5:\n"
-"- Improved automatic language profile matching across CLD2 and Google TTS language-code aliases, including Filipino/Tagalog, Javanese, legacy Hebrew codes, Norwegian variants, Arabic, and Simplified, Traditional, and Cantonese Chinese mappings.\n"
-"- Rebuilt the bundled CLD2 Windows DLLs with MSVC instead of MinGW-w64 so the packaged add-on no longer triggers the previous false-positive antivirus detection in VirusTotal testing."
+"Version 0.6:\n"
+"- Added an optional setting to make Google TTS ready faster when switching from another synthesizer. This setting is off by default; when turned on, it may use more memory while NVDA is running.\n"
+"- When this setting is enabled, Google TTS updates its background preparation after you change the selected Chromium browser runtime or install/remove voice packages.\n"
+"- Improved reliability when switching away from Google TTS, especially while speech or voice preparation is still stopping."
 msgstr ""
-"Phiên bản 0.5.5:\n"
-"- Cải thiện khớp hồ sơ ngôn ngữ tự động cho các bí danh mã ngôn ngữ giữa CLD2 và Google TTS, bao gồm tiếng Philippines/Tagalog, tiếng Java, các mã tiếng Do Thái cũ, các biến thể tiếng Na Uy, tiếng Ả Rập và các ánh xạ tiếng Trung giản thể, tiếng Trung phồn thể và tiếng Quảng Đông.\n"
-"- Xây dựng lại các DLL CLD2 Windows đi kèm bằng MSVC thay cho MinGW-w64 để gói add-on đã đóng gói không còn bị báo nhầm vi-rút như trước trong kiểm tra VirusTotal."
+"Phiên bản 0.6:\n"
+"- Thêm tùy chọn giúp Google TTS sẵn sàng nhanh hơn khi chuyển từ bộ đọc khác sang. Tùy chọn này tắt theo mặc định; khi bật, tùy chọn này có thể dùng thêm bộ nhớ khi NVDA đang chạy.\n"
+"- Khi bật tùy chọn này, Google TTS sẽ cập nhật phần chuẩn bị trong nền sau khi bạn đổi runtime trình duyệt nhân Chromium hoặc cài đặt/xóa gói giọng.\n"
+"- Cải thiện độ ổn định khi chuyển khỏi Google TTS, nhất là lúc giọng đọc hoặc quá trình chuẩn bị giọng vẫn đang dừng."
