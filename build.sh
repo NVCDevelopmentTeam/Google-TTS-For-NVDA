@@ -59,7 +59,7 @@ done
 
 CONFLICT_MATCHES=""
 if [ "${#CONFLICT_FILES[@]}" -gt 0 ]; then
-    CONFLICT_MATCHES="$(grep -nE '^(<<<<<<<|=======|>>>>>>>)' "${CONFLICT_FILES[@]}" 2>/dev/null || true)"
+    CONFLICT_MATCHES="$(grep -nE '^(<<<<<<<($| )|=======$|>>>>>>>($| ))' "${CONFLICT_FILES[@]}" 2>/dev/null || true)"
 fi
 if [ -n "$CONFLICT_MATCHES" ]; then
     echo "$CONFLICT_MATCHES" | sed 's/^/      [ERROR] /'

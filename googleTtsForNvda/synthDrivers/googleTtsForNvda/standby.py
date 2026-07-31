@@ -678,7 +678,6 @@ class _StandbyRuntimeManager:
 
 	def refresh_async(self, reason: str = "", *, force: bool = True) -> None:
 		bridgeToTerminate: ChromeTtsBridge | None = None
-		shouldTerminateBridge = False
 		with self._lock:
 			if self._shutdown:
 				return
@@ -691,15 +690,19 @@ class _StandbyRuntimeManager:
 					log.debug("Google TTS standby runtime refresh skipped while synth is active or disabled.")
 				else:
 					self._worker = None
-				shouldTerminateBridge = True
 			elif not force and self._worker is not None and self._worker.is_alive():
 				return
 			else:
 				self._generation += 1
 				generation = self._generation
 				cancelEvent = threading.Event()
+				workerAlive = self._worker is not None and self._worker.is_alive()
 				self._cancel_current_worker_locked()
 				self._stop_watchers_locked()
+				if workerAlive:
+					# A cancelled worker may still be unwinding a CDP request; do not let
+					# the replacement worker reuse the same browser bridge concurrently.
+					bridgeToTerminate = self._clear_standby_locked(cancelWorker=False)
 				self._cancelEvent = cancelEvent
 				worker = threading.Thread(
 					name="googleTtsForNvda.standby",
@@ -709,8 +712,6 @@ class _StandbyRuntimeManager:
 				)
 				self._worker = worker
 				worker.start()
-		if not shouldTerminateBridge:
-			return
 		self._terminate_bridge(bridgeToTerminate)
 
 	def claim_bridge(self, catalog: VoiceCatalog) -> ChromeTtsBridge | None:

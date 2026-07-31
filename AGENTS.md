@@ -114,6 +114,7 @@ Google-TTS-For-NVDA/
 │  └─ locale/
 │     └─ <locale>/
 ├─ build.bat
+├─ build.sh
 ├─ build_i18n.py
 ├─ generate_voices_json.py
 └─ readme.md
@@ -188,7 +189,7 @@ This add-on depends on a supported Chromium browser runtime, such as Google Chro
   - `__init__.py` synth/standby handoff: `SynthDriver.__init__()`, `SynthDriver.terminate()`, and `SynthDriver._bridge_safe_for_standby_release()`.
   - `settings.py` runtime settings UI: `_runtime_label()`, `_save_browser_runtime()`, `_schedule_runtime_change_after_synth_switch()`, `_clear_pending_runtime_change()`, `_apply_runtime_after_synth_switch()`, `GoogleTtsSettingsPanel._selected_runtime_choice()`, `GoogleTtsSettingsPanel._refresh_runtime_snapshot()`, `GoogleTtsSettingsPanel._format_runtime_choice()`, `GoogleTtsSettingsPanel.on_runtime_choice_changed()`, `GoogleTtsSettingsPanel._refresh_runtime_status()`, `GoogleTtsSettingsPanel._effective_runtime_message()`, and `GoogleTtsSettingsPanel._select_saved_runtime()`.
   - `settings.py` runtime-ready settings UI: `_configured_keep_browser_runtime_ready()`, `_save_keep_browser_runtime_ready()`, `GoogleTtsSettingsPanel.on_keep_browser_runtime_ready_changed()`, `GoogleTtsSettingsPanel._keep_browser_runtime_ready_status_message()`, and `GoogleTtsSettingsPanel._refresh_keep_browser_runtime_ready_status()`.
-  - `standby.py` background runtime readiness: `keep_browser_runtime_ready_enabled()`, `_installed_catalog()`, `_catalog_signature()`, `_current_speech_state()`, `_warmup_voice_ids()`, `_speech_options()`, `_warmup_options()`, `_refresh_reason_requires_runtime_restart()`, `_DirectoryChangeWatcher`, `_StandbyRuntimeManager`, `initialize()`, `refresh_async()`, `claim_bridge()`, `note_synth_active()`, `release_synth_bridge()`, `release_synth_without_bridge()`, and `terminate()`.
+  - `standby.py` background runtime readiness: `keep_browser_runtime_ready_enabled()`, `_installed_catalog()`, `_catalog_signature()`, `_current_speech_state()`, `_warmup_voice_ids()`, `_speech_options()`, `_warmup_options()`, `_refresh_reason_requires_runtime_restart()`, `_DirectoryChangeWatcher`, `_StandbyRuntimeManager.refresh_async()`, `_StandbyRuntimeManager._run_refresh()`, `_StandbyRuntimeManager._clear_standby_locked()`, `_StandbyRuntimeManager._cancel_current_worker_locked()`, `initialize()`, `refresh_async()`, `claim_bridge()`, `note_synth_active()`, `release_synth_bridge()`, `release_synth_without_bridge()`, and `terminate()`.
   - `globalPlugins/googleTtsForNvda/__init__.py` standby lifecycle integration: `_refresh_standby_runtime()`, `GlobalPlugin.__init__()`, `GlobalPlugin._on_post_nvda_startup()`, and `GlobalPlugin.terminate()`.
   - `voiceManager.py` package-change standby refresh: `VoiceManagerDialog._refresh_standby_google_synth_runtime()`.
   - `bridge.py` browser profile roots and profile selection: `BrowserProcessManager._browser_profile_root()`, `BrowserProcessManager._browser_profile_dir_name()`, `_profileRuntime`, `CHROME_PROFILE_DIR_NAME`, `EDGE_PROFILE_DIR_NAME`, and `BRAVE_PROFILE_DIR_NAME`.
@@ -207,6 +208,7 @@ This add-on depends on a supported Chromium browser runtime, such as Google Chro
   - `SynthDriver._maybe_recycle_bridge_after_request()` should run after each non-cancelled speech request, with browser termination kept off NVDA's main thread and away from active audio callbacks.
   - `keepBrowserRuntimeReady` must default to `False`, must be saved through `bridge.py:set_keep_browser_runtime_ready()` so it follows the same active-config/base-profile path as `set_configured_browser_runtime()`, must be gated through `standby.keep_browser_runtime_ready_enabled()`, and must stay disabled in secure mode.
   - Standby refresh must be event-driven from Settings OK/Apply, NVDA startup, synth handoff, Voice Manager package changes, and `_DirectoryChangeWatcher`. Do not add periodic voice-folder rescans.
+  - Forced standby refresh that replaces an active worker must cancel the old worker and detach/terminate the worker-owned `ChromeTtsBridge` instead of letting the replacement worker reuse the same CDP/browser bridge while the old request is still unwinding.
   - `standby.claim_bridge()` may hand off only a ready bridge whose `_catalog_signature(catalog)` matches the current installed package/runtime state.
   - `SynthDriver.terminate()` must call `SynthDriver._bridge_safe_for_standby_release()` before `standby.release_synth_bridge()`. Busy speech queues, active cancel events, or live warmup threads must terminate their bridge and use `standby.release_synth_without_bridge()` instead.
   - Standby warmup/preload must use installed packages and `ChromeTtsBridge.preload_voice()` only. It must never call `voice_store.download_package()`.
@@ -282,6 +284,7 @@ These were removed and must stay removed unless the user explicitly requests a n
 - Preserve the `_patch_read_only_text_setting()` guard that ignores only the wx "has been deleted" refresh on destroyed panels, and keep other `RuntimeError` failures visible.
 - Manual URL fallback dialogs must use real label association, read-only `wx.TextCtrl` sized through `bind_read_only_text_focus_announcement(..., minLines=2, maxLines=5)` without a fixed width, and a Copy link button.
 - Accessibility helper map:
+  - Google TTS settings grouped controls live in `settings.py`: `_SettingsGroup`, `_SettingsGroup.addLabeledControl()`, `_SettingsGroup.addCheckBox()`, `_SettingsGroup.addButton()`, `GoogleTtsSettingsPanel._add_settings_group()`, and `GoogleTtsSettingsPanel._refresh_settings_layout()`.
   - Read-only status/help sizing lives in `googleTtsForNvda/globalPlugins/googleTtsForNvda/uiUtils.py`: `_from_dip()`, `_estimate_wrapped_line_count()`, `_estimate_text_width()`, `_max_read_only_text_width()`, `_read_only_text_target_width()`, `resize_read_only_text_for_content()`, and `bind_read_only_text_focus_announcement()`.
   - Speech Settings read-only notices live in `googleTtsForNvda/globalPlugins/googleTtsForNvda/__init__.py`: `_make_read_only_text_setting_control()`, `_patch_read_only_text_setting()`, `_unpatch_read_only_text_setting()`, and `_hide_google_tts_auto_profile_speech_controls()`.
   - Manual URL fallback dialogs live in `googleTtsForNvda/globalPlugins/googleTtsForNvda/__init__.py`: `_show_manual_web_url_dialog()`.
@@ -696,7 +699,7 @@ Compress-Archive -Path googleTtsForNvda\* -DestinationPath dist\googleTtsForNvda
 
 - `build.bat` is the release packaging entry point. It reads `version` from `googleTtsForNvda\manifest.ini`, cleans stale build artifacts and `__pycache__`, checks unresolved merge conflict markers, runs Python and JavaScript syntax checks, rejects `.zvoice` files in the source tree, packages `googleTtsForNvda\*` into `dist\googleTtsForNvda-<version>.nvda-addon`, and cleans `__pycache__` again before exit.
 - `build.sh` is the WSL/Linux equivalent entry point, kept in the repo root next to `build.bat`. It runs the same 7 steps in the same order and prints the same `[n/7]`/`[ERROR]` markers. When changing build steps, update both scripts together; `build.sh` cannot run or test NVDA/Chromium runtime behavior, only build/check/package.
-- Conflict-marker scan targets live in the root file lists in `build.bat` and `build.sh`; keep `build.sh` included in the Windows `build.bat` scan.
+- Conflict-marker scan targets live in the root file lists in `build.bat` and `build.sh`; keep `build.sh` included in the Windows `build.bat` scan. The scan should match real Git conflict markers only: `<<<<<<<` at the start of a line with either end-of-line or following text, exactly `=======`, and `>>>>>>>` at the start of a line with either end-of-line or following text. Do not make every line beginning with `=` fail, because vendored/documentation files may use underline-style headings.
 - Keep the build steps ordered so syntax/package checks happen before packaging, and so `__pycache__` created by `compileall` is removed before packaging.
 - If adding a new source file type that can contain merge conflict markers or translatable/release content, update the `build.bat` conflict-marker scan patterns and the packaging/check instructions together, and mirror the same file-type list in `build.sh`.
 

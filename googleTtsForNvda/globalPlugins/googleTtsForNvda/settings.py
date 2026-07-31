@@ -185,7 +185,7 @@ class _SettingsGroup:
 		self.sizer = wx.StaticBoxSizer(wx.VERTICAL, parent, label=label)
 		self.box = self.sizer.GetStaticBox()
 		self.box.SetName(label)
-		self.helper = guiHelper.BoxSizerHelper(parent, sizer=self.sizer)
+		self.helper = guiHelper.BoxSizerHelper(self.box, sizer=self.sizer)
 		parentHelper.addItem(self.helper)
 
 	def addLabeledControl(self, labelText: str, wxCtrlClass: type, **kwargs: object) -> wx.Window:
