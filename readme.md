@@ -10,10 +10,10 @@ This project was created to make Google's high-quality local WebAssembly Text-to
 
 ## Current Status
 
-Latest stable release: **Google TTS For NVDA 0.5.5**, last updated on **July 30, 2026**.
+Latest stable release: **Google TTS For NVDA 0.6**, last updated on **August 3, 2026**.
 
-* Full change log for version 0.5.5: [Google TTS For NVDA v0.5.5 release notes](https://github.com/nguyenanhduc09/Google-TTS-For-NVDA/releases/tag/v0.5.5)
-* Download the latest stable add-on package: [googleTtsForNvda-0.5.5.nvda-addon](https://github.com/nguyenanhduc09/Google-TTS-For-NVDA/releases/download/v0.5.5/googleTtsForNvda-0.5.5.nvda-addon)
+* Full change log for version 0.6: [Google TTS For NVDA v0.6 release notes](https://github.com/nguyenanhduc09/Google-TTS-For-NVDA/releases/tag/v0.6)
+* Download the latest stable add-on package: [googleTtsForNvda-0.6.nvda-addon](https://github.com/nguyenanhduc09/Google-TTS-For-NVDA/releases/download/v0.6/googleTtsForNvda-0.6.nvda-addon)
 
 ---
 
@@ -95,6 +95,8 @@ NVDA's Speech settings dialog provides **Pauses** for Google TTS For NVDA whethe
 The add-on includes a custom settings panel under **NVDA Settings (NVDA Menu -> Preferences -> Settings) -> Google TTS For NVDA**:
 * **Chromium browser runtime**: Select which supported Chromium browser runtime to use (Google Chrome, Microsoft Edge, or Brave). The panel shows browser availability on your system.
 * **Chromium browser runtime status**: Review the selected runtime, browser availability, and the active fallback runtime when one is used.
+* **Keep Google TTS browser runtime ready in the background**: Turn on to let Google TTS prepare the browser runtime and current voice package while another synthesizer is active, so switching back to Google TTS can be faster. This setting is off by default. After you turn it on and press OK or Apply, it may use more memory and keep runtime files open until you turn it off or exit NVDA.
+* **Background browser runtime status**: Review whether this setting is off, unnecessary because Google TTS is already the current synthesizer, or waiting to start after you press OK or Apply.
 * **Use automatic language profiles**: Enable automatic profile selection and open the profile controls described below.
 * **Preferred profile language**: Choose the enabled profile language used when a sentence is unclear. This list can be empty until at least one language profile is enabled.
 * **Automatic language profile**: Choose which installed language profile to edit.
