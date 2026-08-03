@@ -983,7 +983,13 @@
 				if (!isCurrentSession(sessionToken)) {
 					break;
 				}
-				finishSegmentAudio(segmentIndex < textSegments.length - 1, sessionToken);
+				const hasNextSegment = segmentIndex < textSegments.length - 1;
+				finishSegmentAudio(hasNextSegment, sessionToken);
+				if (hasNextSegment) {
+					// Each hidden segment is a separate WASM onSpeak call; expose that boundary so
+					// Python can shorten the engine's end-of-utterance silence without splitting CDP requests.
+					emit({ type: "segmentEnd" }, sessionToken);
+				}
 				currentMarkOffset += textSegment.length;
 			}
 			currentMarkOffset = 0;

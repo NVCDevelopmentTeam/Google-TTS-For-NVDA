@@ -63,10 +63,11 @@ _PAUSE_MODE_DO_NOT_SHORTEN = "0"
 _PAUSE_MODE_SHORTEN_END_ONLY = "1"
 _PAUSE_MODE_SHORTEN_ALL = "2"
 _SHORTENED_SILENCE_KEEP_MS = 35
+_SHORTENED_ALL_PAUSES_KEEP_MS = 25
 _SILENCE_SAMPLE_THRESHOLD = 48
 _BYTES_PER_SAMPLE = 2
 _NORMAL_SENTENCE_BREAK_MS = 95
-_SHORTENED_SENTENCE_BREAK_MS = 25
+_SHORTENED_SENTENCE_BREAK_MS = 15
 _GOOGLE_TTS_LANG_CHANGE_ATTR = "googleTtsForNvdaLanguage"
 _MISSING_GOOGLE_TTS_LANGUAGE = object()
 _SpeechRequest = tuple[list[Any], str, int, bool, int, int, str, threading.Event]
@@ -259,10 +260,14 @@ def _pcm_has_audible_sample(pcm: bytes) -> bool:
 
 
 class _PcmSilenceShortener:
-	def __init__(self, shortenAllPauses: bool) -> None:
+	def __init__(
+		self,
+		shortenAllPauses: bool,
+		keepSilenceMs: int = _SHORTENED_SILENCE_KEEP_MS,
+	) -> None:
 		self._shortenAllPauses = bool(shortenAllPauses)
 		self._heldSilence = bytearray()
-		self._keepSilenceBytes = _pcm_bytes_for_milliseconds(_SHORTENED_SILENCE_KEEP_MS)
+		self._keepSilenceBytes = _pcm_bytes_for_milliseconds(keepSilenceMs)
 
 	def _release_held_silence(self, *, final: bool) -> bytes:
 		if not self._heldSilence:
@@ -1624,6 +1629,11 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		shortenPauses = pauseShorteningMode in (_PAUSE_MODE_SHORTEN_END_ONLY, _PAUSE_MODE_SHORTEN_ALL)
 		silenceShortener = _PcmSilenceShortener(
 			shortenAllPauses=pauseShorteningMode == _PAUSE_MODE_SHORTEN_ALL,
+			keepSilenceMs=(
+				_SHORTENED_ALL_PAUSES_KEEP_MS
+				if pauseShorteningMode == _PAUSE_MODE_SHORTEN_ALL
+				else _SHORTENED_SILENCE_KEEP_MS
+			),
 		) if shortenPauses else None
 		pendingIndexes = sorted(remainingIndexes, key=lambda item: item[1])
 
@@ -1655,12 +1665,19 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 			else:
 				feed_processed_audio(pcm)
 
+		def on_segment_end() -> None:
+			if silenceShortener is None:
+				return
+			if not cancelEvent.is_set():
+				feed_processed_audio(silenceShortener.finish())
+
 		speechResult = self._bridge.speak(
 			text,
 			options,
 			on_audio,
 			cancelEvent,
 			onMark=on_mark if hasInternalIndexes else None,
+			onSegmentEnd=on_segment_end if hiddenSegments and shortenPauses else None,
 			segments=hiddenSegments,
 		)
 		if silenceShortener is not None:

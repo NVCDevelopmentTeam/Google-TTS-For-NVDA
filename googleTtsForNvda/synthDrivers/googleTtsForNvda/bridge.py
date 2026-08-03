@@ -117,6 +117,7 @@ class CdpCancelled(Exception):
 
 AudioCallback = Callable[[bytes], None]
 MarkCallback = Callable[[int], None]
+SegmentEndCallback = Callable[[], None]
 
 
 class _ThreadingTcpServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
@@ -1655,6 +1656,7 @@ class WasmTtsEngineBridge:
 		onAudio: AudioCallback,
 		cancelEvent: threading.Event | None = None,
 		onMark: MarkCallback | None = None,
+		onSegmentEnd: SegmentEndCallback | None = None,
 		segments: list[str] | None = None,
 	) -> dict[str, Any]:
 		if not text.strip():
@@ -1752,6 +1754,9 @@ class WasmTtsEngineBridge:
 						onMark(max(0, int(event.get("charIndex") or 0)))
 					except (TypeError, ValueError):
 						pass
+			elif eventType == "segmentEnd":
+				if onSegmentEnd is not None:
+					onSegmentEnd()
 			elif eventType == "done":
 				state["done"] = True
 			elif eventType == "error":
@@ -2021,6 +2026,7 @@ class ChromeTtsBridge:
 		onAudio: AudioCallback,
 		cancelEvent: threading.Event | None = None,
 		onMark: MarkCallback | None = None,
+		onSegmentEnd: SegmentEndCallback | None = None,
 		segments: list[str] | None = None,
 	) -> dict[str, Any]:
 		try:
@@ -2033,6 +2039,7 @@ class ChromeTtsBridge:
 				onAudio,
 				cancelEvent=cancelEvent,
 				onMark=onMark,
+				onSegmentEnd=onSegmentEnd,
 				segments=segments,
 			)
 		except CdpCancelled:
