@@ -381,6 +381,16 @@ def _is_soft_break_character(character: str) -> bool:
 	return any(part in name for part in _UNICODE_SOFT_BREAK_NAME_PARTS)
 
 
+@lru_cache(maxsize=4096)
+def _is_colon_like_character(character: str) -> bool:
+	return character in ":：" or "COLON" in _unicode_name(character)
+
+
+@lru_cache(maxsize=4096)
+def _is_dash_like_character(character: str) -> bool:
+	return character in "\u2013\u2014" or "DASH" in _unicode_name(character)
+
+
 @lru_cache(maxsize=1024)
 def _is_sentence_trailing_closer(character: str) -> bool:
 	return (
@@ -1229,6 +1239,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 			index += 1
 			while index < len(text) and _is_sentence_terminator_character(text[index]):
 				index += 1
+			terminatorEnd = index
 			while index < len(text) and _is_sentence_trailing_closer(text[index]):
 				index += 1
 			whitespaceStart = index
@@ -1238,6 +1249,8 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 			end = index
 			if end == len(text):
 				continue
+			if self._sentence_terminator_stays_with_token(text, terminatorStart, terminatorEnd, terminator):
+				continue
 			if terminator in _ASCII_SENTENCE_TERMINATORS + ";":
 				if not trailing_ws:
 					continue
@@ -1246,21 +1259,41 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 				continue
 			if not trailing_ws:
 				continue
-			if terminator == ".":
-				w_start = terminatorStart - 1
-				while w_start >= 0 and text[w_start].isalnum():
-					w_start -= 1
-				word_before = text[w_start + 1 : terminatorStart].lower()
-				if word_before.isdigit():
-					continue
-				if len(word_before) == 1 and word_before.isalpha():
-					continue
-				if word_before in _COMMON_ABBREVIATIONS:
-					continue
-				if w_start >= 0 and text[w_start] == ".":
-					continue
 			splits.append(end)
 		return splits
+
+	def _sentence_terminator_stays_with_token(
+		self,
+		text: str,
+		terminatorStart: int,
+		terminatorEnd: int,
+		terminator: str,
+	) -> bool:
+		before = text[terminatorStart - 1] if terminatorStart > 0 else ""
+		after = text[terminatorEnd] if terminatorEnd < len(text) else ""
+		if before.isdigit() and after.isdigit():
+			return True
+		if terminator == ".":
+			return self._period_stays_with_previous_token(text, terminatorStart)
+		return False
+
+	def _period_stays_with_previous_token(self, text: str, periodIndex: int) -> bool:
+		if self._period_is_numeric_separator(text, periodIndex):
+			return True
+		w_start = periodIndex - 1
+		while w_start >= 0 and text[w_start].isalnum():
+			w_start -= 1
+		word_before = text[w_start + 1 : periodIndex].lower()
+		if len(word_before) == 1 and word_before.isalpha():
+			return True
+		if word_before in _COMMON_ABBREVIATIONS:
+			return True
+		return word_before.isalpha() and w_start >= 0 and text[w_start] == "."
+
+	def _period_is_numeric_separator(self, text: str, periodIndex: int) -> bool:
+		before = text[periodIndex - 1] if periodIndex > 0 else ""
+		after = text[periodIndex + 1] if periodIndex + 1 < len(text) else ""
+		return before.isdigit() and after.isdigit()
 
 	def _iter_text_segments_for_latency(self, text: str, fastFirstSegment: bool) -> Iterator[str]:
 		remaining = text.strip()
@@ -1403,11 +1436,11 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 			max_len = min(len(text), _SOFT_PHRASE_SEGMENT_MAX_CHARS)
 			lookahead = _SOFT_PHRASE_SEGMENT_LOOKAHEAD
 		for index in range(max_len, min_len - 1, -1):
-			if _is_soft_break_character(text[index - 1]):
+			if self._is_contextual_soft_phrase_cut(text, index):
 				return index
 		lookahead_end = min(len(text), max_len + lookahead)
 		for index in range(max_len, lookahead_end):
-			if _is_soft_break_character(text[index]):
+			if self._is_contextual_soft_phrase_cut(text, index + 1):
 				return index + 1
 		return None
 
@@ -1427,9 +1460,8 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		if len(text) <= max_len:
 			return len(text)
 		min_len = min(max_len, max(_FORCED_SEGMENT_MIN_CHARS, int(max_len * 0.55)))
-		soft_break_chars = ",，、:：;；"
 		for index in range(max_len, min_len - 1, -1):
-			if text[index - 1] in soft_break_chars and self._is_forced_soft_break(text, index):
+			if self._is_contextual_soft_phrase_cut(text, index):
 				return index
 		for index in range(max_len, min_len - 1, -1):
 			if text[index - 1].isspace():
@@ -1461,7 +1493,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 			return None
 		target = min(len(text), max_len, max(_FORCED_SEGMENT_MIN_CHARS, segmentLimit))
 		for index in range(target, _FORCED_SEGMENT_MIN_CHARS - 1, -1):
-			if _is_soft_break_character(text[index - 1]) and self._is_forced_soft_break(text, index):
+			if self._is_contextual_soft_phrase_cut(text, index):
 				return index
 		return self._extend_cut_over_combining_marks(
 			text,
@@ -1506,12 +1538,28 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 
 	def _is_forced_soft_break(self, text: str, index: int) -> bool:
 		character = text[index - 1]
-		if character in ":：":
-			before = text[index - 2] if index >= 2 else ""
-			after = text[index] if index < len(text) else ""
-			if before.isdigit() and after.isdigit():
-				return False
+		before = text[index - 2] if index >= 2 else ""
+		after = text[index] if index < len(text) else ""
+		if before.isdigit() and after.isdigit():
+			return False
+		if _is_colon_like_character(character):
+			if character == ":" and after in "/\\":
+				if index == 2 and text[0].isalpha():
+					return False
+				schemeStart = index - 2
+				while schemeStart >= 0 and (text[schemeStart].isalnum() or text[schemeStart] in "+-."):
+					schemeStart -= 1
+				scheme = text[schemeStart + 1 : index - 1]
+				if scheme and scheme[0].isalpha() and text[index : index + 2] == "//":
+					return False
+		if _is_dash_like_character(character) and before.isalnum() and after.isalnum():
+			return False
 		return True
+
+	def _is_contextual_soft_phrase_cut(self, text: str, index: int) -> bool:
+		if index <= 0 or index > len(text):
+			return False
+		return _is_soft_break_character(text[index - 1]) and self._is_forced_soft_break(text, index)
 
 	def _should_pause_after_segment(self, segment: str) -> bool:
 		stripped = segment.rstrip()
