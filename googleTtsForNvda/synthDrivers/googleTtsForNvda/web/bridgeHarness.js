@@ -5,11 +5,8 @@
 	let currentSessionToken = 0;
 	let currentMarkOffset = 0;
 	let currentOutputGain = 1;
-	let currentVolumeLevel = 1;
 	let currentTempoRate = 1;
 	let currentPostPitchFactor = 1;
-	let currentAgcGain = 1;
-	let currentLimiterGain = 1;
 	let lastChunkAt = 0;
 	let stopped = false;
 	let initPromise = null;
@@ -19,14 +16,6 @@
 	const earlyAudioPacketSamples = 1200;
 	const steadyAudioPacketSamples = 2400;
 	const earlyAudioPacketCount = 3;
-	const agcTargetRms = 0.18;
-	const agcSilenceFloor = 0.012;
-	const agcMinGain = 0.55;
-	const agcMaxGain = 1.7;
-	const agcAttackStep = 0.08;
-	const agcReleaseStep = 0.006;
-	const peakLimiterCeiling = 0.92;
-	const peakLimiterReleaseStep = 0.0002;
 	const softLimiterKnee = 0.82;
 	const softLimiterCeiling = 0.94;
 	const synthesisIdlePollMs = 2;
@@ -196,15 +185,7 @@
 		if (!Number.isFinite(gain)) {
 			return 1;
 		}
-		return Math.max(0, Math.min(2, gain));
-	}
-
-	function volumeLevelFromPayload(payload) {
-		const volume = Number(payload && payload.volume);
-		if (!Number.isFinite(volume)) {
-			return 1;
-		}
-		return Math.max(0, Math.min(1, volume));
+		return Math.max(0, Math.min(1.75, gain));
 	}
 
 	function tempoRateFromPayload(payload) {
@@ -220,42 +201,6 @@
 			return 1;
 		}
 		return Math.max(0.35, Math.min(2.5, pitchFactor));
-	}
-
-	function updateAgcGain(buffers, sampleCount) {
-		if (!sampleCount || !currentOutputGain || !currentVolumeLevel) {
-			return;
-		}
-		let sumSquares = 0;
-		for (const buffer of buffers) {
-			for (let inputIndex = 0; inputIndex < buffer.length; inputIndex++) {
-				sumSquares += buffer[inputIndex] * buffer[inputIndex];
-			}
-		}
-		const rms = Math.sqrt(sumSquares / sampleCount);
-		if (!Number.isFinite(rms) || rms < agcSilenceFloor) {
-			return;
-		}
-		const targetRms = agcTargetRms * currentVolumeLevel;
-		let targetGain = targetRms / (rms * currentOutputGain);
-		targetGain = Math.max(agcMinGain, Math.min(agcMaxGain, targetGain));
-		if (targetGain < currentAgcGain) {
-			currentAgcGain = Math.max(targetGain, currentAgcGain - agcAttackStep);
-		} else {
-			currentAgcGain = Math.min(targetGain, currentAgcGain + agcReleaseStep);
-		}
-	}
-
-	function gainForSample(sample) {
-		const baseGain = currentOutputGain * currentAgcGain;
-		const peak = Math.abs(sample * baseGain);
-		const targetLimiterGain = peak > peakLimiterCeiling ? peakLimiterCeiling / peak : 1;
-		if (targetLimiterGain < currentLimiterGain) {
-			currentLimiterGain = targetLimiterGain;
-		} else {
-			currentLimiterGain = Math.min(1, currentLimiterGain + peakLimiterReleaseStep);
-		}
-		return baseGain * currentLimiterGain;
 	}
 
 	function limitSample(sample) {
@@ -312,11 +257,10 @@
 		const bytes = new Uint8Array(sampleCount * 2);
 		const pcm = new Int16Array(bytes.buffer);
 		let outputIndex = 0;
-		updateAgcGain(buffers, sampleCount);
 		for (const buffer of buffers) {
 			for (let inputIndex = 0; inputIndex < buffer.length; inputIndex++) {
-				const gain = gainForSample(buffer[inputIndex]);
-				const sample = limitSample(buffer[inputIndex] * gain);
+				// A fixed gain avoids the audible pumping caused by adaptive gain and limiter release envelopes.
+				const sample = limitSample(buffer[inputIndex] * currentOutputGain);
 				pcm[outputIndex++] = sample < 0 ? sample * 0x8000 : sample * 0x7fff;
 			}
 		}
@@ -332,8 +276,6 @@
 		heldBoundarySamples = new Float32Array(0);
 		trimLeadingBoundarySilence = false;
 		leadingBoundaryTrimBudget = 0;
-		currentAgcGain = 1;
-		currentLimiterGain = 1;
 	}
 
 	function resetPitchProcessor() {
@@ -833,7 +775,6 @@
 		stopped = true;
 		synthesisGenerating = false;
 		synthesisErrorMessage = "";
-		currentVolumeLevel = 0;
 		smoothSegmentBoundaries = false;
 		if (currentEndResolver) {
 			currentEndResolver();
@@ -861,7 +802,6 @@
 	window.googleTtsForNvdaPreload = async function googleTtsForNvdaPreload(payload) {
 		const sessionToken = beginSession(payload.sessionId, true);
 		currentOutputGain = 0;
-		currentVolumeLevel = 0;
 		try {
 			lastChunkAt = 0;
 			stopped = false;
@@ -940,7 +880,6 @@
 			const hasHiddenSegments = textSegments.length > 1;
 			const sessionToken = beginSession(sessionId, false);
 			currentMarkOffset = 0;
-			currentVolumeLevel = volumeLevelFromPayload(payload);
 			currentOutputGain = outputGainFromPayload(payload);
 			lastChunkAt = 0;
 			stopped = false;

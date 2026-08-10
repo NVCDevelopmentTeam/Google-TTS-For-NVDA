@@ -480,11 +480,11 @@ They are required for `SharedArrayBuffer` support. Do not remove or weaken them.
 - WASM engine version, file checks, and catalog selection live in `catalog.py`: `ENGINE_VERSION`, `ENGINE_ROOT`, `ENGINE_DIR`, `CATALOG_PATH`, `REQUIRED_ENGINE_FILES`, `UNSUPPORTED_ENGINE_PACKAGE_ID_PARTS`, `inspect_engine_library()`, and `is_package_supported_by_engine()`.
 - `googleTtsForNvdaSpeak()` must call `stopActiveSynthesis()` on both successful completion and speech errors so audio buffers, timers, session tokens, and engine `onStop()` state do not leak into the next request.
 - Keep the first browser-side PCM packet small for startup continuity, use larger steady-state packets to reduce CDP/base64 overhead, and keep Python-side validation in sync with any message-shape or sample-rate changes.
-- AGC is responsible only for post-engine PCM loudness/gain normalization and clipping protection; it must not change rate, pitch, segmentation, pause shortening, or voice/package selection. The AGC RMS target must scale with `payload.volume` so the user's Volume slider percentage remains meaningful.
+- Post-engine PCM loudness uses a fixed makeup gain derived from the user's Volume slider and a stateless soft limiter for clipping protection. Do not add adaptive per-packet or per-sample gain, gain-release envelopes, or RMS-target tracking: those can make steady speech audibly pump between louder and quieter levels. Loudness processing must not change rate, pitch, segmentation, pause shortening, or voice/package selection.
 - Browser harness audio code map:
   - Engine startup/readiness/error cleanup: `isTtsEngineInstance()`, `getTtsEngine()`, `ensureEngineInitialized()`, `ensureLanguageReady()`, `stopActiveSynthesis()`, `googleTtsForNvdaPreload()`, and `googleTtsForNvdaSpeak()`.
   - PCM packetization: `buffersToPcmBase64()`, `appendSamples()`, `audioPacketSampleTarget()`, `queueAudioPacket()`, and `flushAudioQueue()`.
-  - Loudness/AGC: `volumeLevelFromPayload()`, `outputGainFromPayload()`, `updateAgcGain()`, `gainForSample()`, and `limitSample()`.
+  - Fixed loudness and clipping protection: `outputGainFromPayload()`, `buffersToPcmBase64()`, and `limitSample()`.
 
 - `bridgeHarness.js` should remain strict-mode and IIFE-wrapped.
 - Avoid changing PCM conversion semantics unless fixing a documented audio bug.
@@ -494,7 +494,7 @@ They are required for `SharedArrayBuffer` support. Do not remove or weaken them.
 - Apply protected high-rate behavior only to package IDs ending in `-seanet`, such as `multi-seanet`, `afh-seanet`, and `fis-seanet`.
 - Do not apply the SeaNet artificial-rate path to non-SeaNet packages such as `multi`, `afh`, and `fis`.
 - Keep the engine rate safer for SeaNet quality at high speeds, then apply artificial rate processing to generated PCM in `bridgeHarness.js`.
-- SeaNet package families should use the same post-engine loudness target as their base packages. At the same Volume slider percentage, `*-multi-seanet`, `*-afh-seanet`, and `*-fis-seanet` should be normalized toward the same browser-side RMS target as `*-multi`, `*-afh`, and `*-fis` respectively, while still letting the slider percentage scale the final target loudness.
+- SeaNet package families must use the same fixed post-engine makeup gain and stateless clipping protection as their base packages. The Volume slider must scale the fixed gain identically for `*-multi-seanet`, `*-afh-seanet`, `*-fis-seanet`, `*-multi`, `*-afh`, and `*-fis`.
 - SeaNet pitch must remain effective even when the underlying WASM engine ignores or weakens its `pitch` option. For SeaNet packages, send neutral engine pitch and carry the desired pitch as `postPitch` for browser-side PCM processing.
 - Post-synthesis pitch processing must run before artificial tempo processing. The pitch pass changes duration as a side effect, and `tempoRateFromPayload()` compensates so the user's requested speech rate stays stable.
 - Cache keys for short speech must include both `pitch` and `postPitch`; otherwise changing Pitch can replay cached audio generated with the old post-synthesis pitch.
@@ -502,7 +502,7 @@ They are required for `SharedArrayBuffer` support. Do not remove or weaken them.
 - SeaNet rate/pitch code map:
   - Synth-side option building: `_speech_options()`, `_uses_protected_engine_rate()`, `_rate_to_chrome()`, `_pitch_to_chrome()`, and `_short_cache_key()`.
   - Python-to-browser payload: `WasmTtsEngineBridge.speak()`.
-  - Browser-side loudness/rate/pitch processing: `volumeLevelFromPayload()`, `outputGainFromPayload()`, `updateAgcGain()`, `gainForSample()`, `limitSample()`, `postPitchFactorFromPayload()`, `tempoRateFromPayload()`, `resetPitchProcessor()`, `processPitchSamples()`, `processTempoSamples()`, `queueTempoInput()`, `flushAudioProcessors()`, `flushTempoProcessor()`, `queueAudio()`, `finishSegmentAudio()`, and `googleTtsForNvdaSpeak()`.
+  - Browser-side loudness/rate/pitch processing: `outputGainFromPayload()`, `limitSample()`, `postPitchFactorFromPayload()`, `tempoRateFromPayload()`, `resetPitchProcessor()`, `processPitchSamples()`, `processTempoSamples()`, `queueTempoInput()`, `flushAudioProcessors()`, `flushTempoProcessor()`, `queueAudio()`, `finishSegmentAudio()`, and `googleTtsForNvdaSpeak()`.
 
 ### CDP/WebSocket expectations
 
