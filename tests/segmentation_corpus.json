@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "artifact": "Google Speech Recognition and Synthesis APK decompilation",
+    "class": "com/google/android/apps/speech/tts/googletts/util/MarkupGenerator",
+    "decompiledClass": "jadx/sources/defpackage/did.java",
+    "observations": [
+      "The default sentence iterator uses Locale.US.",
+      "Language and country select a cached locale-specific BreakIterator sentence instance.",
+      "Sentence text is trimmed before it is emitted.",
+      "A sentence longer than 200 UTF-16 code units is diagnosed as overly long."
+    ],
+    "scope": "Behavioral cases inspired by the APK path; expected results are for this add-on's Unicode-aware, low-latency segmenter."
+  },
+  "cases": [
+    {
+      "id": "en-us-quoted-question-and-title",
+      "category": "locale-punctuation",
+      "locale": "en-US",
+      "operation": "sentenceUnits",
+      "text": "Dr. Rivera asked, “Ready?” Then the test began.",
+      "expected": [
+        "Dr. Rivera asked, “Ready?”",
+        "Then the test began."
+      ]
+    },
+    {
+      "id": "vi-vn-common-abbreviations",
+      "category": "abbreviation",
+      "locale": "vi-VN",
+      "operation": "sentenceUnits",
+      "text": "TS. Nguyễn An làm việc tại TP. Hồ Chí Minh. Hôm nay anh ấy thử giọng.",
+      "expected": [
+        "TS. Nguyễn An làm việc tại TP. Hồ Chí Minh.",
+        "Hôm nay anh ấy thử giọng."
+      ]
+    },
+    {
+      "id": "de-de-common-abbreviations",
+      "category": "abbreviation",
+      "locale": "de-DE",
+      "operation": "sentenceUnits",
+      "text": "Dr. Weber wartet bzw. prüft weiter. Danach startet die Stimme.",
+      "expected": [
+        "Dr. Weber wartet bzw. prüft weiter.",
+        "Danach startet die Stimme."
+      ]
+    },
+    {
+      "id": "el-gr-tailored-question-mark",
+      "category": "locale-punctuation",
+      "locale": "el-GR",
+      "operation": "sentenceUnits",
+      "text": "Είναι έτοιμο; Ναι, ξεκινά.",
+      "expected": [
+        "Είναι έτοιμο;",
+        "Ναι, ξεκινά."
+      ]
+    },
+    {
+      "id": "ar-sa-question-mark",
+      "category": "locale-punctuation",
+      "locale": "ar-SA",
+      "operation": "sentenceUnits",
+      "text": "هل أنت جاهز؟ نعم، أنا جاهز.",
+      "expected": [
+        "هل أنت جاهز؟",
+        "نعم، أنا جاهز."
+      ]
+    },
+    {
+      "id": "ar-xa-unicode-sentence-terminal",
+      "category": "locale-punctuation",
+      "locale": "ar-XA",
+      "operation": "sentenceUnits",
+      "text": "هذه الجملة الأولى؞هذه الجملة الثانية؞",
+      "expected": [
+        "هذه الجملة الأولى؞",
+        "هذه الجملة الثانية؞"
+      ]
+    },
+    {
+      "id": "hi-in-danda",
+      "category": "locale-punctuation",
+      "locale": "hi-IN",
+      "operation": "sentenceUnits",
+      "text": "यह पहला वाक्य है। यह दूसरा वाक्य है।",
+      "expected": [
+        "यह पहला वाक्य है।",
+        "यह दूसरा वाक्य है।"
+      ]
+    },
+    {
+      "id": "ja-jp-closing-quote",
+      "category": "locale-punctuation",
+      "locale": "ja-JP",
+      "operation": "sentenceUnits",
+      "text": "「準備できた？」 次の文を読む。",
+      "expected": [
+        "「準備できた？」",
+        "次の文を読む。"
+      ]
+    },
+    {
+      "id": "zh-cn-fullwidth-punctuation",
+      "category": "locale-punctuation",
+      "locale": "zh-CN",
+      "operation": "sentenceUnits",
+      "text": "第一句准备好了吗？第二句现在开始！最后一句结束。",
+      "expected": [
+        "第一句准备好了吗？",
+        "第二句现在开始！",
+        "最后一句结束。"
+      ]
+    },
+    {
+      "id": "th-th-angkhan-khu",
+      "category": "locale-punctuation",
+      "locale": "th-TH",
+      "operation": "sentenceUnits",
+      "text": "ประโยคแรกจบแล้ว๚ประโยคที่สองเริ่มแล้ว๚",
+      "expected": [
+        "ประโยคแรกจบแล้ว๚",
+        "ประโยคที่สองเริ่มแล้ว๚"
+      ]
+    },
+    {
+      "id": "url-with-decimals",
+      "category": "url",
+      "locale": "en-US",
+      "operation": "sentenceUnits",
+      "text": "Open https://example.com/docs/v1.2/index.html?zoom=1.5 now. Then continue.",
+      "expected": [
+        "Open https://example.com/docs/v1.2/index.html?zoom=1.5 now.",
+        "Then continue."
+      ]
+    },
+    {
+      "id": "emoji-zwj-between-sentences",
+      "category": "emoji",
+      "locale": "en-US",
+      "operation": "sentenceUnits",
+      "text": "The family 👨‍👩‍👧‍👦 is ready! The rocket 🚀 launches now.",
+      "expected": [
+        "The family 👨‍👩‍👧‍👦 is ready!",
+        "The rocket 🚀 launches now."
+      ]
+    },
+    {
+      "id": "common-tailored-ellipsis",
+      "category": "locale-punctuation",
+      "locale": "und",
+      "operation": "sentenceUnits",
+      "text": "First thought… Second thought.",
+      "expected": [
+        "First thought…",
+        "Second thought."
+      ]
+    },
+    {
+      "id": "semicolon-remains-phrase-punctuation",
+      "category": "locale-punctuation",
+      "locale": "en-US",
+      "operation": "sentenceUnits",
+      "text": "The first clause continues; the second clause finishes.",
+      "expected": [
+        "The first clause continues; the second clause finishes."
+      ]
+    },
+    {
+      "id": "very-long-url-token",
+      "category": "url",
+      "locale": "und",
+      "operation": "latencySegments",
+      "fastFirstSegment": false,
+      "textBuilder": {
+        "prefix": "https://example.com/",
+        "pattern": "very-long-path-segment_1234567890/",
+        "repeat": 32,
+        "separator": "",
+        "suffix": "index.html?query=value#section"
+      },
+      "assert": {
+        "minSegmentCount": 5,
+        "maxSegmentLength": 220,
+        "preservesNonWhitespace": true
+      }
+    },
+    {
+      "id": "cjk-long-no-space-text",
+      "category": "cjk",
+      "locale": "zh-CN",
+      "operation": "latencySegments",
+      "fastFirstSegment": false,
+      "textBuilder": {
+        "pattern": "这是用于测试没有空格的长文本分段并保持语音尽快开始",
+        "repeat": 24,
+        "separator": ""
+      },
+      "assert": {
+        "minSegmentCount": 6,
+        "maxSegmentLength": 80,
+        "preservesNonWhitespace": true
+      }
+    },
+    {
+      "id": "thai-long-no-space-text",
+      "category": "thai",
+      "locale": "th-TH",
+      "operation": "latencySegments",
+      "fastFirstSegment": false,
+      "textBuilder": {
+        "pattern": "ข้อความภาษาไทยสำหรับทดสอบการแบ่งข้อความยาวโดยไม่มีช่องว่าง",
+        "repeat": 22,
+        "separator": ""
+      },
+      "assert": {
+        "minSegmentCount": 7,
+        "maxSegmentLength": 78,
+        "preservesNonWhitespace": true,
+        "noLeadingCombiningMark": true
+      }
+    },
+    {
+      "id": "mni-in-meetei-sentence-terminal",
+      "category": "locale-punctuation",
+      "locale": "mni-IN",
+      "operation": "sentenceUnits",
+      "text": "ꯑꯍꯥꯟꯕ ꯋꯥꯍꯩ꯫ꯑꯅꯤꯁꯨꯕ ꯋꯥꯍꯩ꯫",
+      "expected": [
+        "ꯑꯍꯥꯟꯕ ꯋꯥꯍꯩ꯫",
+        "ꯑꯅꯤꯁꯨꯕ ꯋꯥꯍꯩ꯫"
+      ]
+    },
+    {
+      "id": "emoji-zwj-long-text",
+      "category": "emoji",
+      "locale": "und",
+      "operation": "latencySegments",
+      "fastFirstSegment": false,
+      "textBuilder": {
+        "pattern": "family 👨‍👩‍👧‍👦 rocket 🚀 celebration 🎉",
+        "repeat": 34,
+        "separator": " "
+      },
+      "assert": {
+        "minSegmentCount": 5,
+        "maxSegmentLength": 240,
+        "preservesNonWhitespace": true,
+        "forbidSegmentStartCharacters": ["‍", "️"],
+        "forbidSegmentEndCharacters": ["‍"]
+      }
+    },
+    {
+      "id": "long-latin-fast-first-segment",
+      "category": "long-sentence",
+      "locale": "en-US",
+      "operation": "latencySegments",
+      "fastFirstSegment": true,
+      "textBuilder": {
+        "pattern": "This deliberately long sentence has no terminal punctuation and keeps adding ordinary words for latency testing",
+        "repeat": 14,
+        "separator": " "
+      },
+      "assert": {
+        "minSegmentCount": 6,
+        "firstMaxLength": 64,
+        "maxSegmentLength": 240,
+        "preservesNonWhitespace": true
+      }
+    }
+  ]
+}
