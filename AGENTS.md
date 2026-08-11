@@ -184,8 +184,8 @@ This add-on depends on a supported Chromium browser runtime, such as Google Chro
   - `bridge.py` availability and fallback selection: `_runtime_fallback_order()`, `_browser_candidates()`, `browser_path_for_runtime()`, `browser_executable_available()`, `edge_webview2_available()`, `browser_runtime_available()`, `browser_availability()`, `_browser_choices()`, `_find_browser_choice()`, `browser_runtime_snapshot()`, `find_browser()`, `effective_browser_runtime()`, and `edge_webview2_blocks_effective_runtime()`.
   - `bridge.py` CDP connection and harness readiness: `CdpDispatcher`, `CdpClient.request()`, `_friendly_cdp_error()`, `_TRANSIENT_RUNTIME_EVALUATE_ERRORS`, `_is_transient_runtime_evaluate_error()`, `WasmTtsEngineBridge.enable_cdp_domains()`, `WasmTtsEngineBridge.wait_until_ready()`, and `ChromeTtsBridge.ensure_connection()`.
   - `bridge.py` startup cancellation path: `ChromeTtsBridge.speak()`, `ChromeTtsBridge.preload_voice()`, `ChromeTtsBridge.ensure_connection()`, `BrowserProcessManager.start_and_get_websocket_url()`, `WasmTtsEngineBridge.enable_cdp_domains()`, `WasmTtsEngineBridge.wait_until_ready()`, and `CdpClient.request()`.
-  - `bridge.py` runtime health and recycle: `RUNTIME_MEMORY_STARTUP_GRACE_SECONDS`, `RUNTIME_MEMORY_CHECK_INTERVAL_SECONDS`, `RUNTIME_PRIVATE_BYTES_RECYCLE_THRESHOLD`, `RUNTIME_WORKING_SET_BYTES_RECYCLE_THRESHOLD`, `RUNTIME_MEMORY_RECYCLE_CONFIRMATIONS`, `_runtime_error_requires_recycle()`, `_process_tree_memory_usage()`, `BrowserProcessManager.browser_memory_usage()`, `WasmTtsEngineBridge.runtime_busy`, `ChromeTtsBridge._mark_runtime_error_for_recycle()`, `ChromeTtsBridge._mark_memory_recycle_if_needed_locked()`, and `ChromeTtsBridge.maybe_recycle_runtime()`.
-  - `__init__.py` synth-side recycle scheduling: `SynthDriver._maybe_recycle_bridge_after_request()`.
+  - `bridge.py` runtime health, speech-error recovery, and recycle: `_BrowserSpeechError`, `RUNTIME_MEMORY_STARTUP_GRACE_SECONDS`, `RUNTIME_MEMORY_CHECK_INTERVAL_SECONDS`, `RUNTIME_PRIVATE_BYTES_RECYCLE_THRESHOLD`, `RUNTIME_WORKING_SET_BYTES_RECYCLE_THRESHOLD`, `RUNTIME_MEMORY_RECYCLE_CONFIRMATIONS`, `_runtime_error_requires_recycle()`, `_process_tree_memory_usage()`, `BrowserProcessManager.browser_memory_usage()`, `WasmTtsEngineBridge.runtime_busy`, `WasmTtsEngineBridge.speak()`, `ChromeTtsBridge._mark_runtime_error_for_recycle()`, `ChromeTtsBridge._mark_memory_recycle_if_needed_locked()`, `ChromeTtsBridge.maybe_recycle_runtime()`, `ChromeTtsBridge.safe_for_standby_release()`, and `ChromeTtsBridge.speak()`.
+  - `__init__.py` synth-side recycle scheduling and failure diagnostics: `SynthDriver._maybe_recycle_bridge_after_request()` and `SynthDriver._speak_worker()`.
   - `__init__.py` synth/standby handoff: `SynthDriver.__init__()`, `SynthDriver.terminate()`, and `SynthDriver._bridge_safe_for_standby_release()`.
   - `settings.py` runtime settings UI: `_runtime_label()`, `_save_browser_runtime()`, `_schedule_runtime_change_after_synth_switch()`, `_clear_pending_runtime_change()`, `_apply_runtime_after_synth_switch()`, `GoogleTtsSettingsPanel._selected_runtime_choice()`, `GoogleTtsSettingsPanel._refresh_runtime_snapshot()`, `GoogleTtsSettingsPanel._format_runtime_choice()`, `GoogleTtsSettingsPanel.on_runtime_choice_changed()`, `GoogleTtsSettingsPanel._refresh_runtime_status()`, `GoogleTtsSettingsPanel._effective_runtime_message()`, and `GoogleTtsSettingsPanel._select_saved_runtime()`.
   - `settings.py` runtime-ready settings UI: `_configured_keep_browser_runtime_ready()`, `_save_keep_browser_runtime_ready()`, `GoogleTtsSettingsPanel.on_keep_browser_runtime_ready_changed()`, `GoogleTtsSettingsPanel._keep_browser_runtime_ready_status_message()`, and `GoogleTtsSettingsPanel._refresh_keep_browser_runtime_ready_status()`.
@@ -204,13 +204,14 @@ This add-on depends on a supported Chromium browser runtime, such as Google Chro
   - `CdpDispatcher` must propagate Runtime binding/event handler failures back to the owning request instead of only logging them, because audio decode/feed errors must fail the speech request and must not allow partial PCM to be cached.
   - Startup cancellation must pass the same `cancelEvent` through speech/preload, connection startup, CDP domain enable, harness readiness, and individual CDP requests.
   - Runtime/CDP timeout or closed-WebSocket failures should mark the Chromium runtime for urgent recycle after the current speech request.
+  - Browser-harness speech errors must urgently recycle the Chromium/WASM runtime. `ChromeTtsBridge.speak()` may retry the same request at most once after a successful recycle and only when `_BrowserSpeechError.audioStarted` is false; never retry after any PCM packet has been emitted because that can repeat partial speech.
   - Memory threshold recycling should ignore normal Chromium/WASM cold-start spikes, require confirmed high-memory samples after the startup grace/interval, and recycle only when the synth worker reports an idle queue.
   - `SynthDriver._maybe_recycle_bridge_after_request()` should run after each non-cancelled speech request, with browser termination kept off NVDA's main thread and away from active audio callbacks.
   - `keepBrowserRuntimeReady` must default to `False`, must be saved through `bridge.py:set_keep_browser_runtime_ready()` so it follows the same active-config/base-profile path as `set_configured_browser_runtime()`, must be gated through `standby.keep_browser_runtime_ready_enabled()`, and must stay disabled in secure mode.
   - Standby refresh must be event-driven from Settings OK/Apply, NVDA startup, synth handoff, Voice Manager package changes, and `_DirectoryChangeWatcher`. Do not add periodic voice-folder rescans.
   - Forced standby refresh that replaces an active worker must cancel the old worker and detach/terminate the worker-owned `ChromeTtsBridge` instead of letting the replacement worker reuse the same CDP/browser bridge while the old request is still unwinding.
   - `standby.claim_bridge()` may hand off only a ready bridge whose `_catalog_signature(catalog)` matches the current installed package/runtime state.
-  - `SynthDriver.terminate()` must call `SynthDriver._bridge_safe_for_standby_release()` before `standby.release_synth_bridge()`. Busy speech queues, active cancel events, or live warmup threads must terminate their bridge and use `standby.release_synth_without_bridge()` instead.
+  - `SynthDriver.terminate()` must call `SynthDriver._bridge_safe_for_standby_release()` before `standby.release_synth_bridge()`. Busy speech queues, active cancel events, live warmup threads, disconnected CDP clients, busy engines, and bridges marked for recycle must terminate their bridge and use `standby.release_synth_without_bridge()` instead. When runtime-ready mode remains enabled, standby must construct and warm a fresh bridge rather than retain the rejected one.
   - Standby warmup/preload must use installed packages and `ChromeTtsBridge.preload_voice()` only. It must never call `voice_store.download_package()`.
   - `BrowserProcessManager._start_browser_choice()` should bind DevTools to localhost with `--remote-debugging-address=127.0.0.1`.
   - Keep the fallback order Chrome, Edge, then Brave unless changing the product decision. If the saved runtime is Brave and Brave is unavailable, fallback must still find Chrome or Edge when they are usable.
@@ -245,7 +246,7 @@ Pause shortening is implemented in the synth driver after PCM audio returns from
 
 Pause shortening code map:
 
-- Pure pause and streaming PCM helpers live in `googleTtsForNvda/synthDrivers/googleTtsForNvda/speech_processing.py`: `PAUSE_MODE_DO_NOT_SHORTEN`, `PAUSE_MODE_SHORTEN_END_ONLY`, `PAUSE_MODE_SHORTEN_ALL`, `PcmSilenceShortener`, `PcmLeadBuffer`, `create_pcm_silence_shortener()`, `pcm_bytes_for_milliseconds()`, `align_pcm_bytes()`, and `pcm_has_audible_sample()`. This module must remain importable without NVDA.
+- Pure pause and streaming PCM helpers live in `googleTtsForNvda/synthDrivers/googleTtsForNvda/speech_processing.py`: `PAUSE_MODE_DO_NOT_SHORTEN`, `PAUSE_MODE_SHORTEN_END_ONLY`, `PAUSE_MODE_SHORTEN_ALL`, `PcmSilenceShortener`, `PcmSilenceShortener._hold_silence()`, `PcmSilenceShortener._release_held_silence()`, `PcmSilenceShortener.feed()`, `PcmSilenceShortener.finish()`, `PcmLeadBuffer`, `PcmLeadBuffer.feed()`, `PcmLeadBuffer.finish()`, `create_pcm_silence_shortener()`, `pcm_bytes_for_milliseconds()`, `align_pcm_bytes()`, and `pcm_has_audible_sample()`. This module must remain importable without NVDA.
 - NVDA pause settings and sentence-break timing live in `googleTtsForNvda/synthDrivers/googleTtsForNvda/__init__.py`: `_NORMAL_SENTENCE_BREAK_MS`, `_SHORTENED_SENTENCE_BREAK_MS`, `_PAUSE_MODE_SETTING`, and `_pauseModes`.
 - Speech flow integration lives in `speak()`, `_iter_speech_chunks()`, `_sentence_break_milliseconds()`, `_speak_worker()`, `_speak_text()`, `_speak_text().on_segment_end()`, and `_short_cache_key()`.
 - Hidden-segment pause boundary signaling lives in `googleTtsForNvda/synthDrivers/googleTtsForNvda/bridge.py`: `SegmentEndCallback`, `WasmTtsEngineBridge.speak()`, and `ChromeTtsBridge.speak()`.
@@ -277,9 +278,15 @@ These were removed and must stay removed unless the user explicitly requests a n
 - Official script and sentence-terminal tables live in `googleTtsForNvda/synthDrivers/googleTtsForNvda/unicode_data.py`, generated by `generate_unicode_data.py` from pinned UCD and CLDR releases. Do not hand-edit the generated tables. The generator must select the exact `catalog.py:ENGINE_VERSION`, not a lexicographically latest engine directory. `tests/test_unicode_data.py` must continue to prove that every language root in the configured bundled `voices.json` has the expected script map, generated range composition is exact, unique scripts select the intended profile, shared scripts remain ambiguous, and the automatic language-profile fallback reads these tables.
 - `_TAILORED_SENTENCE_TERMINATORS` may contain only supported-language or common sentence endings deliberately excluded from UCD `Sentence_Terminal`. Keep it disjoint from the generated official set. Phrase-level punctuation such as commas, colons, dashes, and semicolons belongs in `_SOFT_BREAK_CHARS`, not in sentence-terminal tailoring.
 - Long-text segmentation code map:
-  - Pure segment-length policy, Unicode punctuation helpers, and segmentation flow live in `googleTtsForNvda/synthDrivers/googleTtsForNvda/speech_processing.py`: `TextSegmenter`, `DEFAULT_TEXT_SEGMENTER`, `TextSegmenter.find_sentence_splits()`, `TextSegmenter.iter_text_segments_for_latency()`, `TextSegmenter.iter_indexed_text_segments()`, `TextSegmenter.spoken_bridge_segments()`, and their private helpers. This module must remain importable without NVDA.
-  - NVDA speech-sequence grouping and adapters live in `googleTtsForNvda/synthDrivers/googleTtsForNvda/__init__.py`: `_iter_speech_chunks()`, `_iter_indexed_text_segments()`, `_iter_text_segments_for_latency()`, `_spoken_bridge_segments()`, and `_should_pause_after_segment()`.
-  - Browser-side hidden-segment continuity lives in `bridgeHarness.js`: `googleTtsForNvdaSpeak()`, `smoothSegmentBoundaries`, `queueProcessedAudio()`, `finishSegmentAudio()`, `trimLeadingSilence()`, `trimTrailingSilence()`, `heldBoundarySamples`, and the `segmentEnd` bridge event.
+  - Pure segment-length policy, Unicode punctuation helpers, and segmentation flow live in `googleTtsForNvda/synthDrivers/googleTtsForNvda/speech_processing.py`: `TextSegmenter`, `DEFAULT_TEXT_SEGMENTER`, `TextSegmenter.split_text_for_latency()`, `TextSegmenter.sanitize_speech_text()`, `TextSegmenter.find_sentence_splits()`, `TextSegmenter.iter_text_segments_for_latency()`, `TextSegmenter.iter_indexed_text_segments()`, `TextSegmenter.spoken_bridge_segments()`, `TextSegmenter.looks_like_url_token()`, `TextSegmenter.should_pause_after_segment()`, `TextSegmenter._needs_spoken_segment_space()`, `TextSegmenter._sentence_terminator_stays_with_token()`, `TextSegmenter._period_stays_with_previous_token()`, `TextSegmenter._period_is_numeric_separator()`, `TextSegmenter._iter_forced_latency_segments()`, `TextSegmenter._iter_soft_phrase_segments()`, `TextSegmenter._find_soft_phrase_cut()`, `TextSegmenter._find_whitespace_cut()`, `TextSegmenter._find_forced_latency_cut()`, `TextSegmenter._find_no_space_script_cut()`, `TextSegmenter._no_space_script_segment_limit()`, `TextSegmenter._extend_cut_over_combining_marks()`, `TextSegmenter._is_forced_soft_break()`, `TextSegmenter._is_contextual_soft_phrase_cut()`, and `_is_no_space_script_character()`. This module must remain importable without NVDA.
+  - NVDA speech-sequence grouping and adapters live in `googleTtsForNvda/synthDrivers/googleTtsForNvda/__init__.py`: `_iter_speech_chunks()`, `_split_text_for_latency()`, `_sanitize_speech_text()`, `_iter_indexed_text_segments()`, `_iter_text_segments_for_latency()`, `_spoken_bridge_segments()`, `_looks_like_url_token()`, and `_should_pause_after_segment()`.
+  - Python hidden-segment boundary context lives in `bridge.py`: `WasmTtsEngineBridge.speak(..., hasPreviousSegment=...)` and `ChromeTtsBridge.speak(..., hasPreviousSegment=...)`.
+  - Browser-side hidden-segment continuity lives in `bridgeHarness.js`: `googleTtsForNvdaSpeak()`, `hasPreviousSegment`, `hasBoundaryContext`, `smoothSegmentBoundaries`, `trimLeadingBoundarySilence`, `leadingBoundaryTrimBudget`, `boundaryMaxLeadingTrimSamples`, `queueProcessedAudio()`, `finishSegmentAudio()`, `trimLeadingSilence()`, `trimTrailingSilence()`, `heldBoundarySamples`, and the `segmentEnd` bridge event.
+
+- Unicode data generation code map:
+  - `generate_unicode_data.py` pinned inputs and bundled-catalog selection: `DEFAULT_ENGINE_ROOT`, `DEFAULT_OUTPUT`, `DEFAULT_CATALOG_MODULE`, `_configured_voices_json()`, `_supported_locales()`, `_ucd_version()`, and `main()`.
+  - `generate_unicode_data.py` UCD/CLDR parsing, range composition, and module rendering: `_parse_ucd_records()`, `_script_aliases()`, `_likely_scripts()`, `_supported_language_scripts()`, `_merge_ranges()`, `_format_ranges()`, `_format_codepoints()`, and `_render_module()`.
+  - `googleTtsForNvda/synthDrivers/googleTtsForNvda/unicode_data.py` generated tables: `UNICODE_VERSION`, `CLDR_VERSION`, `SUPPORTED_LANGUAGE_SCRIPTS`, `SCRIPT_RANGES`, `LANGUAGE_SCRIPT_RANGES`, and `SENTENCE_TERMINAL_CODEPOINTS`.
 
 ### Status/help control accessibility
 
@@ -403,6 +410,14 @@ Automatic language profiles deliberately have their own profile system and must 
   - `googleTtsForNvda/synthDrivers/googleTtsForNvda/bridge.py` completion and payload validation: `CdpDispatcher`, `CdpClient.request()`, and `WasmTtsEngineBridge.speak()`.
   - `googleTtsForNvda/synthDrivers/googleTtsForNvda/web/bridgeHarness.js` browser completion and async-error signaling: `handleTtsEngineEvent()`, `synthesisErrorMessage`, `googleTtsForNvdaSpeak()`, `waitForSynthesisComplete()`, `finishSegmentAudio()`, `flushAudioProcessors()`, `flushAudioQueue()`, and the `segmentEnd` bridge event.
 
+- Standalone regression test code map:
+  - `tests/test_support.py` repository paths and isolated pure-module loading: `ROOT`, `DRIVER_DIR`, `DRIVER_PATH`, `PROCESSING_PATH`, `UNICODE_DATA_PATH`, `_test_driver_package()`, `load_driver_module()`, `pcm_bytes()`, and `pcm_samples()`.
+  - `tests/test_segmentation_corpus.py` and `tests/segmentation_corpus.json`: `SegmentationCorpusTests`, `_materialize_text()`, and `_sentence_units()`.
+  - `tests/test_speech_processing.py`: `PcmSilenceShortenerTests`, `PcmLeadBufferTests`, `TextSegmenterLatencyTests`, and `ShortAudioCacheKeyTests`.
+  - `tests/test_unicode_data.py`: `UnicodeDataTests`.
+  - `tests/test_dependency_isolation.py`: `BundledDependencyIsolationTests`, `VENDORED_WEBSOCKET_ROOT`, `DRIVER_INTERNAL_MODULES`, and `GLOBAL_PLUGIN_INTERNAL_MODULES`.
+  - `tests/test_runtime_recovery.py`: `RuntimeRecoveryTests`, `_FakeCdpClient`, `_FailingEngine`, `_SuccessfulEngine`, `_browser_speech_error()`, and `_runtime_bridge()`.
+
 ---
 
 ## 4. NVDA Integration Rules
@@ -432,7 +447,7 @@ Automatic language profiles deliberately have their own profile system and must 
   - `googleTtsForNvda/globalPlugins/googleTtsForNvda/settings.py` settings panel entry points: `GoogleTtsSettingsPanel.makeSettings()` and `GoogleTtsSettingsPanel.onSave()`.
   - `googleTtsForNvda/globalPlugins/googleTtsForNvda/__init__.py` global plugin entry points: `GlobalPlugin.terminate()`, `GlobalPlugin.on_open_voice_manager()`, `GlobalPlugin.script_openVoiceManager()`, and `GlobalPlugin.script_openSettings()`.
   - `googleTtsForNvda/globalPlugins/googleTtsForNvda/__init__.py` input gesture map: `GlobalPlugin.__gestures`, `GlobalPlugin.script_openVoiceManager()`, and `GlobalPlugin.script_openSettings()`.
-  - `tests/check_nvda_api_contracts.py` statically checks all add-on integration categories against local NVDA source trees and reports high-risk `setSynth`, `WavePlayer`, output-device, `nvwave.isInError`, and `AutoSettingsMixin.refreshGui` contracts without importing NVDA.
+  - `tests/check_nvda_api_contracts.py` static contract runner: `CategoryResult`, `SourceTree`, `discover_trees()`, `check_tree()`, and `main()`; it checks all add-on integration categories and reports high-risk `setSynth`, `WavePlayer`, output-device, `nvwave.isInError`, and `AutoSettingsMixin.refreshGui` contracts without importing NVDA.
   - `tests/NVDA_CHROMIUM_MANUAL_CHECKLIST.md` is the release-test checklist for real NVDA, Chromium/WASM startup, audible PCM, focus announcements, Voice Manager, settings, updater, and lifecycle behavior that static inspection cannot prove.
 
 - Support `synthIndexReached` and `synthDoneSpeaking` notifications.
@@ -495,6 +510,7 @@ They are required for `SharedArrayBuffer` support. Do not remove or weaken them.
 - Browser harness audio code map:
   - Engine startup/readiness/error cleanup: `isTtsEngineInstance()`, `getTtsEngine()`, `ensureEngineInitialized()`, `ensureLanguageReady()`, `stopActiveSynthesis()`, `googleTtsForNvdaPreload()`, and `googleTtsForNvdaSpeak()`.
   - PCM packetization: `buffersToPcmBase64()`, `appendSamples()`, `audioPacketSampleTarget()`, `queueAudioPacket()`, and `flushAudioQueue()`.
+  - Synth-to-browser fixed gain: `_OUTPUT_GAIN_MAKEUP`, `SynthDriver._speech_options()`, and the `outputGain` payload field in `WasmTtsEngineBridge.speak()`.
   - Fixed loudness and clipping protection: `outputGainFromPayload()`, `buffersToPcmBase64()`, and `limitSample()`.
 
 - `bridgeHarness.js` should remain strict-mode and IIFE-wrapped.
@@ -518,10 +534,18 @@ They are required for `SharedArrayBuffer` support. Do not remove or weaken them.
 ### CDP/WebSocket expectations
 
 - Use the vendored websocket-client library from `websocketClientRepo/`; do not require users to install it with pip.
+- Keep add-on-internal imports package-relative and keep the vendored WebSocket client under its private package namespace. Do not insert `websocketClientRepo` into `sys.path`, import a shared top-level `websocket`, or accept `wsaccel`/`python_socks` modules exposed by another add-on.
 - Runtime binding messages are part of the audio transport contract. Preserve message shape unless both Python and JS sides are updated together.
 - CDP calls should have clear timeouts or cancellation behavior where possible.
 - Failures should surface as `CdpError` or logged exceptions with useful context.
 - Runtime binding event handlers run on the CDP reader thread, but their failures belong to the active request. `CdpDispatcher` must wake the registered request and store handler errors so `CdpClient.request()` can fail fast, send any fast-stop callback, and prevent partial audio from reaching the volatile speech cache.
+- Bundled dependency isolation code map:
+  - `googleTtsForNvda/synthDrivers/googleTtsForNvda/bridge.py` and `websocketClientRepo/__init__.py`: package-relative `websocket` import and private vendored package root.
+  - `websocketClientRepo/websocket/_abnf.py`: `native_byteorder` and `_mask()`.
+  - `websocketClientRepo/websocket/_http.py`: `HAVE_PYTHON_SOCKS`, `ProxyError`, `ProxyTimeoutError`, `ProxyConnectionError`, `ProxyType`, and `_start_proxied_socket()`.
+  - `websocketClientRepo/websocket/_utils.py`: `_create_bundled_utf8_validator()` and `validate_utf8()`.
+  - `googleTtsForNvda/synthDrivers/googleTtsForNvda/language_profiles.py`: package-relative `LANGUAGE_SCRIPT_RANGES` import from `unicode_data.py`.
+  - `googleTtsForNvda/synthDrivers/googleTtsForNvda/speech_processing.py`: package-relative `SENTENCE_TERMINAL_CODEPOINTS` import from `unicode_data.py`.
 
 ---
 

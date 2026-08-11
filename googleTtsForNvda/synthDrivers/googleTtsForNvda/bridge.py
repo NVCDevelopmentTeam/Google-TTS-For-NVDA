@@ -102,6 +102,14 @@ class CdpError(Exception):
 		self.technicalDetail = technicalDetail
 
 
+class _BrowserSpeechError(CdpError):
+	"""Speech failure reported by the browser harness."""
+
+	def __init__(self, message: str, technicalDetail: str | None, *, audioStarted: bool) -> None:
+		super().__init__(message, technicalDetail)
+		self.audioStarted = audioStarted
+
+
 class _BrowserProfileInUseError(CdpError):
 	pass
 
@@ -219,6 +227,8 @@ _RUNTIME_RECYCLE_ERROR_MARKERS = (
 def _runtime_error_requires_recycle(error: BaseException) -> bool:
 	if isinstance(error, CdpCancelled):
 		return False
+	if isinstance(error, _BrowserSpeechError):
+		return True
 	if not isinstance(error, CdpError):
 		return True
 	technicalDetail = str(getattr(error, "technicalDetail", "") or "")
@@ -1696,9 +1706,11 @@ class WasmTtsEngineBridge:
 
 		def fail_speech_event(detail: str) -> None:
 			state["error"] = detail
-			raise _friendly_cdp_error(
+			log.debug("Google TTS Chromium browser runtime detail: %s", detail)
+			raise _BrowserSpeechError(
 				_("Google TTS For NVDA could not speak this text."),
 				detail,
+				audioStarted=bool(state["audioChunks"]),
 			)
 
 		def handle_event(message: dict[str, Any]) -> None:
@@ -1797,14 +1809,18 @@ class WasmTtsEngineBridge:
 			self._runtimeBusy = False
 		result = response.get("result", {}).get("result", {})
 		if result.get("subtype") == "error":
-			raise _friendly_cdp_error(
+			detail = str(result.get("description") or "Browser speech evaluation failed.")
+			log.debug("Google TTS Chromium browser runtime detail: %s", detail)
+			raise _BrowserSpeechError(
 				_("Google TTS For NVDA could not start speech in the Chromium browser runtime."),
-				result.get("description") or "Browser speech evaluation failed.",
+				detail,
+				audioStarted=bool(state["audioChunks"]),
 			)
 		if state.get("error"):
-			raise _friendly_cdp_error(
+			raise _BrowserSpeechError(
 				_("Google TTS For NVDA could not speak this text."),
 				str(state["error"]),
+				audioStarted=bool(state["audioChunks"]),
 			)
 		state["firstAudioMs"] = round((firstAudioAt - startedAt) * 1000, 1) if firstAudioAt else None
 		state["maxAudioGapMs"] = round(maxAudioGapMs, 1)
@@ -1981,6 +1997,15 @@ class ChromeTtsBridge:
 			self._highMemorySampleCount = 0
 			return True
 
+	def safe_for_standby_release(self) -> bool:
+		"""Return whether standby may safely keep and reuse this runtime."""
+		with self._lock:
+			return (
+				not self._needsRecycle
+				and not self._engine.runtime_busy
+				and self._cdp_client.is_connected()
+			)
+
 	def ensure_connection(self, cancelEvent: threading.Event | None = None) -> None:
 		with self._lock:
 			_raise_if_cancelled(cancelEvent)
@@ -2055,25 +2080,40 @@ class ChromeTtsBridge:
 		segments: list[str] | None = None,
 		hasPreviousSegment: bool = False,
 	) -> dict[str, Any]:
-		try:
-			_raise_if_cancelled(cancelEvent)
-			self.maybe_recycle_runtime(allowIdleRecycle=False, checkMemory=False)
-			self.ensure_connection(cancelEvent=cancelEvent)
-			return self._engine.speak(
-				text,
-				options,
-				onAudio,
-				cancelEvent=cancelEvent,
-				onMark=onMark,
-				onSegmentEnd=onSegmentEnd,
-				segments=segments,
-				hasPreviousSegment=hasPreviousSegment,
-			)
-		except CdpCancelled:
-			raise
-		except Exception as exc:
-			self._mark_runtime_error_for_recycle(exc)
-			raise
+		attempt = 0
+		while True:
+			try:
+				_raise_if_cancelled(cancelEvent)
+				self.maybe_recycle_runtime(allowIdleRecycle=False, checkMemory=False)
+				self.ensure_connection(cancelEvent=cancelEvent)
+				return self._engine.speak(
+					text,
+					options,
+					onAudio,
+					cancelEvent=cancelEvent,
+					onMark=onMark,
+					onSegmentEnd=onSegmentEnd,
+					segments=segments,
+					hasPreviousSegment=hasPreviousSegment,
+				)
+			except CdpCancelled:
+				raise
+			except Exception as exc:
+				self._mark_runtime_error_for_recycle(exc)
+				if isinstance(exc, _BrowserSpeechError):
+					recycled = False
+					try:
+						recycled = self.maybe_recycle_runtime(
+							allowIdleRecycle=True,
+							checkMemory=False,
+						)
+					except Exception:
+						log.debug("Could not recycle the failed Google TTS browser runtime.", exc_info=True)
+					if attempt == 0 and recycled and not exc.audioStarted:
+						attempt += 1
+						log.debug("Retrying Google TTS speech once with a fresh browser runtime.")
+						continue
+				raise
 
 	def stop_runtime(self) -> None:
 		try:

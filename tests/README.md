@@ -30,6 +30,11 @@ registered a top-level `websocket` module. It also prevents optional third-party
 imports from leaking into the vendored client and checks that CLD2, browser files,
 and the pinned WASM engine stay anchored to this add-on's own directories.
 
+`test_runtime_recovery.py` covers browser-reported speech failures: a request may
+be retried once with a fresh runtime only before any PCM is emitted, partial audio
+must never be repeated, and unhealthy or disconnected runtimes cannot be retained
+by standby mode.
+
 Run all standalone tests without importing NVDA:
 
 ```powershell

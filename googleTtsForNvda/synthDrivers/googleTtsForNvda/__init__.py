@@ -407,6 +407,8 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		warmupThread = getattr(self, "_warmupThread", None)
 		if warmupThread is not None and warmupThread.is_alive():
 			return False
+		if not self._bridge.safe_for_standby_release():
+			return False
 		with self._speechCondition:
 			return self._activeCancelEvent is None and not self._speechQueue
 
@@ -877,8 +879,12 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 				synthDoneSpeaking.notify(synth=self)
 		except CdpCancelled:
 			log.debug("Google TTS speech cancelled.")
-		except Exception:
-			log.exception("Google TTS speech failed.", exc_info=True)
+		except Exception as exc:
+			technicalDetail = str(getattr(exc, "technicalDetail", "") or "")
+			if technicalDetail:
+				log.exception("Google TTS speech failed: %s", technicalDetail, exc_info=True)
+			else:
+				log.exception("Google TTS speech failed.", exc_info=True)
 			if not cancelEvent.is_set():
 				synthDoneSpeaking.notify(synth=self)
 		finally:
