@@ -4,38 +4,39 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Google TTS for NVDA 0.5.5\n"
+"Project-Id-Version: Google TTS for NVDA 0.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-10 00:00+0700\n"
-"PO-Revision-Date: 2026-07-20 02:14+0700\n"
+"PO-Revision-Date: 2026-08-11 12:42+0000\n"
 "Last-Translator: NVDA Chinese Team\n"
+"Language: zh-CN\n"
 "Language-Team: Chinese (Simplified)\n"
-"Language: zh_CN\n"
-"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
 "X-Generator: Poedit 3.9\n"
 
 msgid "&Download checked voice packages"
-msgstr "下载已勾选的语音包(&D)"
+msgstr "下载检查过的语音包(&D)"
 
 msgid "&Filter by language:"
 msgstr "按语言过滤(&F)："
 
 msgid "&Open voice packages folder"
-msgstr "打开语音包文件夹(&O)"
+msgstr "打开语音包文件夹(&S)"
 
 msgid "&Refresh"
-msgstr "刷新(&R)"
+msgstr "＆刷新"
 
 msgid "&Remove checked voice packages"
-msgstr "移除已勾选的语音包(&R)"
+msgstr "删除选中的语音包(&R)"
 
 msgid "A file system error occurred while managing voice packages. Check the voice packages folder and try again."
-msgstr "管理语音包时发生文件系统错误。请检查语音包文件夹后重试。"
+msgstr "管理语音包时发生文件系统错误。检查语音包文件夹并重试。"
 
 msgid "A voice package operation is still running."
-msgstr "一项语音包操作仍在运行中。"
+msgstr "语音包操作仍在运行。"
 
 msgid "Albanian"
 msgstr "阿尔巴尼亚语"
@@ -44,22 +45,22 @@ msgid "All"
 msgstr "全部"
 
 msgid "Automatic language profiles are off. Google TTS uses NVDA's normal Speech Settings for voice, variant, rate, pitch, volume, capitals, and spelling."
-msgstr "自动语言配置文件已关闭。Google TTS 将使用 NVDA 的常规“语音”设置来配置发音人、变体、语速、音调、音量、大写读音和拼写。"
+msgstr "自动语言配置文件已关闭。 Google TTS 使用 NVDA 的正常语音设置来进行语音、变体、速率、音调、音量、大写字母和拼写。"
 
 msgid "&Use automatic language profiles"
-msgstr "使用自动语言配置文件(&U)"
+msgstr "使用自动语言配置文件(&A)"
 
 msgid "An unexpected error occurred while managing voice packages."
 msgstr "管理语音包时发生意外错误。"
 
 msgid "Arabic"
-msgstr "阿拉伯语"
+msgstr "阿拉伯"
 
 msgid "Assamese"
 msgstr "阿萨姆语"
 
 msgid "Automatic language &profile:"
-msgstr "自动语言配置文件(&P)："
+msgstr "自动语言和配置文件："
 
 msgid "Automatic language profile"
 msgstr "自动语言配置文件"
@@ -71,10 +72,10 @@ msgid "Automatic language profiles were disabled because no languages are select
 msgstr "由于未选择任何语言，自动语言配置文件已被禁用。"
 
 msgid "Automatic language profiles use the selected installed language profiles. If only one language is selected, that profile is used for every sentence."
-msgstr "自动语言配置文件使用已选中的已安装语言配置文件。如果仅选择了一种语言，则每句话都会使用该配置文件。"
+msgstr "自动语言配置文件使用选定的已安装语言配置文件。如果仅选择一种语言，则该配置文件将用于每个句子。"
 
 msgid "Available"
-msgstr "可用"
+msgstr "可用的"
 
 msgid "Bengali (Bangladesh)"
 msgstr "孟加拉语（孟加拉国）"
@@ -83,37 +84,55 @@ msgid "Bengali (India)"
 msgstr "孟加拉语（印度）"
 
 msgid "Bodo"
-msgstr "博多语"
+msgstr "博多"
 
 msgid "Bosnian"
 msgstr "波斯尼亚语"
 
 msgid "Chromium browser &runtime:"
-msgstr "Chromium 浏览器运行时(&R)："
+msgstr "Chromium 浏览器和运行时："
 
 msgid "Chromium browser runtime"
 msgstr "Chromium 浏览器运行时"
 
 msgid "Chromium browser runtime status"
-msgstr "Chromium 浏览器运行时状态"
+msgstr "Chrom 浏览器运行时状态"
+
+msgid "&Keep Google TTS browser runtime ready in the background"
+msgstr "让 Google TTS 浏览器运行时在后台就绪(&K)"
+
+msgid "Keep Google TTS browser runtime ready in the background"
+msgstr "让 Google TTS 浏览器运行时在后台保持就绪状态"
+
+msgid "Background browser runtime status"
+msgstr "后台浏览器运行时状态"
+
+msgid "Off. Google TTS For NVDA will start the browser runtime only when you choose Google TTS as the current synthesizer."
+msgstr "离开。仅当您选择 Google TTS 作为当前合成器时，Google TTS For NVDA 才会启动浏览器运行时。"
+
+msgid "On. Google TTS For NVDA is the current synthesizer, so no separate background browser runtime will be started."
+msgstr "在。 Google TTS For NVDA 是当前的合成器，因此不会启动单独的后台浏览器运行时。"
+
+msgid "On. After you press OK or Apply, Google TTS For NVDA can keep the browser runtime ready in the background. This may use more memory and keep runtime files open until you turn it off or exit NVDA."
+msgstr "在。按“确定”或“应用”后，Google TTS For NVDA 可以在后台保持浏览器运行时就绪。这可能会使用更多内存并保持运行时文件打开，直到您将其关闭或退出 NVDA。"
 
 msgid "Bulgarian"
 msgstr "保加利亚语"
 
 msgid "Cantonese"
-msgstr "粤语"
+msgstr "广东话"
 
 msgid "Catalan"
 msgstr "加泰罗尼亚语"
 
 msgid "Check &all voice packages"
-msgstr "勾选所有语音包(&A)"
+msgstr "检查所有语音包(&L)"
 
 msgid "Could not download the voice package. Check your internet connection and try again."
-msgstr "无法下载语音包。请检查您的网络连接后重试。"
+msgstr "无法下载语音包。检查您的互联网连接，然后重试。"
 
 msgid "Could not write to the voice packages folder. Check folder permissions and try again."
-msgstr "无法写入语音包文件夹。请检查文件夹权限后重试。"
+msgstr "无法写入语音包文件夹。检查文件夹权限并重试。"
 
 msgid "Croatian"
 msgstr "克罗地亚语"
@@ -125,7 +144,7 @@ msgid "Danish"
 msgstr "丹麦语"
 
 msgid "Dogri"
-msgstr "多格来语"
+msgstr "多格里"
 
 msgid "Download"
 msgstr "下载"
@@ -134,22 +153,22 @@ msgid "Downloadable voice packages"
 msgstr "可下载的语音包"
 
 msgid "Downloaded {count} voice packages."
-msgstr "已下载 {count} 个语音包。"
+msgstr "下载{count}语音包。"
 
 msgid "Downloaded {package}."
-msgstr "已下载 {package}。"
+msgstr "下载{package}。"
 
 msgid "Downloading voice packages..."
 msgstr "正在下载语音包..."
 
 msgid "Downloading {current}/{total}: {package}"
-msgstr "正在下载 {current}/{total}：{package}"
+msgstr "下载{current}/{total}：{package}"
 
 msgid "Downloading {current}/{total}: {package}, overall {percent} percent complete"
-msgstr "正在下载 {current}/{total}：{package}，总体进度 {percent}%"
+msgstr "下载{current}/{total}：{package}，总体{percent} 完成百分比"
 
 msgid "Downloading {package}."
-msgstr "正在下载 {package}。"
+msgstr "正在下载{package}。"
 
 msgid "Dutch"
 msgstr "荷兰语"
@@ -173,7 +192,7 @@ msgid "Estonian"
 msgstr "爱沙尼亚语"
 
 msgid "Filipino"
-msgstr "菲律宾语"
+msgstr "菲律宾人"
 
 msgid "Filter downloadable voice packages by language"
 msgstr "按语言过滤可下载的语音包"
@@ -182,7 +201,7 @@ msgid "Filter installed voice packages by language"
 msgstr "按语言过滤已安装的语音包"
 
 msgid "Finnish"
-msgstr "芬兰语"
+msgstr "芬兰"
 
 msgid "Flemish"
 msgstr "弗拉芒语"
@@ -197,7 +216,7 @@ msgid "German"
 msgstr "德语"
 
 msgid "Google TTS For NVDA"
-msgstr "Google TTS For NVDA"
+msgstr "NVDA 的 Google TTS"
 
 msgid ""
 "Google TTS For NVDA could not be loaded because the WASM TTS Engine library is incomplete.\n"
@@ -206,16 +225,16 @@ msgid ""
 msgstr ""
 "无法加载 Google TTS For NVDA，因为 WASM TTS 引擎库不完整。\n"
 "\n"
-"请使用完整的 WASM TTS 引擎库重新安装 Google TTS For NVDA。"
+"使用完整的 WASM TTS 引擎库重新安装 Google TTS For NVDA。"
 
 msgid ""
 "Google TTS For NVDA could not be loaded because the WASM TTS Engine library is missing.\n"
 "\n"
 "Reinstall Google TTS For NVDA with the included WASM TTS Engine library."
 msgstr ""
-"无法加载 Google TTS For NVDA，因为缺少 WASM TTS 引擎库。\n"
+"由于缺少 WASM TTS 引擎库，无法加载 Google TTS For NVDA。\n"
 "\n"
-"请使用附带的 WASM TTS 引擎库重新安装 Google TTS For NVDA。"
+"使用附带的 WASM TTS 引擎库重新安装 Google TTS For NVDA。"
 
 msgid ""
 "Google TTS For NVDA could not be loaded because the WASM TTS Engine version is not supported.\n"
@@ -224,29 +243,29 @@ msgid ""
 "\n"
 "Install a Google TTS For NVDA package that includes the supported WASM TTS Engine."
 msgstr ""
-"无法加载 Google TTS For NVDA，因为不支持该 WASM TTS 引擎版本。\n"
+"无法加载 Google TTS For NVDA，因为不支持 WASM TTS 引擎版本。\n"
 "\n"
-"此插件支持 WASM TTS 引擎版本 {supported}，但检测到：{found}。\n"
+"此插件支持 WASM TTS 引擎版本{supported}，但发现：{found}。\n"
 "\n"
-"请安装包含受支持 WASM TTS 引擎的 Google TTS For NVDA 安装包。"
+"安装包含受支持的 WASM TTS 引擎的 Google TTS For NVDA 软件包。"
 
 msgid ""
 "Google TTS For NVDA could not be loaded because the WASM TTS Engine voice catalog could not be read.\n"
 "\n"
 "Reinstall Google TTS For NVDA with a supported WASM TTS Engine library."
 msgstr ""
-"无法加载 Google TTS For NVDA，因为无法读取 WASM TTS 引擎的声音目录。\n"
+"Không thể khởi động Google TTS Cho NVDA vì không đọc được danh mục giọng của WASM TTS Engine.\n"
 "\n"
-"请使用受支持的 WASM TTS 引擎库重新安装 Google TTS For NVDA。"
+"Hãy cài đặt lại Google TTS Cho NVDA với thư viện WASM TTS Engine được hỗ trợ."
 
 msgid "Google TTS For NVDA could not find its speech page in the Chromium browser runtime."
-msgstr "Google TTS For NVDA 在 Chromium 浏览器运行时中未找到其语音页面。"
+msgstr "Google TTS For NVDA 无法在 Chromium 浏览器运行时中找到其语音页面。"
 
 msgid "Google TTS For NVDA could not finish loading the browser speech engine."
 msgstr "Google TTS For NVDA 无法完成浏览器语音引擎的加载。"
 
 msgid "Google TTS For NVDA could not start its local browser bridge."
-msgstr "Google TTS For NVDA 无法启动其本地浏览器桥接程序。"
+msgstr "Google TTS For NVDA 无法启动其本地浏览器桥。"
 
 msgid "Google TTS For NVDA could not start speech in the Chromium browser runtime."
 msgstr "Google TTS For NVDA 无法在 Chromium 浏览器运行时中启动语音。"
@@ -255,10 +274,10 @@ msgid "Google TTS For NVDA is not connected to the Chromium browser runtime."
 msgstr "Google TTS For NVDA 未连接到 Chromium 浏览器运行时。"
 
 msgid "Google TTS Voice Manager"
-msgstr "Google TTS 声音管理器"
+msgstr "谷歌 TTS 语音管理器"
 
 msgid "Google TTS Voice Manager..."
-msgstr "Google TTS 声音管理器..."
+msgstr "谷歌 TTS 语音管理器..."
 
 msgid "Greek"
 msgstr "希腊语"
@@ -273,31 +292,31 @@ msgid "Hindi"
 msgstr "印地语"
 
 msgid "Hungarian"
-msgstr "匈牙利语"
+msgstr "匈牙利"
 
 msgid "Icelandic"
 msgstr "冰岛语"
 
 msgid "Indonesian"
-msgstr "印度尼西亚语"
+msgstr "印度尼西亚"
 
 msgid "Installed"
 msgstr "已安装"
 
 msgid "Installed voice packages"
-msgstr "已安装的语音包"
+msgstr "安装的语音包"
 
 msgid "Install at least one language voice package to use automatic language profiles."
-msgstr "请至少安装一个语言语音包以使用自动语言配置文件。"
+msgstr "至少安装一种语言语音包才能使用自动语言配置文件。"
 
 msgid "Installed {package}."
-msgstr "已安装 {package}。"
+msgstr "安装{package}。"
 
 msgid "Italian"
 msgstr "意大利语"
 
 msgid "Japanese"
-msgstr "日语"
+msgstr "日本人"
 
 msgid "Javanese"
 msgstr "爪哇语"
@@ -306,16 +325,16 @@ msgid "Kannada"
 msgstr "卡纳达语"
 
 msgid "Kashmiri"
-msgstr "克什米尔语"
+msgstr "克什米尔"
 
 msgid "Khmer"
 msgstr "高棉语"
 
 msgid "Konkani"
-msgstr "孔卡尼语"
+msgstr "孔卡尼"
 
 msgid "Korean"
-msgstr "韩语"
+msgstr "韩国人"
 
 msgid "Language"
 msgstr "语言"
@@ -327,7 +346,7 @@ msgid "Lithuanian"
 msgstr "立陶宛语"
 
 msgid "Maithili"
-msgstr "迈蒂利语"
+msgstr "迈蒂利"
 
 msgid "Malay"
 msgstr "马来语"
@@ -336,46 +355,46 @@ msgid "Malayalam"
 msgstr "马拉雅拉姆语"
 
 msgid "Mandarin Chinese (China)"
-msgstr "普通话（中国大陆）"
+msgstr "普通话（中国）"
 
 msgid "Mandarin Chinese (Taiwan)"
-msgstr "国语（台湾）"
+msgstr "普通话（台湾）"
 
 msgid "Manipuri"
-msgstr "曼尼普尔语"
+msgstr "曼尼普里"
 
 msgid "Marathi"
 msgstr "马拉地语"
 
 msgid "Missing required package: {dependency}"
-msgstr "缺少所需的软件包：{dependency}"
+msgstr "缺少所需的包：{dependency}"
 
 msgid "Nepali"
 msgstr "尼泊尔语"
 
 msgid "No Google TTS For NVDA voice packages are installed. Open Google TTS Voice Manager to download a voice package."
-msgstr "未安装任何 Google TTS For NVDA 语音包。请打开 Google TTS 声音管理器以下载语音包。"
+msgstr "未安装 Google TTS For NVDA 语音包。打开 Google TTS 语音管理器下载语音包。"
 
 msgid "No download link is available for voice package {package}."
-msgstr "语音包 {package} 没有可用的下载链接。"
+msgstr "语音包{package}没有可用的下载链接。"
 
 msgid "Norwegian Bokmål"
 msgstr "挪威博克马尔语"
 
 msgid "Odia"
-msgstr "奥里亚语"
+msgstr "奥迪亚"
 
 msgid "Opens the Google TTS Voice Manager."
-msgstr "打开 Google TTS 声音管理器。"
+msgstr "打开 Google TTS 语音管理器。"
 
 msgid "Opens the Google TTS For NVDA settings."
 msgstr "打开 Google TTS For NVDA 设置。"
 
 msgid "Package"
-msgstr "软件包"
+msgstr "包裹"
 
 msgid "Polish"
-msgstr "波兰语"
+msgstr "抛光"
 
 msgid "Portuguese (Brazil)"
 msgstr "葡萄牙语（巴西）"
@@ -384,31 +403,31 @@ msgid "Portuguese (Portugal)"
 msgstr "葡萄牙语（葡萄牙）"
 
 msgid "Progress"
-msgstr "进度"
+msgstr "进步"
 
 msgid "Preferred profile &language:"
-msgstr "首选配置文件语言(&L)："
+msgstr "首选个人资料和语言："
 
 msgid "Preferred profile language"
-msgstr "首选配置文件语言"
+msgstr "首选个人资料语言"
 
 msgid "Punjabi"
 msgstr "旁遮普语"
 
 msgid "Ready."
-msgstr "就绪。"
+msgstr "准备好。"
 
 msgid "Remove voice package {package}?"
-msgstr "是否移除语音包 {package}？"
+msgstr "删除语音包{package}？"
 
 msgid "Removed {count} voice packages."
-msgstr "已移除 {count} 个语音包。"
+msgstr "删除了 {count} 语音包。"
 
 msgid "Removed {package}."
-msgstr "已移除 {package}。"
+msgstr "删除了{package}。"
 
 msgid "Removing voice packages..."
-msgstr "正在移除语音包..."
+msgstr "正在删除语音包..."
 
 msgid "Romanian"
 msgstr "罗马尼亚语"
@@ -417,19 +436,19 @@ msgid "Russian"
 msgstr "俄语"
 
 msgid "Sanskrit"
-msgstr "梵语"
+msgstr "梵文"
 
 msgid "Santali"
-msgstr "桑塔利语"
+msgstr "桑塔利"
 
 msgid "Select Synthesizer dialog class was not found."
-msgstr "未找到“选择语音合成器”对话框类。"
+msgstr "找不到选择合成器对话框类。"
 
 msgid "Select at least one language profile to use automatic language profiles."
-msgstr "请至少选择一个语言配置文件以使用自动语言配置文件。"
+msgstr "至少选择一种语言配置文件以使用自动语言配置文件。"
 
 msgid "Serbian"
-msgstr "塞尔维亚语"
+msgstr "塞尔维亚"
 
 msgid "Sindhi"
 msgstr "信德语"
@@ -438,7 +457,7 @@ msgid "Sinhala"
 msgstr "僧伽罗语"
 
 msgid "Size"
-msgstr "大小"
+msgstr "尺寸"
 
 msgid "Slovak"
 msgstr "斯洛伐克语"
@@ -453,7 +472,7 @@ msgid "Spanish (US)"
 msgstr "西班牙语（美国）"
 
 msgid "Status"
-msgstr "状态"
+msgstr "地位"
 
 msgid "Sundanese"
 msgstr "巽他语"
@@ -462,7 +481,7 @@ msgid "Swahili"
 msgstr "斯瓦希里语"
 
 msgid "Swedish"
-msgstr "瑞典语"
+msgstr "瑞典"
 
 msgid "Tamil"
 msgstr "泰米尔语"
@@ -471,34 +490,34 @@ msgid "Telugu"
 msgstr "泰卢固语"
 
 msgid "Thai"
-msgstr "泰语"
+msgstr "泰国"
 
 msgid "The browser profile used by Google TTS For NVDA is already in use. Restart NVDA, or close any leftover supported Chromium browser helper processes."
-msgstr "Google TTS For NVDA 使用的浏览器配置文件已被占用。请重启 NVDA，或关闭任何残留的受支持 Chromium 浏览器辅助进程。"
+msgstr "Google TTS For NVDA 使用的浏览器配置文件已在使用中。重新启动 NVDA，或关闭任何剩余的受支持的 Chromium 浏览器帮助程序进程。"
 
 msgid "The Chromium browser runtime closed before Google TTS For NVDA was ready."
-msgstr "Chromium 浏览器运行时在 Google TTS For NVDA 就绪前已关闭。"
+msgstr "Chromium 浏览器运行时在 Google TTS For NVDA 准备就绪之前关闭。"
 
 msgid "The Chromium browser runtime connection closed unexpectedly."
 msgstr "Chromium 浏览器运行时连接意外关闭。"
 
 msgid "The Chromium browser runtime is not ready yet."
-msgstr "Chromium 浏览器运行时尚未就绪。"
+msgstr "Chromium 浏览器运行时尚未准备好。"
 
 msgid "The Chromium browser runtime reported an error while preparing speech."
-msgstr "Chromium 浏览器运行时在准备语音时报告了错误。"
+msgstr "Chromium 浏览器运行时在准备演讲时报告错误。"
 
 msgid "The Chromium browser runtime reported an error while processing speech."
-msgstr "Chromium 浏览器运行时在处理语音时报告了错误。"
+msgstr "Chromium 浏览器运行时在处理语音时报告错误。"
 
 msgid "The voice package file could not be found. Refresh the list and try again."
-msgstr "找不到语音包文件。请刷新列表后重试。"
+msgstr "找不到语音包文件。刷新列表并重试。"
 
 msgid "Turkish"
-msgstr "土耳其语"
+msgstr "土耳其"
 
 msgid "Ukrainian"
-msgstr "乌克兰语"
+msgstr "乌克兰"
 
 msgid "Unavailable"
 msgstr "不可用"
@@ -513,7 +532,7 @@ msgid "Vietnamese"
 msgstr "越南语"
 
 msgid "&Close"
-msgstr "关闭(&C)"
+msgstr "＆关闭"
 
 msgid "&Copy link"
 msgstr "复制链接(&C)"
@@ -522,10 +541,10 @@ msgid "&Download online installer"
 msgstr "下载在线安装程序(&D)"
 
 msgid "&Maybe later"
-msgstr "以后再说(&M)"
+msgstr "&也许稍后"
 
 msgid "&Open Microsoft WebView2 page"
-msgstr "打开 Microsoft WebView2 页面(&O)"
+msgstr "打开 Microsoft WebView2 页面(&S)"
 
 msgid "Download address"
 msgstr "下载地址"
@@ -537,32 +556,32 @@ msgid ""
 "\n"
 "Choose Download online installer to download Microsoft's Evergreen Bootstrapper. Choose Open Microsoft WebView2 page if you need an offline installer or a fixed-version package."
 msgstr ""
-"Microsoft Edge 可用，但 Microsoft Edge WebView2 Runtime 不可用。\n"
+"Microsoft Edge 可用，但 Microsoft Edge WebView2 运行时不可用。\n"
 "\n"
-"当将 Microsoft Edge 用作 Chromium 浏览器运行时，Google TTS For NVDA 需要 WebView2。在安装 WebView2 之前，NVDA 将继续使用先前的语音合成器。\n"
+"当 Microsoft Edge 是 Chromium 浏览器运行时时，Google TTS For NVDA 需要 WebView2。 NVDA 将继续使用以前的合成器，直到安装 WebView2。\n"
 "\n"
-"选择“下载在线安装程序”以下载微软的常青引导程序（Evergreen Bootstrapper）。如果您需要离线安装程序或固定版本包，请选择“打开 Microsoft WebView2 页面”。"
+"选择下载在线安装程序以下载 Microsoft 的 Evergreen Bootstrapper。如果您需要离线安装程序或固定版本包，请选择打开 Microsoft WebView2 页面。"
 
 msgid "Microsoft Edge was found, but Microsoft Edge WebView2 Runtime was not found. Keeping the current Google TTS For NVDA Chromium browser runtime setting."
-msgstr "找到了 Microsoft Edge，但未找到 Microsoft Edge WebView2 Runtime。将保留当前的 Google TTS For NVDA Chromium 浏览器运行时设置。"
+msgstr "已找到 Microsoft Edge，但未找到 Microsoft Edge WebView2 运行时。保留当前的 ​​Google TTS For NVDA Chromium 浏览器运行时设置。"
 
 msgid "Microsoft Edge WebView2 Runtime is needed"
-msgstr "需要 Microsoft Edge WebView2 Runtime"
+msgstr "需要 Microsoft Edge WebView2 运行时"
 
 msgid "Microsoft Edge WebView2 Runtime was not found. Install it before using Microsoft Edge as the Google TTS For NVDA Chromium browser runtime."
-msgstr "未找到 Microsoft Edge WebView2 Runtime。请先将其安装，然后再将 Microsoft Edge 用作 Google TTS For NVDA 的 Chromium 浏览器运行时。"
+msgstr "找不到 Microsoft Edge WebView2 运行时。在使用 Microsoft Edge 作为 Google TTS For NVDA Chromium 浏览器运行时之前安装它。"
 
 msgid "Microsoft Edge WebView2 Runtime was not found. Install or repair Microsoft Edge WebView2 Runtime before using Microsoft Edge as the Google TTS For NVDA Chromium browser runtime."
-msgstr "未找到 Microsoft Edge WebView2 Runtime。请先安装或修复 Microsoft Edge WebView2 Runtime，然后再将 Microsoft Edge 用作 Google TTS For NVDA 的 Chromium 浏览器运行时。"
+msgstr "找不到 Microsoft Edge WebView2 运行时。在使用 Microsoft Edge 作为 Google TTS For NVDA Chromium 浏览器运行时之前，请安装或修复 Microsoft Edge WebView2 运行时。"
 
 msgid "No supported Chromium browser runtime was found. Install Google Chrome, Microsoft Edge, or Brave, or set CHROME_PATH, EDGE_PATH, or BRAVE_PATH to a browser executable."
-msgstr "未找到受支持的 Chromium 浏览器运行时。请安装 Google Chrome、Microsoft Edge 或 Brave，或者将 CHROME_PATH、EDGE_PATH 或 BRAVE_PATH 环境变量指向浏览器可执行文件。"
+msgstr "未找到受支持的 Chromium 浏览器运行时。安装 Google Chrome、Microsoft Edge 或 Brave，或将 CHROME_PATH、EDGE_PATH 或 BRAVE_PATH 设置为浏览器可执行文件。"
 
 msgid "Selected Chromium browser runtime: {runtime}. Microsoft Edge: {edgeStatus}. Microsoft Edge WebView2 Runtime: {webView2Status}."
-msgstr "已选中的 Chromium 浏览器运行时：{runtime}。Microsoft Edge：{edgeStatus}。Microsoft Edge WebView2 Runtime：{webView2Status}。"
+msgstr "选定的 Chromium 浏览器运行时：{runtime}。 Microsoft Edge：{edgeStatus}。 Microsoft Edge WebView2 运行时：{webView2Status}。"
 
 msgid "Selected Chromium browser runtime: {runtime}. {browser}: {browserStatus}."
-msgstr "已选中的 Chromium 浏览器运行时：{runtime}。{browser}：{browserStatus}。"
+msgstr "选定的 Chromium 浏览器运行时：{runtime}。 {browser}：{browserStatus}。"
 
 msgid "The download page could not be opened. Please visit this address manually:"
 msgstr "无法打开下载页面。请手动访问此地址："
@@ -571,37 +590,37 @@ msgid "The link could not be copied to the clipboard."
 msgstr "无法将链接复制到剪贴板。"
 
 msgid "The link was copied to the clipboard."
-msgstr "链接已复制到剪贴板。"
+msgstr "该链接已复制到剪贴板。"
 
 msgid "WebView2 Runtime missing"
-msgstr "缺少 WebView2 Runtime"
+msgstr "WebView2 运行时缺失"
 
 msgid "found"
-msgstr "已找到"
+msgstr "成立"
 
 msgid "not found"
 msgstr "未找到"
 
 msgid "{selectedStatus} Active Chromium browser runtime: {runtime}."
-msgstr "{selectedStatus} 当前活动的 Chromium 浏览器运行时：{runtime}。"
+msgstr "{selectedStatus} 活动 Chromium 浏览器运行时：{runtime}。"
 
 msgid "{selectedStatus} Falling back to active Chromium browser runtime: {runtime}."
-msgstr "{selectedStatus} 已回退到活动的 Chromium 浏览器运行时：{runtime}。"
+msgstr "{selectedStatus} 回退到活动的 Chromium 浏览器运行时：{runtime}。"
 
 msgid "{selectedStatus} No supported Chromium browser runtime was found."
 msgstr "{selectedStatus} 未找到受支持的 Chromium 浏览器运行时。"
 
 msgid "Voice settings are managed by automatic language profiles. Open the Google TTS for NVDA category in NVDA Settings to configure them."
-msgstr "声音设置当前由自动语言配置文件管理。请打开 NVDA 设置中的 Google TTS for NVDA 分类进行配置。"
+msgstr "语音设置由自动语言配置文件管理。在 NVDA 设置中打开 Google TTS for NVDA 类别来配置它们。"
 
 msgid "Voice package operation failed: {message}"
 msgstr "语音包操作失败：{message}"
 
 msgid "Voice package {package} did not pass verification after download. Please try downloading it again."
-msgstr "语音包 {package} 在下载后未通过验证。请尝试重新下载。"
+msgstr "语音包{package}下载后未通过验证。请尝试重新下载。"
 
 msgid "Voice package {package} did not pass verification after import."
-msgstr "语音包 {package} 在导入后未通过验证。"
+msgstr "语音包{package}导入后未通过验证。"
 
 msgid "Voices"
 msgstr "声音"
@@ -613,86 +632,86 @@ msgid "another version"
 msgstr "另一个版本"
 
 msgid "{installed} installed voice packages, {available} available to download - Google TTS Voice Manager"
-msgstr "{installed} 个已安装的语音包，{available} 个可供下载 - Google TTS 声音管理器"
+msgstr "{installed} 已安装语音包，{available} 可供下载 - Google TTS 语音管理器"
 
 msgid "{installed} installed voice packages, {available} available to download."
-msgstr "{installed} 个已安装的语音包，{available} 个可供下载。"
+msgstr "{installed}已安装语音包，{available}可供下载。"
 
 msgid "{message} The current variant was reset to {voice}."
-msgstr "{message} 当前变体已重置为 {voice}。"
+msgstr "{message} 当前版本已重置为{voice}。"
 
 msgid "{voice} ({package})"
 msgstr "{voice} ({package})"
 
 msgid "{package} is already installed."
-msgstr "{package} 已经安装。"
+msgstr "{package} 已安装。"
 
 msgid "{runtime} ({status})"
 msgstr "{runtime} ({status})"
 
 msgid "{runtime} was not found. Keeping the current Google TTS For NVDA Chromium browser runtime setting."
-msgstr "未找到 {runtime}。将保留当前的 Google TTS For NVDA Chromium 浏览器运行时设置。"
+msgstr "未发现{runtime}。保留当前的 ​​Google TTS For NVDA Chromium 浏览器运行时设置。"
 
 msgid "{size:.1f} MB"
-msgstr "{size:.1f} MB"
+msgstr "{大小：.1f} MB"
 
 msgid "Available to download"
 msgstr "可供下载"
 
 msgid "Available. Required by {count} downloadable packages"
-msgstr "可用。有 {count} 个可下载的软件包需要此包"
+msgstr "可用的。 {count} 下载包所需"
 
 msgid "Available. Required package is installed: {dependency}"
-msgstr "可用。所需的软件包已安装：{dependency}"
+msgstr "可用的。所需软件包已安装：{dependency}"
 
 msgid "Available. Requires package: {dependency}"
-msgstr "可用。需要软件包：{dependency}"
+msgstr "可用的。需要包装：{dependency}"
 
 msgid "Not usable. Missing required package: {dependency}"
-msgstr "不可用。缺少所需的软件包：{dependency}"
+msgstr "不能用。缺少所需的包：{dependency}"
 
 msgid "Not usable. Required package is not usable: {dependency}"
-msgstr "不可用。所需的软件包不可用：{dependency}"
+msgstr "不能用。所需的包不可用：{dependency}"
 
 msgid "Usable"
 msgstr "可用"
 
 msgid "Usable. Required by {count} installed packages"
-msgstr "可用。有 {count} 个已安装的软件包需要此包"
+msgstr "可用。 {count} 安装的软件包需要"
 
 msgid "Usable. Requires {dependency}"
-msgstr "可用。需要 {dependency}"
+msgstr "可用。需要{dependency}"
 
 msgid "Usable. Requires {dependency}; required by {count} installed packages"
-msgstr "可用。需要 {dependency}；有 {count} 个已安装的软件包需要此包"
+msgstr "可用。要求{dependency}； {count} 安装的软件包需要"
 
 msgid ""
 "Remove {count} packages?\n"
 "{packages}"
 msgstr ""
-"是否移除 {count} 个软件包？\n"
+"删除{count}软件包？\n"
 "{packages}"
 
 msgid "Use Google's WASM text-to-speech voices locally through a supported Chromium browser runtime such as Google Chrome, Microsoft Edge, or Brave as an NVDA synthesizer."
-msgstr "通过受支持的 Chromium 内核浏览器运行时（如 Google Chrome、Microsoft Edge 或 Brave），在本地使用 Google WASM 文本转语音声音，作为 NVDA 的语音合成器。"
+msgstr "通过受支持的 Chromium 浏览器运行时（例如 Google Chrome、Microsoft Edge 或 Brave）在本地使用 Google 的 WASM 文本转语音语音作为 NVDA 合成器。"
 
 msgid "Download or remove Google TTS For NVDA voice packages"
-msgstr "下载或移除 Google TTS For NVDA 语音包"
+msgstr "下载或删除 Google TTS For NVDA 语音包"
 
 msgid ""
 "Download required voice packages?\n"
 "Selected: {selected}\n"
 "Also download packages required by your selection: {dependencies}"
 msgstr ""
-"是否下载所需的语音包？\n"
-"已选择：{selected}\n"
-"还将下载您选择的项目所依赖的软件包：{dependencies}"
+"下载需要的语音包？\n"
+"选择：{selected}\n"
+"同时下载你选择需要的包：{dependencies}"
 
 msgid "The last usable voice package was kept because Google TTS For NVDA is still the current synthesizer."
-msgstr "保留了最后一个可用的语音包，因为 Google TTS For NVDA 仍是当前的语音合成器。"
+msgstr "保留了最后一个可用的语音包，因为 Google TTS For NVDA 仍然是当前的合成器。"
 
 msgid "Waiting for you to switch away from Google TTS For NVDA before removing the last usable voice package."
-msgstr "正在等待您切换离开 Google TTS For NVDA，然后再移除最后一个可用的语音包。"
+msgstr "等待您退出 Google TTS For NVDA，然后再删除最后一个可用的语音包。"
 
 msgid ""
 "You are about to remove the last usable voice package. After it is removed, Google TTS For NVDA will not have any voices available until you download another package.\n"
@@ -701,11 +720,11 @@ msgid ""
 "\n"
 "Choose Yes to remove these packages. Choose No to keep them installed."
 msgstr ""
-"您即将移除最后一个可用的语音包。移除后，在您下载另一个语音包之前，Google TTS For NVDA 将没有任何可用声音。\n"
+"您即将删除最后一个可用的语音包。删除后，Google TTS For NVDA 将不会有任何可用语音，直到您下载另一个软件包。\n"
 "\n"
-"将要移除的软件包（包括依赖包）：{packages}\n"
+"要删除的软件包，包括依赖包：{packages}\n"
 "\n"
-"选择“是”以移除这些软件包。选择“否”以保持它们的安装状态。"
+"选择“是”以删除这些软件包。选择“否”以保持安装状态。"
 
 msgid ""
 "You are about to remove the last usable voice package. Google TTS For NVDA is currently selected as your synthesizer, so it needs at least one voice to keep speaking.\n"
@@ -714,29 +733,29 @@ msgid ""
 "\n"
 "Choose Yes to open Select Synthesizer and switch first. Choose No to keep this package installed."
 msgstr ""
-"您即将移除最后一个可用的语音包。Google TTS For NVDA 当前被选为您的语音合成器，因此它需要至少一种声音以保持朗读。\n"
+"您即将删除最后一个可用的语音包。目前选择 Google TTS For NVDA 作为合成器，因此它至少需要一个声音才能继续说话。\n"
 "\n"
-"将要移除的软件包（包括依赖包）：{packages}\n"
+"要删除的包，包括依赖包：{packages}\n"
 "\n"
-"选择“是”以打开“选择语音合成器”对话框并先进行切换。选择“否”以保持此软件包的安装状态。"
+"选择是打开选择合成器并首先切换。选择“否”以保留此软件包的安装状态。"
 
 msgid "Downloaded {succeeded} of {total} packages. Could not download: {failList}. First error: {reason}"
-msgstr "已下载 {total} 个软件包中的 {succeeded} 个。无法下载：{failList}。首个错误：{reason}"
+msgstr "Đã tải xuống {succeeded}  {total} gói. Không thể tải xuống: {failList}. Lỗi đầu tiên: {reason}"
 
 msgid "Google TTS For NVDA could not speak this text."
-msgstr "Google TTS For NVDA 无法朗读此文本。"
+msgstr "Google TTS For NVDA 无法说出此文本。"
 
 msgid ""
 "Google TTS For NVDA is using the selected Chromium browser runtime now. To change it safely, switch to another synthesizer first.\n"
 "\n"
 "Choose OK to open Select Synthesizer. Choose Cancel to keep the current Chromium browser runtime."
 msgstr ""
-"Google TTS For NVDA 当前正在使用选定的 Chromium 浏览器运行时。要安全地更改它，请先切换到另一个语音合成器。\n"
+"Google TTS For NVDA 现在正在使用选定的 Chromium 浏览器运行时。要安全地更改它，请先切换到另一个合成器。\n"
 "\n"
-"选择“确定”以打开“选择语音合成器”。选择“取消”以保留当前的 Chromium 浏览器运行时。"
+"选择“确定”打开“选择合成器”。选择“取消”以保留当前的 ​​Chromium 浏览器运行时。"
 
 msgid "Google TTS For NVDA will use {runtime} as its Chromium browser runtime."
-msgstr "Google TTS For NVDA 将使用 {runtime} 作为其 Chromium 浏览器运行时。"
+msgstr "Google TTS Cho NVDA sẽ dùng {runtime} làm runtime trình duyệt nhân Chromium."
 
 msgid ""
 "No Google TTS For NVDA voices are installed.\n"
@@ -746,12 +765,12 @@ msgid ""
 "\n"
 "You can also open Voice Manager later from NVDA Menu > Tools > Google TTS Voice Manager, or press NVDA+Ctrl+Shift+G."
 msgstr ""
-"未安装任何 Google TTS For NVDA 声音。\n"
+"未安装 Google TTS For NVDA 语音。\n"
 "\n"
-"按“确定”打开 Google TTS 声音管理器并下载语音包。\n"
-"按“取消”暂时继续使用当前的语音合成器。\n"
+"按“确定”打开 Google TTS 语音管理器并下载语音包。\n"
+"按取消暂时继续使用当前合成器。\n"
 "\n"
-"您稍后也可以通过 NVDA 菜单 > 工具 > Google TTS 声音管理器 打开声音管理器，或按下快捷键 NVDA+Ctrl+Shift+G。"
+"您也可以稍后从 NVDA 菜单 > 工具 > Google TTS 语音管理器打开语音管理器，或按 NVDA+Ctrl+Shift+G。"
 
 msgid ""
 "No installed Google TTS For NVDA voices can be used.\n"
@@ -759,58 +778,58 @@ msgid ""
 "Press OK to open Google TTS Voice Manager and install another voice package.\n"
 "Press Cancel to keep using your current synthesizer for now."
 msgstr ""
-"已安装的 Google TTS For NVDA 声音均不可用。\n"
+"无法使用已安装的 Google TTS For NVDA 语音。\n"
 "\n"
-"按“确定”打开 Google TTS 声音管理器并安装另一个语音包。\n"
-"按“取消”暂时继续使用当前的语音合成器。"
+"按“确定”打开 Google TTS 语音管理器并安装另一个语音包。\n"
+"按“取消”暂时继续使用当前的合成器。"
 
 msgid "No voice packages are checked for download."
-msgstr "未勾选任何用于下载的语音包。"
+msgstr "不检查下载的语音包。"
 
 msgid "No voice packages are checked for removal."
-msgstr "未勾选任何用于移除的语音包。"
+msgstr "不检查语音包是否删除。"
 
 msgid "Not supported by the bundled engine"
-msgstr "附带的引擎不支持"
+msgstr "捆绑引擎不支持"
 
 msgid ""
 "Remove {count} packages?\n"
 "Selected: {selected}\n"
 "Also remove packages that depend on your selection: {dependents}"
 msgstr ""
-"是否移除 {count} 个软件包？\n"
-"已选择：{selected}\n"
-"还将移除依赖于您选择项目的软件包：{dependents}"
+"删除{count}软件包？\n"
+"选择：{selected}\n"
+"同时删除取决于您选择的软件包：{dependents}"
 
 msgid "Removed {succeeded} of {total} packages. Could not remove: {failList}. First error: {reason}"
-msgstr "已移除 {total} 个软件包中的 {succeeded} 个。无法移除：{failList}。首个错误：{reason}"
+msgstr "Đã gỡ bỏ {succeeded} trên {total} gói. Không thể gỡ bỏ: {failList}. Lỗi đầu tiên: {reason}"
 
 msgid "The Select Synthesizer dialog could not be opened."
-msgstr "无法打开“选择语音合成器”对话框。"
+msgstr "无法打开“选择合成器”对话框。"
 
 msgid "The Chromium browser runtime did not respond in time."
-msgstr "Chromium 浏览器运行时未及时响应。"
+msgstr "Chromium 浏览器运行时没有及时响应。"
 
 msgid "The Chromium browser runtime did not start in time."
 msgstr "Chromium 浏览器运行时未及时启动。"
 
 msgid "The Chromium browser runtime was left unchanged because Google TTS For NVDA is still the current synthesizer."
-msgstr "Chromium 浏览器运行时保持不变，因为 Google TTS For NVDA 仍是当前的语音合成器。"
+msgstr "Chromium 浏览器运行时保持不变，因为 Google TTS For NVDA 仍然是当前的合成器。"
 
 msgid "The checked voice packages are not supported by the bundled Google TTS engine."
-msgstr "已勾选的语音包不受附带的 Google TTS 引擎支持。"
+msgstr "捆绑的 Google TTS 引擎不支持检查的语音包。"
 
 msgid "The installed Google TTS For NVDA voice packages do not include any voices this engine can use. Open Google TTS Voice Manager to install another voice package."
-msgstr "已安装的 Google TTS For NVDA 语音包不包含此引擎可使用的任何声音。请打开 Google TTS 声音管理器以安装另一个语音包。"
+msgstr "安装的 Google TTS For NVDA 语音包不包含该引擎可以使用的任何语音。打开 Google TTS 语音管理器安装另一个语音包。"
 
 msgid "This voice package is not installed. Open Google TTS Voice Manager to install it."
-msgstr "未安装此语音包。请打开 Google TTS 声音管理器以安装它。"
+msgstr "该语音包未安装。打开 Google TTS 语音管理器进行安装。"
 
 msgid "This voice package is not supported by the bundled Google TTS engine."
-msgstr "附带的 Google TTS 引擎不支持此语音包。"
+msgstr "捆绑的 Google TTS 引擎不支持此语音包。"
 
 msgid "&Use this language profile"
-msgstr "使用此语言配置文件(&U)"
+msgstr "使用此语言配置文件(&A)"
 
 msgid "Use automatic language profiles"
 msgstr "使用自动语言配置文件"
@@ -825,65 +844,65 @@ msgid ""
 "\n"
 "Open the Google TTS For NVDA category in NVDA Settings and turn off automatic language profiles, then open Voice dictionary again."
 msgstr ""
-"当启用自动语言配置文件时，语音词典首选项不可用。\n"
+"启用自动语言配置文件时，语音词典首选项不可用。\n"
 "\n"
-"Google TTS For NVDA 在朗读时可能会在多个配置文件变体之间切换，因此 NVDA 无法确定要编辑哪一个特定变体的语音词典。\n"
+"Google TTS For NVDA 可能会在说话时在多个配置文件变体之间切换，因此 NVDA 无法知道要编辑哪个单一变体语音词典。\n"
 "\n"
-"请打开 NVDA 设置中的 Google TTS For NVDA 分类并关闭自动语言配置文件，然后重新打开语音词典。"
+"在 NVDA 设置中打开 Google TTS For NVDA 类别并关闭自动语言配置文件，然后再次打开语音词典。"
 
 msgid "Waiting for you to switch away from Google TTS For NVDA before changing the Chromium browser runtime."
-msgstr "正在等待您切换离开 Google TTS For NVDA，然后再更改 Chromium 浏览器运行时。"
+msgstr "在更改 Chromium 浏览器运行时之前，等待您放弃 Google TTS For NVDA。"
 
 msgid "{message} Also downloaded required packages: {packages}"
 msgstr "{message} 还下载了所需的软件包：{packages}"
 
 msgid "{message} Skipped packages not supported by this engine: {packages}"
-msgstr "{message} 已跳过此引擎不支持的软件包：{packages}"
+msgstr "{message} 该引擎不支持的跳过包：{packages}"
 
 msgid "{language} ({count} voices)"
-msgstr "{language}（{count} 个声音）"
+msgstr "{language}（{count} 声音）"
 
 msgid "&Automatically check for add-on updates when NVDA starts"
-msgstr "NVDA 启动时自动检查插件更新(&A)"
+msgstr "NVDA 启动时自动检查附加更新(&A)"
 
 msgid "&Check for updates..."
 msgstr "检查更新(&C)..."
 
 msgid "Add-on update status"
-msgstr "插件更新状态"
+msgstr "附加组件更新状态"
 
 msgid "Automatically check for add-on updates when NVDA starts"
-msgstr "NVDA 启动时自动检查插件更新"
+msgstr "NVDA 启动时自动检查附加更新"
 
 msgid "Cancelling Google TTS For NVDA update download..."
-msgstr "正在取消下载 Google TTS For NVDA 更新..."
+msgstr "正在取消 Google TTS For NVDA 更新下载..."
 
 msgid "Checking for Google TTS For NVDA updates..."
-msgstr "正在检查 Google TTS For NVDA 更新..."
+msgstr "正在检查 Google TTS 的 NVDA 更新..."
 
 msgid "Could not check for Google TTS For NVDA updates. Check your internet connection and try again."
-msgstr "无法检查 Google TTS For NVDA 更新。请检查您的网络连接后重试。"
+msgstr "无法检查 Google TTS For NVDA 更新。检查您的互联网连接，然后重试。"
 
 msgid "Could not check for Google TTS For NVDA updates. The update response was not understood."
-msgstr "无法检查 Google TTS For NVDA 更新。无法解析更新响应内容。"
+msgstr "无法检查 Google TTS For NVDA 更新。更新响应无法理解。"
 
 msgid "Could not download the Google TTS For NVDA update. Check your internet connection and try again."
-msgstr "无法下载 Google TTS For NVDA 更新。请检查您的网络连接后重试。"
+msgstr "无法下载 Google TTS For NVDA 更新。检查您的互联网连接，然后重试。"
 
 msgid "Could not download the Google TTS For NVDA update. The download result was not understood."
-msgstr "无法下载 Google TTS For NVDA 更新。无法解析下载结果。"
+msgstr "无法下载 Google TTS For NVDA 更新。下载结果不明白。"
 
 msgid "Current Google TTS For NVDA version: {version}. An automatic update check is running in the background. Manual checking will be available when it finishes."
-msgstr "当前 Google TTS For NVDA 版本：{version}。后台正在运行自动更新检查。完成后即可进行手动检查。"
+msgstr "当前适用于 NVDA 的 Google TTS 版本：{version}。自动更新检查正在后台运行。完成后即可进行手动检查。"
 
 msgid "Current Google TTS For NVDA version: {version}. Automatic update checks are off. Google TTS For NVDA will not check the next time NVDA starts. You can still check manually."
-msgstr "当前 Google TTS For NVDA 版本：{version}。自动更新检查已关闭。下次 NVDA 启动时 Google TTS For NVDA 将不会检查更新。您仍可以手动检查。"
+msgstr "当前适用于 NVDA 的 Google TTS 版本：{version}。自动更新检查已关闭。 Google TTS For NVDA 不会在 NVDA 下次启动时进行检查。您仍然可以手动检查。"
 
 msgid "Current Google TTS For NVDA version: {version}. Automatic update checks are on. Google TTS For NVDA will check once the next time NVDA starts. You can also check manually."
-msgstr "当前 Google TTS For NVDA 版本：{version}。自动更新检查已开启。下次 NVDA 启动时 Google TTS For NVDA 将检查一次更新。您也可以手动检查。"
+msgstr "当前适用于 NVDA 的 Google TTS 版本：{version}。自动更新检查已开启。 Google TTS For NVDA 将在下次 NVDA 启动时进行检查。您也可以手动检查。"
 
 msgid "Current Google TTS For NVDA version: {version}. Checking for updates now."
-msgstr "当前 Google TTS For NVDA 版本：{version}。正在立即检查更新。"
+msgstr "当前适用于 NVDA 的 Google TTS 版本：{version}。现在检查更新。"
 
 msgid ""
 "Download size: {size}. Minimum NVDA version: {minimumVersion}. Last tested NVDA version: {lastTestedVersion}.\n"
@@ -891,58 +910,58 @@ msgid ""
 "Changes in this version:\n"
 "{changes}"
 msgstr ""
-"下载大小：{size}。最低 NVDA 版本：{minimumVersion}。最新测试过的 NVDA 版本：{lastTestedVersion}。\n"
+"下载大小：{size}。最低 NVDA 版本：{minimumVersion}。上次测试的 NVDA 版本：{lastTestedVersion}.\n"
 "\n"
-"此版本的更新日志：\n"
+"此版本中的更改：\n"
 "{changes}"
 
 msgid "Download status"
 msgstr "下载状态"
 
 msgid "Downloading Google TTS For NVDA update"
-msgstr "正在下载 Google TTS For NVDA 更新"
+msgstr "下载 Google TTS For NVDA 更新"
 
 msgid "Downloading Google TTS For NVDA {version}."
-msgstr "正在下载 Google TTS For NVDA {version}。"
+msgstr "下载 NVDA 的 Google TTS {version}。"
 
 msgid "Downloading Google TTS For NVDA {version}: {percent}% ({received} of {total})."
-msgstr "正在下载 Google TTS For NVDA {version}：{percent}%（{received} / {total}）。"
+msgstr "下载 NVDA 的 Google TTS {version}：{percent}%（{received} 或 {total}）。"
 
 msgid "Google TTS For NVDA is already checking for updates."
-msgstr "Google TTS For NVDA 已在检查更新中。"
+msgstr "Google TTS For NVDA 已在检查更新。"
 
 msgid "Google TTS For NVDA is up to date. Current version: {version}."
-msgstr "Google TTS For NVDA 已是最新版本。当前版本：{version}。"
+msgstr "Google TTS For NVDA 已更新。当前版本：{version}。"
 
 msgid "Google TTS For NVDA update"
-msgstr "Google TTS For NVDA 更新"
+msgstr "NVDA 的 Google TTS 更新"
 
 msgid "Google TTS For NVDA update available"
-msgstr "有可用的 Google TTS For NVDA 更新"
+msgstr "Google TTS For NVDA 更新可用"
 
 msgid "Google TTS For NVDA update installation was cancelled or did not complete."
-msgstr "Google TTS For NVDA 更新安装已被取消或未完成。"
+msgstr "Google TTS For NVDA 更新安装已取消或未完成。"
 
 msgid "Google TTS For NVDA updates cannot be installed in the Windows Store version of NVDA."
-msgstr "无法在 Windows Store 版本的 NVDA 中安装 Google TTS For NVDA 更新。"
+msgstr "Google TTS For NVDA 更新无法安装在 Windows Store 版本的 NVDA 中。"
 
 msgid ""
 "Google TTS For NVDA {version} is available. You are using {currentVersion}.\n"
 "\n"
 "Choose Yes to download and install this update."
 msgstr ""
-"Google TTS For NVDA {version} 已可用。您当前正在使用 {currentVersion}。\n"
+"NVDA 的 Google TTS {version} 可用。您正在使用{currentVersion}。\n"
 "\n"
-"选择“是”以下载并安装此更新。"
+"选择“是”下载并安装此更新。"
 
 msgid "No change log is available for this update."
-msgstr "此更新没有可用的更新日志。"
+msgstr "此更新没有可用的更改日志。"
 
 msgid "Preparing the update download..."
-msgstr "正在准备下载更新..."
+msgstr "正在准备更新下载..."
 
 msgid "The update was downloaded, but NVDA could not start the add-on installer."
-msgstr "更新已下载，但 NVDA 无法启动插件安装程序。"
+msgstr "更新已下载，但 NVDA 无法启动附加安装程序。"
 
 msgid "Update information"
 msgstr "更新信息"
@@ -951,10 +970,10 @@ msgid "Updates"
 msgstr "更新"
 
 msgid "&Pauses"
-msgstr "停顿(&P)"
+msgstr "暂停(&P)"
 
 msgid "Do not shorten"
-msgstr "不缩短"
+msgstr "不要缩短"
 
 msgid "Shorten at end of text only"
 msgstr "仅在文本末尾缩短"
@@ -964,10 +983,18 @@ msgstr "缩短所有停顿"
 
 #: manifest.ini:changelog
 msgid ""
-"Version 0.5.5:\n"
-"- Improved automatic language profile matching across CLD2 and Google TTS language-code aliases, including Filipino/Tagalog, Javanese, legacy Hebrew codes, Norwegian variants, Arabic, and Simplified, Traditional, and Cantonese Chinese mappings.\n"
-"- Rebuilt the bundled CLD2 Windows DLLs with MSVC instead of MinGW-w64 so the packaged add-on no longer triggers the previous false-positive antivirus detection in VirusTotal testing."
+"Version 1.0:\n"
+"- Improved reading responsiveness for medium and long text with faster starts, smoother audio buffering, and reuse of completed audio held temporarily in RAM.\n"
+"- Improved multilingual sentence and phrase breaks and the Use automatic language profiles feature using official Unicode 17.0 and CLDR 48.2 data.\n"
+"- Increased default speech loudness and kept volume steadier without abnormal rises and falls. The Volume setting remains proportional. Distortion in some male voices comes from the original WASM TTS engine and is not addressed by this change.\n"
+"- Improved recovery from failures in the Chromium browser runtime, WASM TTS engine, and NVDA audio output; prevented Keep Google TTS browser runtime ready in the background from retaining unhealthy runtimes; and reduced conflicts with other add-ons.\n"
+"- Updated the bundled WASM TTS engine to version 20260806.1.\n"
+"- Updated translations to match version 1.0."
 msgstr ""
-"0.5.5 版本：\n"
-"- 改进了 CLD2 与 Google TTS 之间语言代码别名的自动语言配置文件匹配，包括菲律宾语（他加禄语）、爪哇语、旧版希伯来语代码、挪威语变体、阿拉伯语以及简体中文、繁体中文和粤语的映射。\n"
-"- 使用 MSVC 替代 MinGW-w64 重新构建了随附的 Windows CLD2 DLL，使打包后的插件包在 VirusTotal 检测中不再像此前那样出现误报病毒的情况。"
+"版本 1.0：\n"
+"- 改进了中长文本的阅读响应能力，具有更快的启动速度、更流畅的音频缓冲以及重复使用临时保存在 RAM 中的完整音频。\n"
+"- 改进了多语言句子和短语中断以及使用官方 Unicode 17.0 和 CLDR 48.2 数据的使用自动语言配置文件功能。\n"
+"- 增加了默认语音响度并保持音量稳定，没有异常的上升和下降。音量设置保持成比例。一些男声的失真来自原始 WASM TTS 引擎，此更改并未解决。\n"
+"- 改进了 Chromium 浏览器运行时、WASM TTS 引擎和 NVDA 音频输出中的故障恢复；防止让 Google TTS 浏览器运行时在后台保持就绪状态，避免保留不健康的运行时；并减少与其他附加组件的冲突。\n"
+"- 将捆绑的 WASM TTS 引擎更新至版本 20260806.1。\n"
+"- 更新翻译以匹配版本 1.0。"
