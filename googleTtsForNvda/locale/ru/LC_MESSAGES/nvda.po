@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GoogleTTSForNVDA\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-10 00:00+0700\n"
-"PO-Revision-Date: 2026-07-31 06:24+0300\n"
+"POT-Creation-Date: 2026-07-10 00:00+0800\n"
+"PO-Revision-Date: 2026-08-11 15:07+0300\n"
 "Last-Translator: \n"
 "Language-Team: nvda.ru\n"
 "Language: ru\n"
@@ -19,20 +19,53 @@ msgstr ""
 "X-Poedit-SearchPath-0: globalPlugins\n"
 "X-Poedit-SearchPath-1: synthDrivers\n"
 
+msgid "&Automatically check for add-on updates when NVDA starts"
+msgstr "&Автоматически проверять обновления дополнения при запуске NVDA"
+
+msgid "&Check for updates..."
+msgstr "&Проверить обновления..."
+
+msgid "&Close"
+msgstr "&Закрыть"
+
+msgid "&Copy link"
+msgstr "&Скопировать ссылку"
+
 msgid "&Download checked voice packages"
 msgstr "&Загрузить отмеченные голосовые пакеты"
+
+msgid "&Download online installer"
+msgstr "&Загрузить онлайн-установщик"
 
 msgid "&Filter by language:"
 msgstr "&Фильтр по языку:"
 
+msgid "&Keep Google TTS browser runtime ready in the background"
+msgstr "&Держать среду выполнения браузера Google TTS готовой в фоне"
+
+msgid "&Maybe later"
+msgstr "&Возможно, позже"
+
+msgid "&Open Microsoft WebView2 page"
+msgstr "Открыть страницу Microsoft &WebView2"
+
 msgid "&Open voice packages folder"
 msgstr "&Открыть папку с голосовыми пакетами"
+
+msgid "&Pauses"
+msgstr "&Паузы"
 
 msgid "&Refresh"
 msgstr "&Обновить"
 
 msgid "&Remove checked voice packages"
 msgstr "&Удалить отмеченные голосовые пакеты"
+
+msgid "&Use automatic language profiles"
+msgstr "&Использовать автоматические языковые профили"
+
+msgid "&Use this language profile"
+msgstr "&Использовать этот языковой профиль"
 
 msgid ""
 "A file system error occurred while managing voice packages. Check the voice "
@@ -44,25 +77,20 @@ msgstr ""
 msgid "A voice package operation is still running."
 msgstr "Операция с голосовым пакетом все еще выполняется."
 
+msgid "Add-on update status"
+msgstr "Состояние обновления дополнения"
+
 msgid "Albanian"
 msgstr "Албанский"
 
 msgid "All"
 msgstr "Все"
 
-msgid ""
-"Automatic language profiles are off. Google TTS uses NVDA's normal Speech "
-"Settings for voice, variant, rate, pitch, volume, capitals, and spelling."
-msgstr ""
-"Автоматические языковые профили отключены. Google TTS использует обычные "
-"настройки речи NVDA для голоса, варианта, скорости, высоты тона, громкости, "
-"заглавных букв и произнесения по буквам."
-
-msgid "&Use automatic language profiles"
-msgstr "&Использовать автоматические языковые профили"
-
 msgid "An unexpected error occurred while managing voice packages."
 msgstr "Произошла непредвиденная ошибка при управлении голосовыми пакетами."
+
+msgid "another version"
+msgstr "другая версия"
 
 msgid "Arabic"
 msgstr "Арабский"
@@ -76,14 +104,16 @@ msgstr "Автоматический языковой &профиль:"
 msgid "Automatic language profile"
 msgstr "Автоматический языковой профиль"
 
+msgid ""
+"Automatic language profiles are off. Google TTS uses NVDA's normal Speech "
+"Settings for voice, variant, rate, pitch, volume, capitals, and spelling."
+msgstr ""
+"Автоматические языковые профили отключены. Google TTS использует обычные "
+"настройки речи NVDA для голоса, варианта, скорости, высоты тона, громкости, "
+"заглавных букв и произнесения по буквам."
+
 msgid "Automatic language profiles status"
 msgstr "Состояние автоматических языковых профилей"
-
-msgid ""
-"Automatic language profiles were disabled because no languages are selected."
-msgstr ""
-"Автоматические языковые профили были отключены, поскольку не выбрано ни "
-"одного языка."
 
 msgid ""
 "Automatic language profiles use the selected installed language profiles. If "
@@ -93,8 +123,32 @@ msgstr ""
 "профили. Если выбран только один язык, этот профиль используется для каждого "
 "предложения."
 
+msgid ""
+"Automatic language profiles were disabled because no languages are selected."
+msgstr ""
+"Автоматические языковые профили были отключены, поскольку не выбрано ни "
+"одного языка."
+
+msgid "Automatically check for add-on updates when NVDA starts"
+msgstr "Автоматически проверять обновления дополнения при запуске NVDA"
+
 msgid "Available"
 msgstr "Доступно"
+
+msgid "Available to download"
+msgstr "Доступно для загрузки"
+
+msgid "Available. Required by {count} downloadable packages"
+msgstr "Доступно. Требуется для {count} загружаемых пакетов"
+
+msgid "Available. Required package is installed: {dependency}"
+msgstr "Доступно. Требуемый пакет установлен: {dependency}"
+
+msgid "Available. Requires package: {dependency}"
+msgstr "Доступно. Требует пакет: {dependency}"
+
+msgid "Background browser runtime status"
+msgstr "Статус фоновой среды выполнения браузера"
 
 msgid "Bengali (Bangladesh)"
 msgstr "Бенгальский (Бангладеш)"
@@ -108,50 +162,11 @@ msgstr "Бодо"
 msgid "Bosnian"
 msgstr "Боснийский"
 
-msgid "Chromium browser &runtime:"
-msgstr "Среда выполнения браузера на &Chromium:"
-
-msgid "Chromium browser runtime"
-msgstr "Среда выполнения браузера на Chromium"
-
-msgid "Chromium browser runtime status"
-msgstr "Состояние среды выполнения браузера на Chromium"
-
-msgid "&Keep Google TTS browser runtime ready in the background"
-msgstr "&Держать среду выполнения браузера Google TTS готовой в фоне"
-
-msgid "Keep Google TTS browser runtime ready in the background"
-msgstr "Держать среду выполнения браузера Google TTS готовой в фоне"
-
-msgid "Background browser runtime status"
-msgstr "Статус фоновой среды выполнения браузера"
-
-msgid ""
-"Off. Google TTS For NVDA will start the browser runtime only when you choose "
-"Google TTS as the current synthesizer."
-msgstr ""
-"Выкл. Google TTS Для NVDA будет запускать среду выполнения браузера только "
-"когда вы выберете Google TTS в качестве текущего синтезатора."
-
-msgid ""
-"On. Google TTS For NVDA is the current synthesizer, so no separate "
-"background browser runtime will be started."
-msgstr ""
-"Вкл. Google TTS Для NVDA является текущим синтезатором, поэтому отдельная "
-"фоновая среда выполнения браузера запускаться не будет."
-
-msgid ""
-"On. After you press OK or Apply, Google TTS For NVDA can keep the browser "
-"runtime ready in the background. This may use more memory and keep runtime "
-"files open until you turn it off or exit NVDA."
-msgstr ""
-"Вкл. После нажатия OK или Применить, Google TTS Для NVDA может держать среду "
-"выполнения браузера готовой в фоне. Это может использовать больше памяти и "
-"держать файлы среды выполнения открытыми, пока вы не выключите эту опцию или "
-"не закроете NVDA."
-
 msgid "Bulgarian"
 msgstr "Болгарский"
+
+msgid "Cancelling Google TTS For NVDA update download..."
+msgstr "Отмена загрузки обновления Google TTS Для NVDA..."
 
 msgid "Cantonese"
 msgstr "Кантонский"
@@ -161,6 +176,46 @@ msgstr "Каталанский"
 
 msgid "Check &all voice packages"
 msgstr "Отметить &все голосовые пакеты"
+
+msgid "Checking for Google TTS For NVDA updates..."
+msgstr "Проверка обновлений Google TTS Для NVDA..."
+
+msgid "Chromium browser &runtime:"
+msgstr "Среда выполнения браузера на &Chromium:"
+
+msgid "Chromium browser runtime"
+msgstr "Среда выполнения браузера на Chromium"
+
+msgid "Chromium browser runtime status"
+msgstr "Состояние среды выполнения браузера на Chromium"
+
+msgid ""
+"Could not check for Google TTS For NVDA updates. Check your internet "
+"connection and try again."
+msgstr ""
+"Не удалось проверить обновления Google TTS Для NVDA. Проверьте подключение к "
+"интернету и повторите попытку."
+
+msgid ""
+"Could not check for Google TTS For NVDA updates. The update response was not "
+"understood."
+msgstr ""
+"Не удалось проверить обновления Google TTS Для NVDA. Ответ сервера "
+"обновлений не распознан."
+
+msgid ""
+"Could not download the Google TTS For NVDA update. Check your internet "
+"connection and try again."
+msgstr ""
+"Не удалось загрузить обновление Google TTS Для NVDA. Проверьте подключение к "
+"интернету и повторите попытку."
+
+msgid ""
+"Could not download the Google TTS For NVDA update. The download result was "
+"not understood."
+msgstr ""
+"Не удалось загрузить обновление Google TTS Для NVDA. Результат загрузки не "
+"распознан."
 
 msgid ""
 "Could not download the voice package. Check your internet connection and try "
@@ -179,17 +234,84 @@ msgstr ""
 msgid "Croatian"
 msgstr "Хорватский"
 
+msgid ""
+"Current Google TTS For NVDA version: {version}. An automatic update check is "
+"running in the background. Manual checking will be available when it "
+"finishes."
+msgstr ""
+"Текущая версия Google TTS Для NVDA: {version}. В фоновом режиме выполняется "
+"автоматическая проверка обновлений. Ручная проверка станет доступна после ее "
+"завершения."
+
+msgid ""
+"Current Google TTS For NVDA version: {version}. Automatic update checks are "
+"off. Google TTS For NVDA will not check the next time NVDA starts. You can "
+"still check manually."
+msgstr ""
+"Текущая версия Google TTS Для NVDA: {version}. Автоматическая проверка "
+"обновлений отключена. Google TTS Для NVDA не будет проверять обновления при "
+"следующем запуске NVDA. Вы все равно можете проверить вручную."
+
+msgid ""
+"Current Google TTS For NVDA version: {version}. Automatic update checks are "
+"on. Google TTS For NVDA will check once the next time NVDA starts. You can "
+"also check manually."
+msgstr ""
+"Текущая версия Google TTS Для NVDA: {version}. Автоматическая проверка "
+"обновлений включена. Google TTS Для NVDA выполнит проверку один раз при "
+"следующем запуске NVDA. Вы также можете проверить вручную."
+
+msgid ""
+"Current Google TTS For NVDA version: {version}. Checking for updates now."
+msgstr ""
+"Текущая версия Google TTS Для NVDA: {version}. Выполняется проверка "
+"обновлений."
+
 msgid "Czech"
 msgstr "Чешский"
 
 msgid "Danish"
 msgstr "Датский"
 
+msgid "Do not shorten"
+msgstr "Не укорачивать"
+
 msgid "Dogri"
 msgstr "Догри"
 
 msgid "Download"
 msgstr "Загрузка"
+
+msgid "Download address"
+msgstr "Адрес загрузки"
+
+msgid "Download or remove Google TTS For NVDA voice packages"
+msgstr "Загрузить или удалить голосовые пакеты Google TTS Для NVDA"
+
+msgid ""
+"Download required voice packages?\n"
+"Selected: {selected}\n"
+"Also download packages required by your selection: {dependencies}"
+msgstr ""
+"Загрузить требуемые голосовые пакеты?\n"
+"Выбрано: {selected}\n"
+"Также загрузить пакеты, требуемые вашим выбором: {dependencies}"
+
+msgid ""
+"Download size: {size}. Minimum NVDA version: {minimumVersion}. Last tested "
+"NVDA version: {lastTestedVersion}.\n"
+"\n"
+"Changes in this version:\n"
+"{changes}"
+msgstr ""
+"Размер загрузки: {size}. Минимальная версия NVDA: {minimumVersion}. "
+"Последняя протестированная версия NVDA: {lastTestedVersion}.\n"
+"\n"
+"Изменения в этой версии:\n"
+"{changes}"
+
+msgid "Download status"
+msgstr "Состояние загрузки"
 
 msgid "Downloadable voice packages"
 msgstr "Доступные для загрузки голосовые пакеты"
@@ -199,6 +321,26 @@ msgstr "Загружено голосовых пакетов: {count}."
 
 msgid "Downloaded {package}."
 msgstr "Загружен {package}."
+
+msgid ""
+"Downloaded {succeeded} of {total} packages. Could not download: {failList}. "
+"First error: {reason}"
+msgstr ""
+"Загружено {succeeded} из {total} пакетов. Не удалось загрузить: {failList}. "
+"Первая ошибка: {reason}"
+
+msgid "Downloading Google TTS For NVDA update"
+msgstr "Загрузка обновления Google TTS Для NVDA"
+
+msgid "Downloading Google TTS For NVDA {version}."
+msgstr "Загрузка Google TTS Для NVDA {version}."
+
+msgid ""
+"Downloading Google TTS For NVDA {version}: {percent}% ({received} of "
+"{total})."
+msgstr ""
+"Загрузка Google TTS Для NVDA {version}: {percent}% (получено {received} из "
+"{total})."
 
 msgid "Downloading voice packages..."
 msgstr "Загрузка голосовых пакетов..."
@@ -248,6 +390,9 @@ msgstr "Финский"
 
 msgid "Flemish"
 msgstr "Фламандский"
+
+msgid "found"
+msgstr "найдено"
 
 msgid "French (Canada)"
 msgstr "Французский (Канада)"
@@ -326,6 +471,9 @@ msgid "Google TTS For NVDA could not finish loading the browser speech engine."
 msgstr ""
 "Google TTS Для NVDA не удалось завершить загрузку речевого движка браузера."
 
+msgid "Google TTS For NVDA could not speak this text."
+msgstr "Google TTS Для NVDA не удалось произнести этот текст."
+
 msgid "Google TTS For NVDA could not start its local browser bridge."
 msgstr "Google TTS Для NVDA не удалось запустить локальный мост браузера."
 
@@ -335,9 +483,62 @@ msgstr ""
 "Google TTS Для NVDA не удалось запустить речь в среде выполнения браузера на "
 "Chromium."
 
+msgid "Google TTS For NVDA is already checking for updates."
+msgstr "Google TTS Для NVDA уже проверяет обновления."
+
 msgid "Google TTS For NVDA is not connected to the Chromium browser runtime."
 msgstr ""
 "Google TTS Для NVDA не подключен к среде выполнения браузера на Chromium."
+
+msgid "Google TTS For NVDA is up to date. Current version: {version}."
+msgstr ""
+"Google TTS Для NVDA обновлен до актуальной версии. Текущая версия: {version}."
+
+msgid ""
+"Google TTS For NVDA is using the selected Chromium browser runtime now. To "
+"change it safely, switch to another synthesizer first.\n"
+"\n"
+"Choose OK to open Select Synthesizer. Choose Cancel to keep the current "
+"Chromium browser runtime."
+msgstr ""
+"Google TTS Для NVDA сейчас использует выбранную среду выполнения браузера на "
+"Chromium. Чтобы безопасно изменить ее, сначала переключитесь на другой "
+"синтезатор.\n"
+"\n"
+"Выберите \"ОК\", чтобы открыть диалог выбора синтезатора. Выберите \"Отмена"
+"\", чтобы сохранить текущую среду выполнения браузера на Chromium."
+
+msgid "Google TTS For NVDA update"
+msgstr "Обновление Google TTS Для NVDA"
+
+msgid "Google TTS For NVDA update available"
+msgstr "Доступно обновление Google TTS Для NVDA"
+
+msgid ""
+"Google TTS For NVDA update installation was cancelled or did not complete."
+msgstr ""
+"Установка обновления Google TTS Для NVDA была отменена или не завершена."
+
+msgid ""
+"Google TTS For NVDA updates cannot be installed in the Windows Store version "
+"of NVDA."
+msgstr ""
+"Обновления Google TTS Для NVDA не могут быть установлены в версии NVDA из "
+"Windows Store."
+
+msgid "Google TTS For NVDA will use {runtime} as its Chromium browser runtime."
+msgstr ""
+"Google TTS Для NVDA будет использовать {runtime} в качестве среды выполнения "
+"браузера на Chromium."
+
+msgid ""
+"Google TTS For NVDA {version} is available. You are using {currentVersion}.\n"
+"\n"
+"Choose Yes to download and install this update."
+msgstr ""
+"Доступен Google TTS Для NVDA {version}. Вы используете {currentVersion}.\n"
+"\n"
+"Выберите \"Да\", чтобы загрузить и установить это обновление."
 
 msgid "Google TTS Voice Manager"
 msgstr "Менеджер голосов Google TTS"
@@ -366,18 +567,18 @@ msgstr "Исландский"
 msgid "Indonesian"
 msgstr "Индонезийский"
 
-msgid "Installed"
-msgstr "Установлено"
-
-msgid "Installed voice packages"
-msgstr "Установленные голосовые пакеты"
-
 msgid ""
 "Install at least one language voice package to use automatic language "
 "profiles."
 msgstr ""
 "Установите хотя бы один голосовой пакет для языка, чтобы использовать "
 "автоматические языковые профили."
+
+msgid "Installed"
+msgstr "Установлено"
+
+msgid "Installed voice packages"
+msgstr "Установленные голосовые пакеты"
 
 msgid "Installed {package}."
 msgstr "Установлен {package}."
@@ -396,6 +597,9 @@ msgstr "Каннада"
 
 msgid "Kashmiri"
 msgstr "Кашмирский"
+
+msgid "Keep Google TTS browser runtime ready in the background"
+msgstr "Держать среду выполнения браузера Google TTS готовой в фоне"
 
 msgid "Khmer"
 msgstr "Кхмерский"
@@ -435,209 +639,6 @@ msgstr "Манипури"
 
 msgid "Marathi"
 msgstr "Маратхи"
-
-msgid "Missing required package: {dependency}"
-msgstr "Отсутствует требуемый пакет: {dependency}"
-
-msgid "Nepali"
-msgstr "Непальский"
-
-msgid ""
-"No Google TTS For NVDA voice packages are installed. Open Google TTS Voice "
-"Manager to download a voice package."
-msgstr ""
-"Не установлено ни одного голосового пакета Google TTS Для NVDA. Откройте "
-"Менеджер голосов Google TTS, чтобы загрузить голосовой пакет."
-
-msgid "No download link is available for voice package {package}."
-msgstr "Недоступна ссылка для загрузки голосового пакета {package}."
-
-msgid "Norwegian Bokmål"
-msgstr "Норвежский (букмол)"
-
-msgid "Odia"
-msgstr "Ория"
-
-msgid "Opens the Google TTS Voice Manager."
-msgstr "Открывает Менеджер голосов Google TTS."
-
-msgid "Opens the Google TTS For NVDA settings."
-msgstr "Открывает настройки Google TTS Для NVDA."
-
-msgid "Package"
-msgstr "Пакет"
-
-msgid "Polish"
-msgstr "Польский"
-
-msgid "Portuguese (Brazil)"
-msgstr "Португальский (Бразилия)"
-
-msgid "Portuguese (Portugal)"
-msgstr "Португальский (Португалия)"
-
-msgid "Progress"
-msgstr "Прогресс"
-
-msgid "Preferred profile &language:"
-msgstr "Предпочтительный &язык профиля:"
-
-msgid "Preferred profile language"
-msgstr "Предпочтительный язык профиля"
-
-msgid "Punjabi"
-msgstr "Панджаби"
-
-msgid "Ready."
-msgstr "Готово."
-
-msgid "Remove voice package {package}?"
-msgstr "Удалить голосовой пакет {package}?"
-
-msgid "Removed {count} voice packages."
-msgstr "Удалено голосовых пакетов: {count}."
-
-msgid "Removed {package}."
-msgstr "Удален {package}."
-
-msgid "Removing voice packages..."
-msgstr "Удаление голосовых пакетов..."
-
-msgid "Romanian"
-msgstr "Румынский"
-
-msgid "Russian"
-msgstr "Русский"
-
-msgid "Sanskrit"
-msgstr "Санскрит"
-
-msgid "Santali"
-msgstr "Сантали"
-
-msgid "Select Synthesizer dialog class was not found."
-msgstr "Не найден класс диалога выбора синтезатора."
-
-msgid ""
-"Select at least one language profile to use automatic language profiles."
-msgstr ""
-"Выберите хотя бы один языковой профиль, чтобы использовать автоматические "
-"языковые профили."
-
-msgid "Serbian"
-msgstr "Сербский"
-
-msgid "Sindhi"
-msgstr "Синдхи"
-
-msgid "Sinhala"
-msgstr "Сингальский"
-
-msgid "Size"
-msgstr "Размер"
-
-msgid "Slovak"
-msgstr "Словацкий"
-
-msgid "Slovenian"
-msgstr "Словенский"
-
-msgid "Spanish (Spain)"
-msgstr "Испанский (Испания)"
-
-msgid "Spanish (US)"
-msgstr "Испанский (США)"
-
-msgid "Status"
-msgstr "Состояние"
-
-msgid "Sundanese"
-msgstr "Сунданский"
-
-msgid "Swahili"
-msgstr "Суахили"
-
-msgid "Swedish"
-msgstr "Шведский"
-
-msgid "Tamil"
-msgstr "Тамильский"
-
-msgid "Telugu"
-msgstr "Телугу"
-
-msgid "Thai"
-msgstr "Тайский"
-
-msgid ""
-"The browser profile used by Google TTS For NVDA is already in use. Restart "
-"NVDA, or close any leftover supported Chromium browser helper processes."
-msgstr ""
-"Профиль браузера, используемый Google TTS Для NVDA, уже занят. Перезапустите "
-"NVDA или закройте все оставшиеся вспомогательные процессы поддерживаемых "
-"браузеров на Chromium."
-
-msgid ""
-"The Chromium browser runtime closed before Google TTS For NVDA was ready."
-msgstr ""
-"Среда выполнения браузера на Chromium закрылась до того, как Google TTS Для "
-"NVDA был готов."
-
-msgid "The Chromium browser runtime connection closed unexpectedly."
-msgstr ""
-"Соединение со средой выполнения браузера на Chromium неожиданно закрылось."
-
-msgid "The Chromium browser runtime is not ready yet."
-msgstr "Среда выполнения браузера на Chromium еще не готова."
-
-msgid "The Chromium browser runtime reported an error while preparing speech."
-msgstr ""
-"Среда выполнения браузера на Chromium сообщила об ошибке при подготовке речи."
-
-msgid "The Chromium browser runtime reported an error while processing speech."
-msgstr ""
-"Среда выполнения браузера на Chromium сообщила об ошибке при обработке речи."
-
-msgid ""
-"The voice package file could not be found. Refresh the list and try again."
-msgstr ""
-"Не удалось найти файл голосового пакета. Обновите список и повторите попытку."
-
-msgid "Turkish"
-msgstr "Турецкий"
-
-msgid "Ukrainian"
-msgstr "Украинский"
-
-msgid "Unavailable"
-msgstr "Недоступно"
-
-msgid "Urdu (India)"
-msgstr "Урду (Индия)"
-
-msgid "Urdu (Pakistan)"
-msgstr "Урду (Пакистан)"
-
-msgid "Vietnamese"
-msgstr "Вьетнамский"
-
-msgid "&Close"
-msgstr "&Закрыть"
-
-msgid "&Copy link"
-msgstr "&Скопировать ссылку"
-
-msgid "&Download online installer"
-msgstr "&Загрузить онлайн-установщик"
-
-msgid "&Maybe later"
-msgstr "&Возможно, позже"
-
-msgid "&Open Microsoft WebView2 page"
-msgstr "Открыть страницу Microsoft &WebView2"
-
-msgid "Download address"
-msgstr "Адрес загрузки"
 
 msgid ""
 "Microsoft Edge is available, but Microsoft Edge WebView2 Runtime is not "
@@ -692,6 +693,57 @@ msgstr ""
 "Edge в качестве среды выполнения браузера на Chromium для Google TTS Для "
 "NVDA."
 
+msgid "Missing required package: {dependency}"
+msgstr "Отсутствует требуемый пакет: {dependency}"
+
+msgid "Nepali"
+msgstr "Непальский"
+
+msgid "No change log is available for this update."
+msgstr "Для этого обновления нет журнала изменений."
+
+msgid "No download link is available for voice package {package}."
+msgstr "Недоступна ссылка для загрузки голосового пакета {package}."
+
+msgid ""
+"No Google TTS For NVDA voice packages are installed. Open Google TTS Voice "
+"Manager to download a voice package."
+msgstr ""
+"Не установлено ни одного голосового пакета Google TTS Для NVDA. Откройте "
+"Менеджер голосов Google TTS, чтобы загрузить голосовой пакет."
+
+msgid ""
+"No Google TTS For NVDA voices are installed.\n"
+"\n"
+"Press OK to open Google TTS Voice Manager and download a voice package.\n"
+"Press Cancel to keep using your current synthesizer for now.\n"
+"\n"
+"You can also open Voice Manager later from NVDA Menu > Tools > Google TTS "
+"Voice Manager, or press NVDA+Ctrl+Shift+G."
+msgstr ""
+"Не установлено ни одного голоса Google TTS Для NVDA.\n"
+"\n"
+"Нажмите \"ОК\", чтобы открыть Менеджер голосов Google TTS и загрузить "
+"голосовой пакет.\n"
+"Нажмите \"Отмена\", чтобы пока продолжить использовать текущий синтезатор.\n"
+"\n"
+"Вы также можете открыть Менеджер голосов позже через меню NVDA > Сервис > "
+"Менеджер голосов Google TTS или нажав NVDA+Ctrl+Shift+G."
+
+msgid ""
+"No installed Google TTS For NVDA voices can be used.\n"
+"\n"
+"Press OK to open Google TTS Voice Manager and install another voice "
+"package.\n"
+"Press Cancel to keep using your current synthesizer for now."
+msgstr ""
+"Ни один из установленных голосов Google TTS Для NVDA не может быть "
+"использован.\n"
+"\n"
+"Нажмите \"ОК\", чтобы открыть Менеджер голосов Google TTS и установить "
+"другой голосовой пакет.\n"
+"Нажмите \"Отмена\", чтобы пока продолжить использовать текущий синтезатор."
+
 msgid ""
 "No supported Chromium browser runtime was found. Install Google Chrome, "
 "Microsoft Edge, or Brave, or set CHROME_PATH, EDGE_PATH, or BRAVE_PATH to a "
@@ -701,6 +753,148 @@ msgstr ""
 "Установите Google Chrome, Microsoft Edge или Brave, либо укажите путь к "
 "исполняемому файлу браузера в переменных CHROME_PATH, EDGE_PATH или "
 "BRAVE_PATH."
+
+msgid "No voice packages are checked for download."
+msgstr "Не отмечено ни одного голосового пакета для загрузки."
+
+msgid "No voice packages are checked for removal."
+msgstr "Не отмечено ни одного голосового пакета для удаления."
+
+msgid "Norwegian Bokmål"
+msgstr "Норвежский (букмол)"
+
+msgid "not found"
+msgstr "не найдено"
+
+msgid "Not supported by the bundled engine"
+msgstr "Не поддерживается встроенным движком"
+
+msgid "Not usable. Missing required package: {dependency}"
+msgstr "Непригодно к использованию. Отсутствует требуемый пакет: {dependency}"
+
+msgid "Not usable. Required package is not usable: {dependency}"
+msgstr ""
+"Непригодно к использованию. Требуемый пакет непригоден к использованию: "
+"{dependency}"
+
+msgid "Odia"
+msgstr "Ория"
+
+msgid ""
+"Off. Google TTS For NVDA will start the browser runtime only when you choose "
+"Google TTS as the current synthesizer."
+msgstr ""
+"Выкл. Google TTS Для NVDA будет запускать среду выполнения браузера только "
+"когда вы выберете Google TTS в качестве текущего синтезатора."
+
+msgid ""
+"On. After you press OK or Apply, Google TTS For NVDA can keep the browser "
+"runtime ready in the background. This may use more memory and keep runtime "
+"files open until you turn it off or exit NVDA."
+msgstr ""
+"Вкл. После нажатия OK или Применить, Google TTS Для NVDA может держать среду "
+"выполнения браузера готовой в фоне. Это может использовать больше памяти и "
+"держать файлы среды выполнения открытыми, пока вы не выключите эту опцию или "
+"не закроете NVDA."
+
+msgid ""
+"On. Google TTS For NVDA is the current synthesizer, so no separate "
+"background browser runtime will be started."
+msgstr ""
+"Вкл. Google TTS Для NVDA является текущим синтезатором, поэтому отдельная "
+"фоновая среда выполнения браузера запускаться не будет."
+
+msgid "Opens the Google TTS For NVDA settings."
+msgstr "Открывает настройки Google TTS Для NVDA."
+
+msgid "Opens the Google TTS Voice Manager."
+msgstr "Открывает Менеджер голосов Google TTS."
+
+msgid "Package"
+msgstr "Пакет"
+
+msgid "Polish"
+msgstr "Польский"
+
+msgid "Portuguese (Brazil)"
+msgstr "Португальский (Бразилия)"
+
+msgid "Portuguese (Portugal)"
+msgstr "Португальский (Португалия)"
+
+msgid "Preferred profile &language:"
+msgstr "Предпочтительный &язык профиля:"
+
+msgid "Preferred profile language"
+msgstr "Предпочтительный язык профиля"
+
+msgid "Preparing the update download..."
+msgstr "Подготовка загрузки обновления..."
+
+msgid "Progress"
+msgstr "Прогресс"
+
+msgid "Punjabi"
+msgstr "Панджаби"
+
+msgid "Ready."
+msgstr "Готово."
+
+msgid "Remove voice package {package}?"
+msgstr "Удалить голосовой пакет {package}?"
+
+msgid ""
+"Remove {count} packages?\n"
+"Selected: {selected}\n"
+"Also remove packages that depend on your selection: {dependents}"
+msgstr ""
+"Удалить {count} пакетов?\n"
+"Выбрано: {selected}\n"
+"Также удалить пакеты, которые зависят от вашего выбора: {dependents}"
+
+msgid ""
+"Remove {count} packages?\n"
+"{packages}"
+msgstr ""
+"Удалить {count} пакетов?\n"
+"{packages}"
+
+msgid "Removed {count} voice packages."
+msgstr "Удалено голосовых пакетов: {count}."
+
+msgid "Removed {package}."
+msgstr "Удален {package}."
+
+msgid ""
+"Removed {succeeded} of {total} packages. Could not remove: {failList}. First "
+"error: {reason}"
+msgstr ""
+"Удалено {succeeded} из {total} пакетов. Не удалось удалить: {failList}. "
+"Первая ошибка: {reason}"
+
+msgid "Removing voice packages..."
+msgstr "Удаление голосовых пакетов..."
+
+msgid "Romanian"
+msgstr "Румынский"
+
+msgid "Russian"
+msgstr "Русский"
+
+msgid "Sanskrit"
+msgstr "Санскрит"
+
+msgid "Santali"
+msgstr "Сантали"
+
+msgid ""
+"Select at least one language profile to use automatic language profiles."
+msgstr ""
+"Выберите хотя бы один языковой профиль, чтобы использовать автоматические "
+"языковые профили."
+
+msgid "Select Synthesizer dialog class was not found."
+msgstr "Не найден класс диалога выбора синтезатора."
 
 msgid ""
 "Selected Chromium browser runtime: {runtime}. Microsoft Edge: {edgeStatus}. "
@@ -715,11 +909,126 @@ msgstr ""
 "Выбранная среда выполнения браузера на Chromium: {runtime}. {browser}: "
 "{browserStatus}."
 
+msgid "Serbian"
+msgstr "Сербский"
+
+msgid "Shorten all pauses"
+msgstr "Укорачивать все паузы"
+
+msgid "Shorten at end of text only"
+msgstr "Укорачивать только в конце текста"
+
+msgid "Sindhi"
+msgstr "Синдхи"
+
+msgid "Sinhala"
+msgstr "Сингальский"
+
+msgid "Size"
+msgstr "Размер"
+
+msgid "Slovak"
+msgstr "Словацкий"
+
+msgid "Slovenian"
+msgstr "Словенский"
+
+msgid "Spanish (Spain)"
+msgstr "Испанский (Испания)"
+
+msgid "Spanish (US)"
+msgstr "Испанский (США)"
+
+msgid "Status"
+msgstr "Состояние"
+
+msgid "Sundanese"
+msgstr "Сунданский"
+
+msgid "Swahili"
+msgstr "Суахили"
+
+msgid "Swedish"
+msgstr "Шведский"
+
+msgid "Tamil"
+msgstr "Тамильский"
+
+msgid "Telugu"
+msgstr "Телугу"
+
+msgid "Thai"
+msgstr "Тайский"
+
+msgid ""
+"The browser profile used by Google TTS For NVDA is already in use. Restart "
+"NVDA, or close any leftover supported Chromium browser helper processes."
+msgstr ""
+"Профиль браузера, используемый Google TTS Для NVDA, уже занят. Перезапустите "
+"NVDA или закройте все оставшиеся вспомогательные процессы поддерживаемых "
+"браузеров на Chromium."
+
+msgid ""
+"The checked voice packages are not supported by the bundled Google TTS "
+"engine."
+msgstr ""
+"Отмеченные голосовые пакеты не поддерживаются встроенным движком Google TTS."
+
+msgid ""
+"The Chromium browser runtime closed before Google TTS For NVDA was ready."
+msgstr ""
+"Среда выполнения браузера на Chromium закрылась до того, как Google TTS Для "
+"NVDA был готов."
+
+msgid "The Chromium browser runtime connection closed unexpectedly."
+msgstr ""
+"Соединение со средой выполнения браузера на Chromium неожиданно закрылось."
+
+msgid "The Chromium browser runtime did not respond in time."
+msgstr "Среда выполнения браузера на Chromium не ответила вовремя."
+
+msgid "The Chromium browser runtime did not start in time."
+msgstr "Среда выполнения браузера на Chromium не запустилась вовремя."
+
+msgid "The Chromium browser runtime is not ready yet."
+msgstr "Среда выполнения браузера на Chromium еще не готова."
+
+msgid "The Chromium browser runtime reported an error while preparing speech."
+msgstr ""
+"Среда выполнения браузера на Chromium сообщила об ошибке при подготовке речи."
+
+msgid "The Chromium browser runtime reported an error while processing speech."
+msgstr ""
+"Среда выполнения браузера на Chromium сообщила об ошибке при обработке речи."
+
+msgid ""
+"The Chromium browser runtime was left unchanged because Google TTS For NVDA "
+"is still the current synthesizer."
+msgstr ""
+"Среда выполнения браузера на Chromium осталась без изменений, так как Google "
+"TTS Для NVDA все еще является текущим синтезатором."
+
 msgid ""
 "The download page could not be opened. Please visit this address manually:"
 msgstr ""
 "Не удалось открыть страницу загрузки. Пожалуйста, перейдите по этому адресу "
 "вручную:"
+
+msgid ""
+"The installed Google TTS For NVDA voice packages do not include any voices "
+"this engine can use. Open Google TTS Voice Manager to install another voice "
+"package."
+msgstr ""
+"Установленные голосовые пакеты Google TTS Для NVDA не содержат голосов, "
+"которые может использовать этот движок. Откройте Менеджер голосов Google "
+"TTS, чтобы установить другой голосовой пакет."
+
+msgid ""
+"The last usable voice package was kept because Google TTS For NVDA is still "
+"the current synthesizer."
+msgstr ""
+"Последний пригодный к использованию голосовой пакет был сохранен, поскольку "
+"Google TTS Для NVDA все еще является текущим синтезатором."
 
 msgid "The link could not be copied to the clipboard."
 msgstr "Не удалось скопировать ссылку в буфер обмена."
@@ -727,113 +1036,50 @@ msgstr "Не удалось скопировать ссылку в буфер о
 msgid "The link was copied to the clipboard."
 msgstr "Ссылка скопирована в буфер обмена."
 
-msgid "WebView2 Runtime missing"
-msgstr "Отсутствует WebView2 Runtime"
-
-msgid "found"
-msgstr "найдено"
-
-msgid "not found"
-msgstr "не найдено"
-
-msgid "{selectedStatus} Active Chromium browser runtime: {runtime}."
-msgstr ""
-"{selectedStatus} Активная среда выполнения браузера на Chromium: {runtime}."
+msgid "The Select Synthesizer dialog could not be opened."
+msgstr "Не удалось открыть диалог выбора синтезатора."
 
 msgid ""
-"{selectedStatus} Falling back to active Chromium browser runtime: {runtime}."
+"The update was downloaded, but NVDA could not start the add-on installer."
 msgstr ""
-"{selectedStatus} Переключение на активную среду выполнения браузера на "
-"Chromium: {runtime}."
-
-msgid "{selectedStatus} No supported Chromium browser runtime was found."
-msgstr ""
-"{selectedStatus} Не найдено поддерживаемой среды выполнения браузера на "
-"Chromium."
+"Обновление было загружено, но NVDA не удалось запустить установщик "
+"дополнения."
 
 msgid ""
-"Voice settings are managed by automatic language profiles. Open the Google "
-"TTS for NVDA category in NVDA Settings to configure them."
+"The voice package file could not be found. Refresh the list and try again."
 msgstr ""
-"Настройки голоса управляются автоматическими языковыми профилями. Откройте "
-"категорию Google TTS Для NVDA в настройках NVDA, чтобы настроить их."
-
-msgid "Voice package operation failed: {message}"
-msgstr "Операция с голосовым пакетом не удалась: {message}"
+"Не удалось найти файл голосового пакета. Обновите список и повторите попытку."
 
 msgid ""
-"Voice package {package} did not pass verification after download. Please try "
-"downloading it again."
+"This voice package is not installed. Open Google TTS Voice Manager to "
+"install it."
 msgstr ""
-"Голосовой пакет {package} не прошел проверку после загрузки. Пожалуйста, "
-"попробуйте загрузить его снова."
+"Этот голосовой пакет не установлен. Откройте Менеджер голосов Google TTS, "
+"чтобы установить его."
 
-msgid "Voice package {package} did not pass verification after import."
-msgstr "Голосовой пакет {package} не прошел проверку после импорта."
+msgid "This voice package is not supported by the bundled Google TTS engine."
+msgstr "Этот голосовой пакет не поддерживается встроенным движком Google TTS."
 
-msgid "Voices"
-msgstr "Голоса"
+msgid "Turkish"
+msgstr "Турецкий"
 
-msgid "Welsh"
-msgstr "Валлийский"
+msgid "Ukrainian"
+msgstr "Украинский"
 
-msgid "another version"
-msgstr "другая версия"
+msgid "Unavailable"
+msgstr "Недоступно"
 
-msgid ""
-"{installed} installed voice packages, {available} available to download - "
-"Google TTS Voice Manager"
-msgstr ""
-"{installed} установленных голосовых пакетов, {available} доступно для "
-"загрузки — Менеджер голосов Google TTS"
+msgid "Update information"
+msgstr "Информация об обновлении"
 
-msgid ""
-"{installed} installed voice packages, {available} available to download."
-msgstr ""
-"{installed} установленных голосовых пакетов, {available} доступно для "
-"загрузки."
+msgid "Updates"
+msgstr "Обновления"
 
-msgid "{message} The current variant was reset to {voice}."
-msgstr "{message} Текущий вариант сброшен на {voice}."
+msgid "Urdu (India)"
+msgstr "Урду (Индия)"
 
-msgid "{voice} ({package})"
-msgstr "{voice} ({package})"
-
-msgid "{package} is already installed."
-msgstr "{package} уже установлен."
-
-msgid "{runtime} ({status})"
-msgstr "{runtime} ({status})"
-
-msgid ""
-"{runtime} was not found. Keeping the current Google TTS For NVDA Chromium "
-"browser runtime setting."
-msgstr ""
-"{runtime} не найден. Сохранение текущей настройки среды выполнения браузера "
-"на Chromium для Google TTS Для NVDA."
-
-msgid "{size:.1f} MB"
-msgstr "{size:.1f} МБ"
-
-msgid "Available to download"
-msgstr "Доступно для загрузки"
-
-msgid "Available. Required by {count} downloadable packages"
-msgstr "Доступно. Требуется для {count} загружаемых пакетов"
-
-msgid "Available. Required package is installed: {dependency}"
-msgstr "Доступно. Требуемый пакет установлен: {dependency}"
-
-msgid "Available. Requires package: {dependency}"
-msgstr "Доступно. Требует пакет: {dependency}"
-
-msgid "Not usable. Missing required package: {dependency}"
-msgstr "Непригодно к использованию. Отсутствует требуемый пакет: {dependency}"
-
-msgid "Not usable. Required package is not usable: {dependency}"
-msgstr ""
-"Непригодно к использованию. Требуемый пакет непригоден к использованию: "
-"{dependency}"
+msgid "Urdu (Pakistan)"
+msgstr "Урду (Пакистан)"
 
 msgid "Usable"
 msgstr "Пригодно к использованию"
@@ -849,12 +1095,8 @@ msgstr ""
 "Пригодно к использованию. Требует {dependency}; требуется для {count} "
 "установленных пакетов"
 
-msgid ""
-"Remove {count} packages?\n"
-"{packages}"
-msgstr ""
-"Удалить {count} пакетов?\n"
-"{packages}"
+msgid "Use automatic language profiles"
+msgstr "Использовать автоматические языковые профили"
 
 msgid ""
 "Use Google's WASM text-to-speech voices locally through a supported Chromium "
@@ -865,24 +1107,84 @@ msgstr ""
 "через поддерживаемую среду выполнения браузера на Chromium, такую как Google "
 "Chrome, Microsoft Edge или Brave, в качестве синтезатора NVDA."
 
-msgid "Download or remove Google TTS For NVDA voice packages"
-msgstr "Загрузить или удалить голосовые пакеты Google TTS Для NVDA"
+msgid "Use this language profile"
+msgstr "Использовать этот языковой профиль"
 
 msgid ""
-"Download required voice packages?\n"
-"Selected: {selected}\n"
-"Also download packages required by your selection: {dependencies}"
+"Version 0.6:\n"
+"- Added an optional setting to make Google TTS ready faster when switching "
+"from another synthesizer. This setting is off by default; when turned on, it "
+"may use more memory while NVDA is running.\n"
+"- When this setting is enabled, Google TTS updates its background "
+"preparation after you change the selected Chromium browser runtime or "
+"install/remove voice packages.\n"
+"- Improved reliability when switching away from Google TTS, especially while "
+"speech or voice preparation is still stopping."
 msgstr ""
-"Загрузить требуемые голосовые пакеты?\n"
-"Выбрано: {selected}\n"
-"Также загрузить пакеты, требуемые вашим выбором: {dependencies}"
+"Версия 0.6:\n"
+"- Добавлена опциональная настройка, позволяющая Google TTS быстрее быть "
+"готовым при переключении с другого синтезатора. Эта настройка по умолчанию "
+"выключена; при включении может использоваться больше памяти во время работы "
+"NVDA.\n"
+"- Когда эта настройка включена, Google TTS обновляет свою фоновую подготовку "
+"после изменения выбранной среды выполнения браузера Chromium или установки/"
+"удаления голосовых пакетов.\n"
+"- Улучшена надежность при переключении с Google TTS, особенно когда речь или "
+"подготовка голоса все еще останавливаются."
+
+msgid "Vietnamese"
+msgstr "Вьетнамский"
 
 msgid ""
-"The last usable voice package was kept because Google TTS For NVDA is still "
-"the current synthesizer."
+"Voice dictionary preferences are unavailable while automatic language "
+"profiles are enabled.\n"
+"\n"
+"Google TTS For NVDA may switch between several profile variants while "
+"speaking, so NVDA cannot know which single variant voice dictionary to "
+"edit.\n"
+"\n"
+"Open the Google TTS For NVDA category in NVDA Settings and turn off "
+"automatic language profiles, then open Voice dictionary again."
 msgstr ""
-"Последний пригодный к использованию голосовой пакет был сохранен, поскольку "
-"Google TTS Для NVDA все еще является текущим синтезатором."
+"Настройки голосового словаря недоступны, пока включены автоматические "
+"языковые профили.\n"
+"\n"
+"Google TTS Для NVDA может переключаться между несколькими вариантами "
+"профилей во время речи, поэтому NVDA не может определить, какой именно "
+"голосовой словарь редактировать.\n"
+"\n"
+"Откройте категорию Google TTS Для NVDA в настройках NVDA и отключите "
+"автоматические языковые профили, затем снова откройте голосовой словарь."
+
+msgid "Voice package operation failed: {message}"
+msgstr "Операция с голосовым пакетом не удалась: {message}"
+
+msgid ""
+"Voice package {package} did not pass verification after download. Please try "
+"downloading it again."
+msgstr ""
+"Голосовой пакет {package} не прошел проверку после загрузки. Пожалуйста, "
+"попробуйте загрузить его снова."
+
+msgid "Voice package {package} did not pass verification after import."
+msgstr "Голосовой пакет {package} не прошел проверку после импорта."
+
+msgid ""
+"Voice settings are managed by automatic language profiles. Open the Google "
+"TTS for NVDA category in NVDA Settings to configure them."
+msgstr ""
+"Настройки голоса управляются автоматическими языковыми профилями. Откройте "
+"категорию Google TTS Для NVDA в настройках NVDA, чтобы настроить их."
+
+msgid "Voices"
+msgstr "Голоса"
+
+msgid ""
+"Waiting for you to switch away from Google TTS For NVDA before changing the "
+"Chromium browser runtime."
+msgstr ""
+"Ожидание переключения с Google TTS Для NVDA перед изменением среды "
+"выполнения браузера на Chromium."
 
 msgid ""
 "Waiting for you to switch away from Google TTS For NVDA before removing the "
@@ -890,6 +1192,12 @@ msgid ""
 msgstr ""
 "Ожидание переключения с Google TTS Для NVDA перед удалением последнего "
 "пригодного к использованию голосового пакета."
+
+msgid "WebView2 Runtime missing"
+msgstr "Отсутствует WebView2 Runtime"
+
+msgid "Welsh"
+msgstr "Валлийский"
 
 msgid ""
 "You are about to remove the last usable voice package. After it is removed, "
@@ -929,168 +1237,20 @@ msgstr ""
 "переключиться. Выберите \"Нет\", чтобы оставить этот пакет установленным."
 
 msgid ""
-"Downloaded {succeeded} of {total} packages. Could not download: {failList}. "
-"First error: {reason}"
+"{installed} installed voice packages, {available} available to download - "
+"Google TTS Voice Manager"
 msgstr ""
-"Загружено {succeeded} из {total} пакетов. Не удалось загрузить: {failList}. "
-"Первая ошибка: {reason}"
-
-msgid "Google TTS For NVDA could not speak this text."
-msgstr "Google TTS Для NVDA не удалось произнести этот текст."
+"{installed} установленных голосовых пакетов, {available} доступно для "
+"загрузки — Менеджер голосов Google TTS"
 
 msgid ""
-"Google TTS For NVDA is using the selected Chromium browser runtime now. To "
-"change it safely, switch to another synthesizer first.\n"
-"\n"
-"Choose OK to open Select Synthesizer. Choose Cancel to keep the current "
-"Chromium browser runtime."
+"{installed} installed voice packages, {available} available to download."
 msgstr ""
-"Google TTS Для NVDA сейчас использует выбранную среду выполнения браузера на "
-"Chromium. Чтобы безопасно изменить ее, сначала переключитесь на другой "
-"синтезатор.\n"
-"\n"
-"Выберите \"ОК\", чтобы открыть диалог выбора синтезатора. Выберите \"Отмена"
-"\", чтобы сохранить текущую среду выполнения браузера на Chromium."
+"{installed} установленных голосовых пакетов, {available} доступно для "
+"загрузки."
 
-msgid "Google TTS For NVDA will use {runtime} as its Chromium browser runtime."
-msgstr ""
-"Google TTS Для NVDA будет использовать {runtime} в качестве среды выполнения "
-"браузера на Chromium."
-
-msgid ""
-"No Google TTS For NVDA voices are installed.\n"
-"\n"
-"Press OK to open Google TTS Voice Manager and download a voice package.\n"
-"Press Cancel to keep using your current synthesizer for now.\n"
-"\n"
-"You can also open Voice Manager later from NVDA Menu > Tools > Google TTS "
-"Voice Manager, or press NVDA+Ctrl+Shift+G."
-msgstr ""
-"Не установлено ни одного голоса Google TTS Для NVDA.\n"
-"\n"
-"Нажмите \"ОК\", чтобы открыть Менеджер голосов Google TTS и загрузить "
-"голосовой пакет.\n"
-"Нажмите \"Отмена\", чтобы пока продолжить использовать текущий синтезатор.\n"
-"\n"
-"Вы также можете открыть Менеджер голосов позже через меню NVDA > Сервис > "
-"Менеджер голосов Google TTS или нажав NVDA+Ctrl+Shift+G."
-
-msgid ""
-"No installed Google TTS For NVDA voices can be used.\n"
-"\n"
-"Press OK to open Google TTS Voice Manager and install another voice "
-"package.\n"
-"Press Cancel to keep using your current synthesizer for now."
-msgstr ""
-"Ни один из установленных голосов Google TTS Для NVDA не может быть "
-"использован.\n"
-"\n"
-"Нажмите \"ОК\", чтобы открыть Менеджер голосов Google TTS и установить "
-"другой голосовой пакет.\n"
-"Нажмите \"Отмена\", чтобы пока продолжить использовать текущий синтезатор."
-
-msgid "No voice packages are checked for download."
-msgstr "Не отмечено ни одного голосового пакета для загрузки."
-
-msgid "No voice packages are checked for removal."
-msgstr "Не отмечено ни одного голосового пакета для удаления."
-
-msgid "Not supported by the bundled engine"
-msgstr "Не поддерживается встроенным движком"
-
-msgid ""
-"Remove {count} packages?\n"
-"Selected: {selected}\n"
-"Also remove packages that depend on your selection: {dependents}"
-msgstr ""
-"Удалить {count} пакетов?\n"
-"Выбрано: {selected}\n"
-"Также удалить пакеты, которые зависят от вашего выбора: {dependents}"
-
-msgid ""
-"Removed {succeeded} of {total} packages. Could not remove: {failList}. First "
-"error: {reason}"
-msgstr ""
-"Удалено {succeeded} из {total} пакетов. Не удалось удалить: {failList}. "
-"Первая ошибка: {reason}"
-
-msgid "The Select Synthesizer dialog could not be opened."
-msgstr "Не удалось открыть диалог выбора синтезатора."
-
-msgid "The Chromium browser runtime did not respond in time."
-msgstr "Среда выполнения браузера на Chromium не ответила вовремя."
-
-msgid "The Chromium browser runtime did not start in time."
-msgstr "Среда выполнения браузера на Chromium не запустилась вовремя."
-
-msgid ""
-"The Chromium browser runtime was left unchanged because Google TTS For NVDA "
-"is still the current synthesizer."
-msgstr ""
-"Среда выполнения браузера на Chromium осталась без изменений, так как Google "
-"TTS Для NVDA все еще является текущим синтезатором."
-
-msgid ""
-"The checked voice packages are not supported by the bundled Google TTS "
-"engine."
-msgstr ""
-"Отмеченные голосовые пакеты не поддерживаются встроенным движком Google TTS."
-
-msgid ""
-"The installed Google TTS For NVDA voice packages do not include any voices "
-"this engine can use. Open Google TTS Voice Manager to install another voice "
-"package."
-msgstr ""
-"Установленные голосовые пакеты Google TTS Для NVDA не содержат голосов, "
-"которые может использовать этот движок. Откройте Менеджер голосов Google "
-"TTS, чтобы установить другой голосовой пакет."
-
-msgid ""
-"This voice package is not installed. Open Google TTS Voice Manager to "
-"install it."
-msgstr ""
-"Этот голосовой пакет не установлен. Откройте Менеджер голосов Google TTS, "
-"чтобы установить его."
-
-msgid "This voice package is not supported by the bundled Google TTS engine."
-msgstr "Этот голосовой пакет не поддерживается встроенным движком Google TTS."
-
-msgid "&Use this language profile"
-msgstr "&Использовать этот языковой профиль"
-
-msgid "Use automatic language profiles"
-msgstr "Использовать автоматические языковые профили"
-
-msgid "Use this language profile"
-msgstr "Использовать этот языковой профиль"
-
-msgid ""
-"Voice dictionary preferences are unavailable while automatic language "
-"profiles are enabled.\n"
-"\n"
-"Google TTS For NVDA may switch between several profile variants while "
-"speaking, so NVDA cannot know which single variant voice dictionary to "
-"edit.\n"
-"\n"
-"Open the Google TTS For NVDA category in NVDA Settings and turn off "
-"automatic language profiles, then open Voice dictionary again."
-msgstr ""
-"Настройки голосового словаря недоступны, пока включены автоматические "
-"языковые профили.\n"
-"\n"
-"Google TTS Для NVDA может переключаться между несколькими вариантами "
-"профилей во время речи, поэтому NVDA не может определить, какой именно "
-"голосовой словарь редактировать.\n"
-"\n"
-"Откройте категорию Google TTS Для NVDA в настройках NVDA и отключите "
-"автоматические языковые профили, затем снова откройте голосовой словарь."
-
-msgid ""
-"Waiting for you to switch away from Google TTS For NVDA before changing the "
-"Chromium browser runtime."
-msgstr ""
-"Ожидание переключения с Google TTS Для NVDA перед изменением среды "
-"выполнения браузера на Chromium."
+msgid "{language} ({count} voices)"
+msgstr "{language} ({count} голосов)"
 
 msgid "{message} Also downloaded required packages: {packages}"
 msgstr "{message} Также загружены требуемые пакеты: {packages}"
@@ -1098,203 +1258,42 @@ msgstr "{message} Также загружены требуемые пакеты:
 msgid "{message} Skipped packages not supported by this engine: {packages}"
 msgstr "{message} Пропущены пакеты, не поддерживаемые этим движком: {packages}"
 
-msgid "{language} ({count} voices)"
-msgstr "{language} ({count} голосов)"
+msgid "{message} The current variant was reset to {voice}."
+msgstr "{message} Текущий вариант сброшен на {voice}."
 
-msgid "&Automatically check for add-on updates when NVDA starts"
-msgstr "&Автоматически проверять обновления дополнения при запуске NVDA"
+msgid "{package} is already installed."
+msgstr "{package} уже установлен."
 
-msgid "&Check for updates..."
-msgstr "&Проверить обновления..."
-
-msgid "Add-on update status"
-msgstr "Состояние обновления дополнения"
-
-msgid "Automatically check for add-on updates when NVDA starts"
-msgstr "Автоматически проверять обновления дополнения при запуске NVDA"
-
-msgid "Cancelling Google TTS For NVDA update download..."
-msgstr "Отмена загрузки обновления Google TTS Для NVDA..."
-
-msgid "Checking for Google TTS For NVDA updates..."
-msgstr "Проверка обновлений Google TTS Для NVDA..."
+msgid "{runtime} ({status})"
+msgstr "{runtime} ({status})"
 
 msgid ""
-"Could not check for Google TTS For NVDA updates. Check your internet "
-"connection and try again."
+"{runtime} was not found. Keeping the current Google TTS For NVDA Chromium "
+"browser runtime setting."
 msgstr ""
-"Не удалось проверить обновления Google TTS Для NVDA. Проверьте подключение к "
-"интернету и повторите попытку."
+"{runtime} не найден. Сохранение текущей настройки среды выполнения браузера "
+"на Chromium для Google TTS Для NVDA."
+
+msgid "{selectedStatus} Active Chromium browser runtime: {runtime}."
+msgstr ""
+"{selectedStatus} Активная среда выполнения браузера на Chromium: {runtime}."
 
 msgid ""
-"Could not check for Google TTS For NVDA updates. The update response was not "
-"understood."
+"{selectedStatus} Falling back to active Chromium browser runtime: {runtime}."
 msgstr ""
-"Не удалось проверить обновления Google TTS Для NVDA. Ответ сервера "
-"обновлений не распознан."
+"{selectedStatus} Переключение на активную среду выполнения браузера на "
+"Chromium: {runtime}."
 
-msgid ""
-"Could not download the Google TTS For NVDA update. Check your internet "
-"connection and try again."
+msgid "{selectedStatus} No supported Chromium browser runtime was found."
 msgstr ""
-"Не удалось загрузить обновление Google TTS Для NVDA. Проверьте подключение к "
-"интернету и повторите попытку."
+"{selectedStatus} Не найдено поддерживаемой среды выполнения браузера на "
+"Chromium."
 
-msgid ""
-"Could not download the Google TTS For NVDA update. The download result was "
-"not understood."
-msgstr ""
-"Не удалось загрузить обновление Google TTS Для NVDA. Результат загрузки не "
-"распознан."
+msgid "{size:.1f} MB"
+msgstr "{size:.1f} МБ"
 
-msgid ""
-"Current Google TTS For NVDA version: {version}. An automatic update check is "
-"running in the background. Manual checking will be available when it "
-"finishes."
-msgstr ""
-"Текущая версия Google TTS Для NVDA: {version}. В фоновом режиме выполняется "
-"автоматическая проверка обновлений. Ручная проверка станет доступна после ее "
-"завершения."
-
-msgid ""
-"Current Google TTS For NVDA version: {version}. Automatic update checks are "
-"off. Google TTS For NVDA will not check the next time NVDA starts. You can "
-"still check manually."
-msgstr ""
-"Текущая версия Google TTS Для NVDA: {version}. Автоматическая проверка "
-"обновлений отключена. Google TTS Для NVDA не будет проверять обновления при "
-"следующем запуске NVDA. Вы все равно можете проверить вручную."
-
-msgid ""
-"Current Google TTS For NVDA version: {version}. Automatic update checks are "
-"on. Google TTS For NVDA will check once the next time NVDA starts. You can "
-"also check manually."
-msgstr ""
-"Текущая версия Google TTS Для NVDA: {version}. Автоматическая проверка "
-"обновлений включена. Google TTS Для NVDA выполнит проверку один раз при "
-"следующем запуске NVDA. Вы также можете проверить вручную."
-
-msgid ""
-"Current Google TTS For NVDA version: {version}. Checking for updates now."
-msgstr ""
-"Текущая версия Google TTS Для NVDA: {version}. Выполняется проверка "
-"обновлений."
-
-msgid ""
-"Download size: {size}. Minimum NVDA version: {minimumVersion}. Last tested "
-"NVDA version: {lastTestedVersion}.\n"
-"\n"
-"Changes in this version:\n"
-"{changes}"
-msgstr ""
-"Размер загрузки: {size}. Минимальная версия NVDA: {minimumVersion}. "
-"Последняя протестированная версия NVDA: {lastTestedVersion}.\n"
-"\n"
-"Изменения в этой версии:\n"
-"{changes}"
-
-msgid "Download status"
-msgstr "Состояние загрузки"
-
-msgid "Downloading Google TTS For NVDA update"
-msgstr "Загрузка обновления Google TTS Для NVDA"
-
-msgid "Downloading Google TTS For NVDA {version}."
-msgstr "Загрузка Google TTS Для NVDA {version}."
-
-msgid ""
-"Downloading Google TTS For NVDA {version}: {percent}% ({received} of "
-"{total})."
-msgstr ""
-"Загрузка Google TTS Для NVDA {version}: {percent}% (получено {received} из "
-"{total})."
-
-msgid "Google TTS For NVDA is already checking for updates."
-msgstr "Google TTS Для NVDA уже проверяет обновления."
-
-msgid "Google TTS For NVDA is up to date. Current version: {version}."
-msgstr ""
-"Google TTS Для NVDA обновлен до актуальной версии. Текущая версия: {version}."
-
-msgid "Google TTS For NVDA update"
-msgstr "Обновление Google TTS Для NVDA"
-
-msgid "Google TTS For NVDA update available"
-msgstr "Доступно обновление Google TTS Для NVDA"
-
-msgid ""
-"Google TTS For NVDA update installation was cancelled or did not complete."
-msgstr ""
-"Установка обновления Google TTS Для NVDA была отменена или не завершена."
-
-msgid ""
-"Google TTS For NVDA updates cannot be installed in the Windows Store version "
-"of NVDA."
-msgstr ""
-"Обновления Google TTS Для NVDA не могут быть установлены в версии NVDA из "
-"Windows Store."
-
-msgid ""
-"Google TTS For NVDA {version} is available. You are using {currentVersion}.\n"
-"\n"
-"Choose Yes to download and install this update."
-msgstr ""
-"Доступен Google TTS Для NVDA {version}. Вы используете {currentVersion}.\n"
-"\n"
-"Выберите \"Да\", чтобы загрузить и установить это обновление."
-
-msgid "No change log is available for this update."
-msgstr "Для этого обновления нет журнала изменений."
-
-msgid "Preparing the update download..."
-msgstr "Подготовка загрузки обновления..."
-
-msgid ""
-"The update was downloaded, but NVDA could not start the add-on installer."
-msgstr ""
-"Обновление было загружено, но NVDA не удалось запустить установщик "
-"дополнения."
-
-msgid "Update information"
-msgstr "Информация об обновлении"
-
-msgid "Updates"
-msgstr "Обновления"
-
-msgid "&Pauses"
-msgstr "&Паузы"
-
-msgid "Do not shorten"
-msgstr "Не укорачивать"
-
-msgid "Shorten at end of text only"
-msgstr "Укорачивать только в конце текста"
-
-msgid "Shorten all pauses"
-msgstr "Укорачивать все паузы"
-
-#: manifest.ini:changelog
-msgid ""
-"Version 0.6:\n"
-"- Added an optional setting to make Google TTS ready faster when switching "
-"from another synthesizer. This setting is off by default; when turned on, it "
-"may use more memory while NVDA is running.\n"
-"- When this setting is enabled, Google TTS updates its background "
-"preparation after you change the selected Chromium browser runtime or "
-"install/remove voice packages.\n"
-"- Improved reliability when switching away from Google TTS, especially while "
-"speech or voice preparation is still stopping."
-msgstr ""
-"Версия 0.6:\n"
-"- Добавлена опциональная настройка, позволяющая Google TTS быстрее быть "
-"готовым при переключении с другого синтезатора. Эта настройка по умолчанию "
-"выключена; при включении может использоваться больше памяти во время работы "
-"NVDA.\n"
-"- Когда эта настройка включена, Google TTS обновляет свою фоновую подготовку "
-"после изменения выбранной среды выполнения браузера Chromium или установки/"
-"удаления голосовых пакетов.\n"
-"- Улучшена надежность при переключении с Google TTS, особенно когда речь или "
-"подготовка голоса все еще останавливаются."
+msgid "{voice} ({package})"
+msgstr "{voice} ({package})"
 
 #~ msgid ""
 #~ "Version 0.5.5:\n"
