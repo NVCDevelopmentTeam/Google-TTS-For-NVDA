@@ -245,12 +245,12 @@ Pause shortening is implemented in the synth driver after PCM audio returns from
 
 Pause shortening code map:
 
-- Pure pause constants and PCM processing live in `googleTtsForNvda/synthDrivers/googleTtsForNvda/speech_processing.py`: `PAUSE_MODE_DO_NOT_SHORTEN`, `PAUSE_MODE_SHORTEN_END_ONLY`, `PAUSE_MODE_SHORTEN_ALL`, `SHORTENED_SILENCE_KEEP_MS`, `SHORTENED_ALL_PAUSES_KEEP_MS`, `SILENCE_SAMPLE_THRESHOLD`, `PcmSilenceShortener`, `create_pcm_silence_shortener()`, `pcm_bytes_for_milliseconds()`, `align_pcm_bytes()`, and `pcm_has_audible_sample()`. This module must remain importable without NVDA.
+- Pure pause and streaming PCM helpers live in `googleTtsForNvda/synthDrivers/googleTtsForNvda/speech_processing.py`: `PAUSE_MODE_DO_NOT_SHORTEN`, `PAUSE_MODE_SHORTEN_END_ONLY`, `PAUSE_MODE_SHORTEN_ALL`, `PcmSilenceShortener`, `PcmLeadBuffer`, `create_pcm_silence_shortener()`, `pcm_bytes_for_milliseconds()`, `align_pcm_bytes()`, and `pcm_has_audible_sample()`. This module must remain importable without NVDA.
 - NVDA pause settings and sentence-break timing live in `googleTtsForNvda/synthDrivers/googleTtsForNvda/__init__.py`: `_NORMAL_SENTENCE_BREAK_MS`, `_SHORTENED_SENTENCE_BREAK_MS`, `_PAUSE_MODE_SETTING`, and `_pauseModes`.
 - Speech flow integration lives in `speak()`, `_iter_speech_chunks()`, `_sentence_break_milliseconds()`, `_speak_worker()`, `_speak_text()`, `_speak_text().on_segment_end()`, and `_short_cache_key()`.
 - Hidden-segment pause boundary signaling lives in `googleTtsForNvda/synthDrivers/googleTtsForNvda/bridge.py`: `SegmentEndCallback`, `WasmTtsEngineBridge.speak()`, and `ChromeTtsBridge.speak()`.
 - Browser-side hidden-segment boundary events live in `googleTtsForNvda/synthDrivers/googleTtsForNvda/web/bridgeHarness.js`: `googleTtsForNvdaSpeak()`, `finishSegmentAudio()`, and the `segmentEnd` bridge event.
-- Short-audio cache identity lives in `speech_processing.py:SHORT_AUDIO_CACHE_OPTION_FIELDS` and `short_audio_cache_key()`; cleanup lives in `_clear_short_audio_cache()`.
+- Short-audio cache identity lives in `speech_processing.py:SHORT_AUDIO_CACHE_OPTION_FIELDS`, `short_audio_cache_key()`, and `segment_audio_cache_key()`; cleanup lives in `_clear_short_audio_cache()`.
 - NVDA Speech Settings accessors live in `_get_availablePausemodes()`, `_get_pauseMode()`, and `_set_pauseMode()`.
 
 Do **not** re-add:
@@ -264,6 +264,8 @@ These were removed and must stay removed unless the user explicitly requests a n
 
 - Long-text latency segmentation should prefer natural sentence and phrase punctuation before falling back to forced length cuts.
 - Preserve the fast-first-segment behavior: the first chunk of long text should stay short enough to start speech quickly, while later chunks may be larger to reduce browser/CDP/WASM overhead. Do not raise first-segment limits merely to reduce total segment count unless latency has been measured.
+- Apply fast-first segmentation to medium utterances above the configured trigger as well as very long text. When punctuation is unavailable, use the fast whitespace/forced limit instead of falling back to the regular 240-character window.
+- A bounded initial PCM lead may be used for a live multi-segment cache miss to reduce playback underruns. Keep it small, do not apply it to ordinary single-segment speech, and preserve immediate passthrough after the lead is released.
 - Unicode punctuation helpers live in `_unicode_name()`, `_is_sentence_terminator_character()`, `_is_soft_break_character()`, `_is_colon_like_character()`, `_is_dash_like_character()`, and `_is_sentence_trailing_closer()`. Keep these cached because they run repeatedly while segmenting long text. Sentence trailing closers should accept Unicode closing/final punctuation categories (`Pe`/`Pf`) so sentence breaks can cross localized brackets and quotes.
 - For scripts that often do not separate words with spaces, the synth driver may use conservative fixed-size script-window cuts after punctuation and whitespace checks have failed. This is a latency fallback, not language detection and not word segmentation.
 - Keep this fallback independent from automatic language profiles, NVDA Speech Settings, speech dictionaries, and voice dictionary handling.
@@ -382,19 +384,21 @@ Automatic language profiles deliberately have their own profile system and must 
 - Repeated short phrases are cached as PCM in the `SynthDriver` instance only.
 - The short-phrase cache is volatile: it is not written to disk and clears when NVDA exits, NVDA restarts, or the PC reboots.
 - The current short-phrase cache threshold is 5000 characters.
-- Hidden browser-side segments are part of the cache identity and are capped for caching; do not cache large hidden-segment lists that make the cache key larger than the short-audio use case.
+- Hidden browser-side segments are part of the cache identity and are capped for caching. They describe boundaries over the same text and therefore count once, not twice, against the character threshold.
 - The current short-phrase cache RAM cap is 150 MB.
 - Do not add persistent speech-audio caching without an explicit product decision, because cached speech can contain sensitive screen-reader text.
 - Cache integrity rule: only cache PCM for a complete, successful, structurally valid speech request. If speech is cancelled, interrupted by a newer utterance, aborted by warm-up/runtime shutdown, the browser bridge does not report successful completion, Runtime binding audio is malformed, an audio callback/feed path fails, or the collected PCM has no audible samples, discard collected PCM so partial or invalid audio such as a cut-off focus announcement cannot be replayed later as a full utterance.
 - `SynthDriver._speak_text()` may collect PCM during live synthesis, but it may call `_put_cached_audio()` only after `ChromeTtsBridge.speak()` returns a successful result with browser-side `done`, the request cancel event is still clear, the PCM length is meaningful, and `_pcm_has_audible_sample()` passes.
+- Segment PCM may be cached only after the complete bridge request succeeds and every expected boundary is present. Its key must include previous/next boundary context. Reuse only a continuous prefix, and disable independent segment caching when artificial-rate or post-pitch processing carries overlap state across boundaries.
 - Keep the cache key aligned with every option that can change rendered PCM, including hidden segments, pause mode, pitch, post-synthesis pitch/rate, and output gain.
 - Clearing the volatile PCM cache after a Chromium/WASM runtime recycle is acceptable because it releases memory and avoids retaining audio across a runtime-health reset; do not write the cache to disk.
-- Runtime binding events must update `audioChunks` and `done`, forward `segmentEnd` when hidden-segment pause boundary handling is active, drop late audio after cancellation, validate `sampleRate`, base64 payloads, and even PCM byte length, and propagate event-handler failures through `_handlerErrors`.
+- Runtime binding events must update `audioChunks` and `done`, forward `segmentEnd`, measure first-audio/inter-packet/segment-resume timing without logging speech text, drop late audio after cancellation, validate `sampleRate`, base64 payloads, and even PCM byte length, and propagate event-handler failures through `_handlerErrors`.
 - Preserve the browser-side `done` event as the signal that all queued audio for the session has been flushed, but do not emit `done` or return success after an engine error event.
 
 - Volatile speech cache code map:
-  - `googleTtsForNvda/synthDrivers/googleTtsForNvda/__init__.py` cache read/write: `SynthDriver._speak_text()`, `_short_cache_key()`, `_get_cached_audio()`, `_put_cached_audio()`, `_clear_short_audio_cache()`, and `_pcm_has_audible_sample()`.
-  - `googleTtsForNvda/synthDrivers/googleTtsForNvda/__init__.py` cache limits and logging: `_SHORT_CACHE_MAX_CHARS`, `_SHORT_CACHE_MAX_HIDDEN_SEGMENTS`, `_SHORT_CACHE_MAX_ITEMS`, `_SHORT_CACHE_MAX_BYTES`, and `_SHORT_CACHE_STATS_LOG_INTERVAL`.
+  - `googleTtsForNvda/synthDrivers/googleTtsForNvda/__init__.py` cache read/write: `SynthDriver._speak_text()`, `_short_cache_key()`, `_segment_cache_key()`, `_get_cached_audio()`, `_put_cached_audio()`, and `_clear_short_audio_cache()`.
+  - `googleTtsForNvda/synthDrivers/googleTtsForNvda/speech_processing.py` cache limits, keys, completion validation, and live lead buffering: `SHORT_CACHE_MAX_CHARS`, `SHORT_CACHE_MAX_HIDDEN_SEGMENTS`, `short_audio_cache_key()`, `segment_audio_cache_key()`, `is_complete_speech_result()`, `LIVE_MULTI_SEGMENT_LEAD_MS`, and `PcmLeadBuffer`.
+  - `googleTtsForNvda/synthDrivers/googleTtsForNvda/__init__.py` RAM caps and eviction logging: `_SHORT_CACHE_MAX_ITEMS`, `_SHORT_CACHE_MAX_BYTES`, and `_SHORT_CACHE_STATS_LOG_INTERVAL`.
   - `googleTtsForNvda/synthDrivers/googleTtsForNvda/__init__.py` runtime recycle cleanup: `SynthDriver._maybe_recycle_bridge_after_request()` and `_clear_short_audio_cache()`.
   - `googleTtsForNvda/synthDrivers/googleTtsForNvda/bridge.py` completion and payload validation: `CdpDispatcher`, `CdpClient.request()`, and `WasmTtsEngineBridge.speak()`.
   - `googleTtsForNvda/synthDrivers/googleTtsForNvda/web/bridgeHarness.js` browser completion and async-error signaling: `handleTtsEngineEvent()`, `synthesisErrorMessage`, `googleTtsForNvdaSpeak()`, `waitForSynthesisComplete()`, `finishSegmentAudio()`, `flushAudioProcessors()`, `flushAudioQueue()`, and the `segmentEnd` bridge event.

@@ -877,7 +877,8 @@
 			const textSegments = Array.isArray(payload.segments) && payload.segments.length
 				? payload.segments.filter((segment) => typeof segment === "string" && segment.length)
 				: [payload.text];
-			const hasHiddenSegments = textSegments.length > 1;
+			const hasPreviousSegment = payload.hasPreviousSegment === true;
+			const hasBoundaryContext = textSegments.length > 1 || hasPreviousSegment;
 			const sessionToken = beginSession(sessionId, false);
 			currentMarkOffset = 0;
 			currentOutputGain = outputGainFromPayload(payload);
@@ -889,7 +890,9 @@
 			resetAudioQueue();
 			currentPostPitchFactor = postPitchFactorFromPayload(payload);
 			currentTempoRate = tempoRateFromPayload(payload);
-			smoothSegmentBoundaries = hasHiddenSegments;
+			smoothSegmentBoundaries = hasBoundaryContext;
+			trimLeadingBoundarySilence = hasPreviousSegment;
+			leadingBoundaryTrimBudget = hasPreviousSegment ? boundaryMaxLeadingTrimSamples : 0;
 			emit({ type: "started" }, sessionToken);
 			for (let segmentIndex = 0; segmentIndex < textSegments.length; segmentIndex++) {
 				if (stopped || !isCurrentSession(sessionToken)) {

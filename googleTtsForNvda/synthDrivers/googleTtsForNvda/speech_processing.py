@@ -25,6 +25,7 @@ SHORTENED_SILENCE_KEEP_MS = 35
 SHORTENED_ALL_PAUSES_KEEP_MS = 25
 SILENCE_SAMPLE_THRESHOLD = 48
 PCM_BYTES_PER_SAMPLE = 2
+LIVE_MULTI_SEGMENT_LEAD_MS = 120
 SHORT_CACHE_MAX_CHARS = 5000
 SHORT_CACHE_MAX_HIDDEN_SEGMENTS = 24
 SHORT_AUDIO_CACHE_OPTION_FIELDS = (
@@ -40,6 +41,7 @@ SHORT_AUDIO_CACHE_OPTION_FIELDS = (
 FAST_FIRST_SEGMENT_MIN_CHARS = 30
 REGULAR_SEGMENT_MIN_CHARS = 110
 FAST_FIRST_SEGMENT_MAX_CHARS = 64
+FAST_FIRST_SEGMENT_TRIGGER_CHARS = 90
 REGULAR_SEGMENT_MAX_CHARS = 240
 SEAMLESS_UTTERANCE_MAX_CHARS = 900
 FAST_SOFT_PHRASE_SEGMENT_MIN_CHARS = 30
@@ -280,6 +282,36 @@ class PcmSilenceShortener:
 		return self._release_held_silence(final=True)
 
 
+class PcmLeadBuffer:
+	"""Hold a small initial PCM lead, then pass subsequent packets through."""
+
+	def __init__(self, *, sampleRate: int, leadMs: int = LIVE_MULTI_SEGMENT_LEAD_MS) -> None:
+		self._leadBytes = pcm_bytes_for_milliseconds(leadMs, sampleRate)
+		self._buffer = bytearray()
+		self._started = self._leadBytes <= 0
+
+	def feed(self, pcm: bytes) -> bytes:
+		if not pcm:
+			return b""
+		if self._started:
+			return pcm
+		self._buffer.extend(pcm)
+		if len(self._buffer) < self._leadBytes:
+			return b""
+		self._started = True
+		output = bytes(self._buffer)
+		self._buffer.clear()
+		return output
+
+	def finish(self) -> bytes:
+		self._started = True
+		if not self._buffer:
+			return b""
+		output = bytes(self._buffer)
+		self._buffer.clear()
+		return output
+
+
 def create_pcm_silence_shortener(pauseMode: str, sampleRate: int) -> PcmSilenceShortener | None:
 	if pauseMode == PAUSE_MODE_DO_NOT_SHORTEN:
 		return None
@@ -312,13 +344,62 @@ def short_audio_cache_key(
 	if hiddenSegments:
 		if len(hiddenSegments) > maxHiddenSegments:
 			return None
-		if len(text) + sum(len(segment) for segment in hiddenSegments) > maxChars:
+		# Hidden segments are alternate boundaries over the same spoken text, so do
+		# not count their characters a second time against the content limit.
+		if max(len(text), sum(len(segment) for segment in hiddenSegments)) > maxChars:
 			return None
 	return (
 		text,
 		tuple(hiddenSegments or ()),
 		*(options.get(field) for field in SHORT_AUDIO_CACHE_OPTION_FIELDS),
 		pauseShorteningMode,
+	)
+
+
+def segment_audio_cache_key(
+	text: str,
+	options: dict[str, Any],
+	pauseShorteningMode: str,
+	*,
+	hasPreviousSegment: bool,
+	hasNextSegment: bool,
+	maxChars: int = SHORT_CACHE_MAX_CHARS,
+) -> tuple[Any, ...] | None:
+	"""Build a cache key for PCM whose boundary trimming context is complete."""
+	if not text or len(text) > maxChars:
+		return None
+	# Tempo and post-pitch processors carry overlap state across hidden segment
+	# boundaries. Their PCM cannot be safely reused as an independent prefix.
+	try:
+		artificialRate = float(options.get("artificialRate", 1))
+		postPitch = float(options.get("postPitch", 1))
+	except (TypeError, ValueError):
+		return None
+	if abs(artificialRate - 1) >= 0.001 or abs(postPitch - 1) >= 0.001:
+		return None
+	return (
+		"segment-v1",
+		text,
+		*(options.get(field) for field in SHORT_AUDIO_CACHE_OPTION_FIELDS),
+		pauseShorteningMode,
+		bool(hasPreviousSegment),
+		bool(hasNextSegment),
+	)
+
+
+def is_complete_speech_result(result: Any, *, expectedSegmentEnds: int = 0) -> bool:
+	"""Return whether a bridge result is structurally complete for PCM caching."""
+	if expectedSegmentEnds < 0 or not isinstance(result, dict):
+		return False
+	try:
+		segmentEnds = int(result.get("segmentEnds", 0))
+	except (TypeError, ValueError):
+		return False
+	return (
+		result.get("success") is True
+		and result.get("done") is True
+		and not result.get("cancelled")
+		and segmentEnds == expectedSegmentEnds
 	)
 
 
@@ -528,7 +609,10 @@ class TextSegmenter:
 				continue
 			targetLength = FAST_FIRST_SEGMENT_MIN_CHARS if (firstYield and fastFirstSegment) else REGULAR_SEGMENT_MIN_CHARS
 			if len(candidate) >= targetLength or endIndex == len(text):
-				for segment in self._iter_forced_latency_segments(candidate, firstYield):
+				for segment in self._iter_forced_latency_segments(
+					candidate,
+					firstYield and fastFirstSegment,
+				):
 					yield segment
 					firstYield = False
 				chunkStart = endIndex
@@ -564,7 +648,15 @@ class TextSegmenter:
 			len(remaining) > SOFT_PHRASE_SEGMENT_MAX_CHARS
 			and self._no_space_script_segment_limit(remaining, SOFT_PHRASE_SEGMENT_MAX_CHARS) is not None
 		)
-		while len(remaining) > SOFT_PHRASE_SEGMENT_MAX_CHARS or noSpaceSegmentation:
+		while (
+			len(remaining) > SOFT_PHRASE_SEGMENT_MAX_CHARS
+			or noSpaceSegmentation
+			or (
+				firstSegment
+				and len(remaining) > FAST_FIRST_SEGMENT_TRIGGER_CHARS
+				and not self.looks_like_url_token(remaining)
+			)
+		):
 			noSpaceLimit = (
 				self._no_space_script_segment_limit(remaining, SOFT_PHRASE_SEGMENT_MAX_CHARS)
 				if noSpaceSegmentation
@@ -572,22 +664,44 @@ class TextSegmenter:
 			)
 			if noSpaceLimit is None:
 				noSpaceSegmentation = False
-				if len(remaining) <= SOFT_PHRASE_SEGMENT_MAX_CHARS:
+				if (
+					len(remaining) <= SOFT_PHRASE_SEGMENT_MAX_CHARS
+					and not (
+						firstSegment
+						and len(remaining) > FAST_FIRST_SEGMENT_TRIGGER_CHARS
+						and not self.looks_like_url_token(remaining)
+					)
+				):
 					break
 			if noSpaceLimit is not None and len(remaining) <= noSpaceLimit:
 				break
-			cut = (
-				self._find_no_space_script_cut(remaining, noSpaceLimit)
-				if noSpaceLimit is not None
-				else self._find_soft_phrase_cut(remaining, firstSegment)
+			fastFirstCut = (
+				firstSegment
+				and len(remaining) > FAST_FIRST_SEGMENT_TRIGGER_CHARS
+				and not self.looks_like_url_token(remaining)
 			)
-			if cut is None:
-				cut = self._find_whitespace_cut(
-					remaining,
-					SOFT_PHRASE_SEGMENT_MIN_CHARS,
-					SOFT_PHRASE_SEGMENT_MAX_CHARS,
-					SOFT_PHRASE_SEGMENT_LOOKAHEAD,
-				)
+			if noSpaceLimit is not None:
+				cut = self._find_no_space_script_cut(remaining, noSpaceLimit)
+			elif fastFirstCut:
+				cut = self._find_soft_phrase_cut(remaining, True)
+				if cut is None:
+					cut = self._find_whitespace_cut(
+						remaining,
+						FAST_SOFT_PHRASE_SEGMENT_MIN_CHARS,
+						FAST_SOFT_PHRASE_SEGMENT_MAX_CHARS,
+						FAST_SOFT_PHRASE_SEGMENT_LOOKAHEAD,
+					)
+				if cut is None:
+					cut = self._find_forced_latency_cut(remaining, FAST_SOFT_PHRASE_SEGMENT_MAX_CHARS)
+			else:
+				cut = self._find_soft_phrase_cut(remaining, False)
+				if cut is None:
+					cut = self._find_whitespace_cut(
+						remaining,
+						SOFT_PHRASE_SEGMENT_MIN_CHARS,
+						SOFT_PHRASE_SEGMENT_MAX_CHARS,
+						SOFT_PHRASE_SEGMENT_LOOKAHEAD,
+					)
 			if cut is None:
 				cut = min(len(remaining), FORCED_SEGMENT_HARD_MAX_CHARS)
 			segment = remaining[:cut].strip()

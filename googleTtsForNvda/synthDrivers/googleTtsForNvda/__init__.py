@@ -45,11 +45,15 @@ from . import language_detector, standby, voice_store
 from .language_profiles import language_script_signal
 from .speech_processing import (
 	DEFAULT_TEXT_SEGMENTER as _TEXT_SEGMENTER,
+	LIVE_MULTI_SEGMENT_LEAD_MS,
 	PAUSE_MODE_DO_NOT_SHORTEN as _PAUSE_MODE_DO_NOT_SHORTEN,
 	PAUSE_MODE_SHORTEN_ALL as _PAUSE_MODE_SHORTEN_ALL,
 	PAUSE_MODE_SHORTEN_END_ONLY as _PAUSE_MODE_SHORTEN_END_ONLY,
+	PcmLeadBuffer,
 	create_pcm_silence_shortener,
+	is_complete_speech_result,
 	pcm_has_audible_sample as _pcm_has_audible_sample,
+	segment_audio_cache_key,
 	short_audio_cache_key,
 )
 
@@ -890,6 +894,8 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		hiddenSegments: list[str] | None = None,
 		pauseShorteningMode: str = _PAUSE_MODE_DO_NOT_SHORTEN,
 	) -> None:
+		originalText = text
+		originalHiddenSegments = list(hiddenSegments or [])
 		indexes = indexes or []
 		leadingIndexes = [index for index, charOffset in indexes if charOffset <= 0]
 		remainingIndexes = [(index, charOffset) for index, charOffset in indexes if charOffset > 0]
@@ -899,15 +905,45 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 			self._sync_player()
 			synthIndexReached.notify(synth=self, index=index)
 
-		hasInternalIndexes = any(0 < charOffset < len(text) for _index, charOffset in remainingIndexes)
-
-		cacheKey = self._short_cache_key(text, options, hiddenSegments, pauseShorteningMode)
+		hasInternalIndexes = any(0 < charOffset < len(originalText) for _index, charOffset in remainingIndexes)
+		cacheKey = self._short_cache_key(
+			originalText,
+			options,
+			originalHiddenSegments or None,
+			pauseShorteningMode,
+		)
+		segmentCacheKeys: list[tuple[Any, ...] | None] = []
+		if len(originalHiddenSegments) > 1:
+			segmentCacheKeys = [
+				self._segment_cache_key(
+					segment,
+					options,
+					pauseShorteningMode,
+					hasPreviousSegment=segmentIndex > 0,
+					hasNextSegment=segmentIndex < len(originalHiddenSegments) - 1,
+				)
+				for segmentIndex, segment in enumerate(originalHiddenSegments)
+			]
+		log.debug(
+			"Google TTS speech group: chars=%d, hiddenSegments=%d, firstHiddenChars=%d, "
+			"wholeCacheEligible=%s, pauseMode=%s.",
+			len(originalText),
+			len(originalHiddenSegments),
+			len(originalHiddenSegments[0]) if originalHiddenSegments else len(originalText),
+			cacheKey is not None,
+			pauseShorteningMode,
+		)
 		if cacheKey is not None:
 			cached = self._get_cached_audio(cacheKey)
 			if cached is not None:
+				log.debug(
+					"Google TTS short audio cache hit: kind=group, chars=%d, bytes=%d.",
+					len(originalText),
+					len(cached),
+				)
 				if not cancelEvent.is_set():
 					if hasInternalIndexes:
-						self._feed_audio_with_indexes(cached, remainingIndexes, len(text), cancelEvent)
+						self._feed_audio_with_indexes(cached, remainingIndexes, len(originalText), cancelEvent)
 					else:
 						self._feed_audio(cached)
 						for index, _charOffset in remainingIndexes:
@@ -916,10 +952,108 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 							self._sync_player()
 							synthIndexReached.notify(synth=self, index=index)
 				return
+			log.debug("Google TTS short audio cache miss: kind=group, chars=%d.", len(originalText))
 
-		audioParts: list[bytes] = []
-		shortenPauses = pauseShorteningMode in (_PAUSE_MODE_SHORTEN_END_ONLY, _PAUSE_MODE_SHORTEN_ALL)
+		cachedSegmentAudio: list[bytes] = []
+		cachedSegmentCount = 0
+		for segmentIndex, segmentKey in enumerate(segmentCacheKeys):
+			if segmentKey is None:
+				log.debug(
+					"Google TTS segment cache disabled: index=%d, chars=%d.",
+					segmentIndex,
+					len(originalHiddenSegments[segmentIndex]),
+				)
+				break
+			segmentAudio = self._get_cached_audio(segmentKey)
+			if segmentAudio is None:
+				log.debug(
+					"Google TTS short audio cache miss: kind=segment, index=%d, chars=%d.",
+					segmentIndex,
+					len(originalHiddenSegments[segmentIndex]),
+				)
+				break
+			log.debug(
+				"Google TTS short audio cache hit: kind=segment, index=%d, chars=%d, bytes=%d.",
+				segmentIndex,
+				len(originalHiddenSegments[segmentIndex]),
+				len(segmentAudio),
+			)
+			cachedSegmentAudio.append(segmentAudio)
+			cachedSegmentCount += 1
+
+		if segmentCacheKeys and cachedSegmentCount == len(segmentCacheKeys):
+			cached = b"".join(cachedSegmentAudio)
+			log.debug(
+				"Google TTS segment cache satisfied group: segments=%d, chars=%d, bytes=%d.",
+				cachedSegmentCount,
+				len(originalText),
+				len(cached),
+			)
+			if hasInternalIndexes:
+				self._feed_audio_with_indexes(cached, remainingIndexes, len(originalText), cancelEvent)
+			elif not cancelEvent.is_set():
+				self._feed_audio(cached)
+				for index, _charOffset in remainingIndexes:
+					if cancelEvent.is_set():
+						return
+					self._sync_player()
+					synthIndexReached.notify(synth=self, index=index)
+			if cacheKey is not None and not cancelEvent.is_set():
+				self._put_cached_audio(cacheKey, cached)
+			return
+
+		cachedPrefixAudio = b"".join(cachedSegmentAudio)
+		cachedPrefixCharacters = sum(len(segment) for segment in originalHiddenSegments[:cachedSegmentCount])
+		if cachedPrefixAudio:
+			prefixIndexes = [
+				(index, charOffset)
+				for index, charOffset in remainingIndexes
+				if charOffset <= cachedPrefixCharacters
+			]
+			if prefixIndexes:
+				self._feed_audio_with_indexes(
+					cachedPrefixAudio,
+					prefixIndexes,
+					cachedPrefixCharacters,
+					cancelEvent,
+				)
+			elif not cancelEvent.is_set():
+				self._feed_audio(cachedPrefixAudio)
+			remainingIndexes = [
+				(index, charOffset - cachedPrefixCharacters)
+				for index, charOffset in remainingIndexes
+				if charOffset > cachedPrefixCharacters
+			]
+			if cancelEvent.is_set():
+				return
+
+		if segmentCacheKeys:
+			synthesisSegments = originalHiddenSegments[cachedSegmentCount:]
+			text = "".join(synthesisSegments)
+			bridgeSegments = synthesisSegments
+		else:
+			synthesisSegments = [originalText]
+			text = originalText
+			bridgeSegments = originalHiddenSegments or None
+		if not text:
+			return
+
+		audioParts: list[bytes] = [cachedPrefixAudio] if cacheKey is not None and cachedPrefixAudio else []
+		segmentAudioParts: list[bytes] = []
+		completedSegmentAudio: list[bytes] = []
+		collectSegmentAudio = any(key is not None for key in segmentCacheKeys)
 		silenceShortener = create_pcm_silence_shortener(pauseShorteningMode, SAMPLE_RATE)
+		leadBuffer = (
+			PcmLeadBuffer(sampleRate=SAMPLE_RATE, leadMs=LIVE_MULTI_SEGMENT_LEAD_MS)
+			if len(synthesisSegments) > 1 and not cachedPrefixAudio
+			else None
+		)
+		if leadBuffer is not None:
+			log.debug(
+				"Google TTS live PCM lead buffer enabled: milliseconds=%d, segments=%d.",
+				LIVE_MULTI_SEGMENT_LEAD_MS,
+				len(synthesisSegments),
+			)
 		pendingIndexes = sorted(remainingIndexes, key=lambda item: item[1])
 
 		def notify_indexes_through(charOffset: int, *, sync: bool = False) -> None:
@@ -941,8 +1075,11 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 				return
 			if cacheKey is not None:
 				audioParts.append(pcm)
+			if collectSegmentAudio:
+				segmentAudioParts.append(pcm)
 			if not cancelEvent.is_set():
-				self._feed_audio(pcm)
+				livePcm = leadBuffer.feed(pcm) if leadBuffer is not None else pcm
+				self._feed_audio(livePcm)
 
 		def on_audio(pcm: bytes) -> None:
 			if silenceShortener is not None:
@@ -951,22 +1088,29 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 				feed_processed_audio(pcm)
 
 		def on_segment_end() -> None:
-			if silenceShortener is None:
-				return
-			if not cancelEvent.is_set():
+			if silenceShortener is not None and not cancelEvent.is_set():
 				feed_processed_audio(silenceShortener.finish())
+			if collectSegmentAudio:
+				completedSegmentAudio.append(b"".join(segmentAudioParts))
+				segmentAudioParts.clear()
 
 		speechResult = self._bridge.speak(
 			text,
 			options,
 			on_audio,
 			cancelEvent,
-			onMark=on_mark if hasInternalIndexes else None,
-			onSegmentEnd=on_segment_end if hiddenSegments and shortenPauses else None,
-			segments=hiddenSegments,
+			onMark=on_mark if any(0 < offset < len(text) for _index, offset in pendingIndexes) else None,
+			onSegmentEnd=on_segment_end if len(synthesisSegments) > 1 else None,
+			segments=bridgeSegments,
+			hasPreviousSegment=cachedSegmentCount > 0,
 		)
 		if silenceShortener is not None:
 			feed_processed_audio(silenceShortener.finish())
+		if collectSegmentAudio:
+			completedSegmentAudio.append(b"".join(segmentAudioParts))
+			segmentAudioParts.clear()
+		if leadBuffer is not None and not cancelEvent.is_set():
+			self._feed_audio(leadBuffer.finish())
 
 		audio = b"".join(audioParts) if audioParts else b""
 		if pendingIndexes and not cancelEvent.is_set():
@@ -975,12 +1119,47 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 					return
 				self._sync_player()
 				synthIndexReached.notify(synth=self, index=index)
-		speechComplete = (
+		expectedSegmentEnds = max(0, len(synthesisSegments) - 1)
+		speechComplete = not cancelEvent.is_set() and is_complete_speech_result(
+			speechResult,
+			expectedSegmentEnds=expectedSegmentEnds,
+		)
+		if (
 			isinstance(speechResult, dict)
 			and speechResult.get("success") is True
 			and speechResult.get("done") is True
-			and not speechResult.get("cancelled")
-		)
+			and not cancelEvent.is_set()
+			and not speechComplete
+		):
+			log.debug(
+				"Google TTS speech completion rejected: expectedSegmentEnds=%d, actualSegmentEnds=%r.",
+				expectedSegmentEnds,
+				speechResult.get("segmentEnds"),
+			)
+		if speechComplete and segmentCacheKeys:
+			expectedSegmentCount = len(synthesisSegments)
+			if len(completedSegmentAudio) != expectedSegmentCount:
+				log.debug(
+					"Google TTS segment cache skipped after boundary mismatch: expected=%d, actual=%d.",
+					expectedSegmentCount,
+					len(completedSegmentAudio),
+				)
+			else:
+				for relativeIndex, segmentAudio in enumerate(completedSegmentAudio):
+					segmentIndex = cachedSegmentCount + relativeIndex
+					segmentKey = segmentCacheKeys[segmentIndex]
+					if (
+						segmentKey is not None
+						and len(segmentAudio) >= 64
+						and _pcm_has_audible_sample(segmentAudio)
+					):
+						self._put_cached_audio(segmentKey, segmentAudio)
+						log.debug(
+							"Google TTS short audio cache stored: kind=segment, index=%d, chars=%d, bytes=%d.",
+							segmentIndex,
+							len(originalHiddenSegments[segmentIndex]),
+							len(segmentAudio),
+						)
 		if (
 			cacheKey is not None
 			and speechComplete
@@ -989,6 +1168,11 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 			and _pcm_has_audible_sample(audio)
 		):
 			self._put_cached_audio(cacheKey, audio)
+			log.debug(
+				"Google TTS short audio cache stored: kind=group, chars=%d, bytes=%d.",
+				len(originalText),
+				len(audio),
+			)
 
 	def _feed_audio(self, pcm: bytes) -> None:
 		if pcm:
@@ -1076,6 +1260,23 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		pauseShorteningMode: str = _PAUSE_MODE_DO_NOT_SHORTEN,
 	) -> tuple[Any, ...] | None:
 		return short_audio_cache_key(text, options, hiddenSegments, pauseShorteningMode)
+
+	def _segment_cache_key(
+		self,
+		text: str,
+		options: dict[str, Any],
+		pauseShorteningMode: str,
+		*,
+		hasPreviousSegment: bool,
+		hasNextSegment: bool,
+	) -> tuple[Any, ...] | None:
+		return segment_audio_cache_key(
+			text,
+			options,
+			pauseShorteningMode,
+			hasPreviousSegment=hasPreviousSegment,
+			hasNextSegment=hasNextSegment,
+		)
 
 	def _get_cached_audio(self, key: tuple[Any, ...]) -> bytes | None:
 		with self._cacheLock:

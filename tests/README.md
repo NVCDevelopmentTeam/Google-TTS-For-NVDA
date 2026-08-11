@@ -21,7 +21,8 @@ validated before behavioral cases run.
 
 `test_speech_processing.py` covers all three pause modes, the inclusive PCM
 noise floor, arbitrary/odd PCM packet boundaries, hidden-segment finalization,
-and every field in the short-audio cache key.
+bounded lead buffering, whole/segment cache identity, and safe boundary-context
+reuse. The corpus also protects the medium-text fast-first fallback.
 
 Run all standalone tests without importing NVDA:
 

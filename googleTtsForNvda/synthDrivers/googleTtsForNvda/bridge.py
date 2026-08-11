@@ -1658,6 +1658,7 @@ class WasmTtsEngineBridge:
 		onMark: MarkCallback | None = None,
 		onSegmentEnd: SegmentEndCallback | None = None,
 		segments: list[str] | None = None,
+		hasPreviousSegment: bool = False,
 	) -> dict[str, Any]:
 		if not text.strip():
 			return {"success": True, "empty": True}
@@ -1688,9 +1689,15 @@ class WasmTtsEngineBridge:
 		}
 		if segments:
 			payload["segments"] = segments
-		state: dict[str, Any] = {"audioChunks": 0, "done": False}
+		if hasPreviousSegment:
+			payload["hasPreviousSegment"] = True
+		state: dict[str, Any] = {"audioChunks": 0, "segmentEnds": 0, "done": False}
 		startedAt = time.perf_counter()
 		firstAudioAt: float | None = None
+		lastAudioAt: float | None = None
+		lastSegmentEndAt: float | None = None
+		maxAudioGapMs = 0.0
+		maxSegmentResumeMs = 0.0
 
 		def fail_speech_event(detail: str) -> None:
 			state["error"] = detail
@@ -1700,7 +1707,7 @@ class WasmTtsEngineBridge:
 			)
 
 		def handle_event(message: dict[str, Any]) -> None:
-			nonlocal firstAudioAt
+			nonlocal firstAudioAt, lastAudioAt, lastSegmentEndAt, maxAudioGapMs, maxSegmentResumeMs
 			if message.get("method") != "Runtime.bindingCalled":
 				return
 			params = message.get("params") or {}
@@ -1739,13 +1746,20 @@ class WasmTtsEngineBridge:
 				if audio:
 					if cancelEvent is not None and cancelEvent.is_set():
 						return
+					now = time.perf_counter()
 					if firstAudioAt is None:
-						firstAudioAt = time.perf_counter()
+						firstAudioAt = now
 						log.debug(
 							"Google TTS session %s first audio after %.1f ms.",
 							sessionId,
 							(firstAudioAt - startedAt) * 1000,
 						)
+					if lastAudioAt is not None:
+						maxAudioGapMs = max(maxAudioGapMs, (now - lastAudioAt) * 1000)
+					if lastSegmentEndAt is not None:
+						maxSegmentResumeMs = max(maxSegmentResumeMs, (now - lastSegmentEndAt) * 1000)
+						lastSegmentEndAt = None
+					lastAudioAt = now
 					state["audioChunks"] += 1
 					onAudio(audio)
 			elif eventType == "mark":
@@ -1755,6 +1769,8 @@ class WasmTtsEngineBridge:
 					except (TypeError, ValueError):
 						pass
 			elif eventType == "segmentEnd":
+				state["segmentEnds"] += 1
+				lastSegmentEndAt = time.perf_counter()
 				if onSegmentEnd is not None:
 					onSegmentEnd()
 			elif eventType == "done":
@@ -1795,6 +1811,20 @@ class WasmTtsEngineBridge:
 				_("Google TTS For NVDA could not speak this text."),
 				str(state["error"]),
 			)
+		state["firstAudioMs"] = round((firstAudioAt - startedAt) * 1000, 1) if firstAudioAt else None
+		state["maxAudioGapMs"] = round(maxAudioGapMs, 1)
+		state["maxSegmentResumeMs"] = round(maxSegmentResumeMs, 1)
+		log.debug(
+			"Google TTS session %s summary: chars=%d, segments=%d, audioChunks=%d, "
+			"firstAudioMs=%s, maxAudioGapMs=%.1f, maxSegmentResumeMs=%.1f.",
+			sessionId,
+			len(text),
+			len(segments) if segments else 1,
+			state["audioChunks"],
+			state["firstAudioMs"],
+			maxAudioGapMs,
+			maxSegmentResumeMs,
+		)
 		value = result.get("value")
 		if isinstance(value, dict):
 			value.update(state)
@@ -2028,6 +2058,7 @@ class ChromeTtsBridge:
 		onMark: MarkCallback | None = None,
 		onSegmentEnd: SegmentEndCallback | None = None,
 		segments: list[str] | None = None,
+		hasPreviousSegment: bool = False,
 	) -> dict[str, Any]:
 		try:
 			_raise_if_cancelled(cancelEvent)
@@ -2041,6 +2072,7 @@ class ChromeTtsBridge:
 				onMark=onMark,
 				onSegmentEnd=onSegmentEnd,
 				segments=segments,
+				hasPreviousSegment=hasPreviousSegment,
 			)
 		except CdpCancelled:
 			raise
