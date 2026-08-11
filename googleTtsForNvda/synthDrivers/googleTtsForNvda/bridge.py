@@ -141,7 +141,7 @@ class _ThreadingTcpServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 
 
 class _BridgeRequestHandler(http.server.SimpleHTTPRequestHandler):
-	server_version = "GoogleTtsForNvda/0.6"
+	server_version = "GoogleTtsForNvda/1.0"
 	extensions_map = {
 		**http.server.SimpleHTTPRequestHandler.extensions_map,
 		".wasm": "application/wasm",

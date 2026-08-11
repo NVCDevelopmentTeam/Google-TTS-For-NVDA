@@ -139,6 +139,43 @@
 	</ul>
 
 	<h2>Nhật Ký Thay Đổi</h2>
+	<h3>Phiên bản 1.0 (11-08-2026)</h3>
+	<ul>
+		<li><strong>Đọc nhanh và mượt hơn:</strong>
+			<ul>
+				<li>Với văn bản vừa và dài, add-on nay ưu tiên một đoạn đầu ngắn để bắt đầu đọc sớm hơn, sau đó xử lý phần còn lại thành các đoạn lớn hơn.</li>
+				<li>Add-on có thể dùng lại âm thanh đã tạo xong và đang được giữ tạm trong RAM. Khi đọc văn bản dài lần đầu, add-on cũng đệm trước một lượng âm thanh nhỏ để hạn chế tình trạng ngắt quãng.</li>
+			</ul>
+		</li>
+		<li><strong>Xử lý văn bản đa ngôn ngữ tốt hơn:</strong>
+			<ul>
+				<li>Add-on nay dựa vào dữ liệu chính thức Unicode 17.0 và CLDR 48.2 với phạm vi dấu câu và hệ chữ rộng hơn để ngắt câu và cụm. Nhờ đó, add-on xử lý tốt hơn dấu câu theo từng ngôn ngữ, từ viết tắt, địa chỉ web, biểu tượng cảm xúc, văn bản tiếng Trung, tiếng Nhật, tiếng Hàn, tiếng Thái và văn bản ở những ngôn ngữ khác ít dùng khoảng trắng.</li>
+				<li>Khi văn bản quá ngắn hoặc chưa xác định rõ ngôn ngữ, tính năng <strong>Sử dụng hồ sơ ngôn ngữ tự động</strong> có thể dựa vào phạm vi hệ chữ rộng hơn để chọn hồ sơ phù hợp chính xác hơn.</li>
+				<li>Tùy chọn <strong>Khoảng lặng</strong> và phần chuyển tiếp giữa các đoạn hoạt động ổn định hơn, dù add-on dùng lại âm thanh đang giữ trong RAM hay vừa tạo âm thanh mới.</li>
+			</ul>
+		</li>
+		<li><strong>Âm lượng lớn và ổn định hơn:</strong>
+			<ul>
+				<li>Add-on nay dùng một mức khuếch đại cố định để tăng âm lượng mặc định, nhờ đó âm lượng không còn tăng giảm bất thường trong lúc đọc. Tùy chọn <strong>Âm lượng</strong> vẫn điều chỉnh theo đúng tỉ lệ, đồng thời cơ chế bảo vệ khỏi vỡ tiếng vẫn được duy trì.</li>
+				<li>Một số giọng nam vẫn có thể bị rè hoặc méo vì hiện tượng này đã có trong âm thanh đầu ra từ công cụ WASM TTS gốc; add-on không thể khắc phục bằng xử lý âm thanh sau khi tổng hợp. Các thay đổi ở phiên bản này chỉ nhằm làm âm thanh lớn và ổn định hơn, không nhằm khắc phục hiện tượng méo nói trên.</li>
+			</ul>
+		</li>
+		<li><strong>Cải thiện độ ổn định:</strong>
+			<ul>
+				<li>Nếu runtime trình duyệt nhân Chromium hoặc công cụ WASM TTS gặp lỗi trước khi phát ra âm thanh, Google TTS sẽ loại bỏ runtime bị lỗi và thử lại một lần bằng runtime mới. Nếu âm thanh đã bắt đầu phát, add-on sẽ không thử lại để tránh đọc lặp một phần nội dung.</li>
+				<li>Tùy chọn <strong>Giữ runtime trình duyệt của Google TTS sẵn sàng trong nền</strong> nay không còn giữ lại runtime đang bận, mất kết nối hoặc gặp lỗi.</li>
+				<li>Add-on nay chỉ nạp những thành phần đi kèm của mình, nhờ đó giảm nguy cơ xung đột với thành phần trùng tên do add-on NVDA khác nạp.</li>
+				<li>Khi NVDA thay đổi thiết bị đầu ra âm thanh hoặc thiết bị gặp lỗi, add-on có thể khôi phục hoạt động ổn định hơn trên các phiên bản NVDA được hỗ trợ.</li>
+			</ul>
+		</li>
+		<li><strong>Cập nhật thành phần và bản dịch:</strong>
+			<ul>
+				<li>Nâng công cụ WASM TTS đi kèm lên phiên bản 20260806.1.</li>
+				<li>Cập nhật bản dịch cho khớp với phiên bản 1.0.</li>
+			</ul>
+		</li>
+	</ul>
+
 	<h3>Phiên bản 0.6 (30-07-2026)</h3>
 	<ul>
 		<li><strong>Chuyển bộ đọc nhanh hơn:</strong> Thêm tùy chọn giúp Google TTS sẵn sàng nhanh hơn khi chuyển từ bộ đọc khác sang. Tùy chọn này tắt theo mặc định; khi bật, tùy chọn này có thể dùng thêm bộ nhớ khi NVDA đang chạy.</li>
@@ -194,6 +231,6 @@
 	<ul>
 		<li>Phiên bản phát hành đầu tiên.</li>
 	</ul>
-	<p>Cập nhật lần cuối vào ngày 30-07-2026</p>
+	<p>Cập nhật lần cuối vào ngày 11-08-2026</p>
 </body>
 </html>

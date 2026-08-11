@@ -139,6 +139,43 @@
 	</ul>
 
 	<h2>Change Log</h2>
+	<h3>Version 1.0 (2026-08-11)</h3>
+	<ul>
+		<li><strong>Faster and smoother reading:</strong>
+			<ul>
+				<li>For medium and long text, the add-on now uses a shorter first section so speech can begin sooner, then processes the remaining text in larger sections.</li>
+				<li>The add-on can reuse completed speech audio held temporarily in RAM. A small amount of audio is also buffered before playback to reduce interruptions when long text is spoken for the first time.</li>
+			</ul>
+		</li>
+		<li><strong>Better multilingual text handling:</strong>
+			<ul>
+				<li>Sentence and phrase breaks now use broader official Unicode 17.0 and CLDR 48.2 punctuation and writing-system data. This improves handling of localized punctuation, abbreviations, web addresses, emoji, Chinese, Japanese, Korean, Thai, and other text that may not use spaces regularly.</li>
+				<li>The <strong>Use automatic language profiles</strong> feature can use this broader writing-system coverage to select the most likely profile more accurately when text is short or its language is unclear.</li>
+				<li>The <strong>Pauses</strong> setting and transitions between sections are more consistent, whether audio is reused from RAM or newly generated.</li>
+			</ul>
+		</li>
+		<li><strong>Louder, steadier speech:</strong>
+			<ul>
+				<li>The add-on now uses fixed amplification to increase default loudness, preventing abnormal volume rises and falls during speech. The <strong>Volume</strong> setting remains proportional, and protection against overly loud peaks is retained.</li>
+				<li>Distortion in some male voices is already present in the output from the original WASM TTS engine, so the add-on cannot correct it through post-processing. These changes improve loudness and volume consistency; they are not intended to reduce that distortion.</li>
+			</ul>
+		</li>
+		<li><strong>Improved reliability:</strong>
+			<ul>
+				<li>If the Chromium browser runtime or WASM TTS engine fails before producing audio, Google TTS discards the failed runtime and retries once with a new runtime. If audio has already started, the add-on does not retry, preventing repeated partial speech.</li>
+				<li>The <strong>Keep Google TTS browser runtime ready in the background</strong> setting no longer retains a busy, disconnected, or unhealthy runtime.</li>
+				<li>The add-on now loads only its own bundled components, reducing conflicts with similarly named components loaded by other NVDA add-ons.</li>
+				<li>The add-on now recovers more reliably when NVDA's audio output device changes or enters an error state across supported NVDA versions.</li>
+			</ul>
+		</li>
+		<li><strong>Updated components and translations:</strong>
+			<ul>
+				<li>Updated the bundled WASM TTS engine to version 20260806.1.</li>
+				<li>Updated translations to match version 1.0.</li>
+			</ul>
+		</li>
+	</ul>
+
 	<h3>Version 0.6 (2026-07-30)</h3>
 	<ul>
 		<li><strong>Faster synthesizer switching:</strong> Added an optional setting to make Google TTS ready faster when switching from another synthesizer. This setting is off by default; when turned on, it may use more memory while NVDA is running.</li>
@@ -194,6 +231,6 @@
 	<ul>
 		<li>Initial release.</li>
 	</ul>
-	<p>Last edited on 2026-07-30</p>
+	<p>Last edited on 2026-08-11</p>
 </body>
 </html>
