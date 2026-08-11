@@ -48,11 +48,11 @@ except Exception:  # pragma: no cover - used by standalone smoke tests.
 
 from .catalog import ENGINE_DIR, VoiceCatalog, is_package_supported_by_engine
 from . import voice_store
+from .websocketClientRepo import websocket
 
 
 BASE_DIR = Path(__file__).resolve().parent
 WEB_DIR = BASE_DIR / "web"
-WEBSOCKET_CLIENT_DIR = BASE_DIR / "websocketClientRepo"
 BINDING_NAME = "googleTtsForNvdaBridge"
 SAMPLE_RATE = 24000
 RECV_POLL_TIMEOUT = 0.001
@@ -94,11 +94,6 @@ BROWSER_RUNTIME_LABELS = {
 	BROWSER_RUNTIME_BRAVE: "Brave",
 }
 BROWSER_RUNTIMES = (BROWSER_RUNTIME_CHROME, BROWSER_RUNTIME_EDGE, BROWSER_RUNTIME_BRAVE)
-
-if str(WEBSOCKET_CLIENT_DIR) not in sys.path:
-	sys.path.insert(1, str(WEBSOCKET_CLIENT_DIR))
-
-import websocket  # type: ignore
 
 
 class CdpError(Exception):

@@ -12,10 +12,7 @@ from functools import lru_cache
 import unicodedata
 from typing import Any
 
-try:
-	from .unicode_data import SENTENCE_TERMINAL_CODEPOINTS
-except ImportError:  # Direct import by the standalone test suite.
-	from unicode_data import SENTENCE_TERMINAL_CODEPOINTS
+from .unicode_data import SENTENCE_TERMINAL_CODEPOINTS
 
 
 PAUSE_MODE_DO_NOT_SHORTEN = "0"

@@ -29,18 +29,9 @@ class NoLock:
         pass
 
 
-try:
-    # If wsaccel is available we use compiled routines to validate UTF-8
-    # strings.
-    from wsaccel.utf8validator import Utf8Validator
-
-    def _validate_utf8(utfbytes: Union[str, bytes]) -> bool:
-        result: bool = Utf8Validator().validate(utfbytes)[0]
-        return result
-
-except ImportError:
-    # UTF-8 validator
-    # python implementation of http://bjoern.hoehrmann.de/utf-8/decoder/dfa/
+def _create_bundled_utf8_validator():
+    """Create the pure-Python validator without importing a shared wsaccel."""
+    # Python implementation of http://bjoern.hoehrmann.de/utf-8/decoder/dfa/
 
     _UTF8_ACCEPT = 0
     _UTF8_REJECT = 12
@@ -435,6 +426,11 @@ except ImportError:
                 return False
 
         return True
+
+    return _validate_utf8
+
+
+_validate_utf8 = _create_bundled_utf8_validator()
 
 
 def validate_utf8(utfbytes: Union[str, bytes]) -> bool:

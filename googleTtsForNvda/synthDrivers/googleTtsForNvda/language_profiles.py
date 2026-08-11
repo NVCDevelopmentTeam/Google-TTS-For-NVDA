@@ -8,10 +8,7 @@ from __future__ import annotations
 
 from collections.abc import Collection
 
-try:
-	from .unicode_data import LANGUAGE_SCRIPT_RANGES
-except ImportError:  # Direct loading by the standalone test suite.
-	from unicode_data import LANGUAGE_SCRIPT_RANGES
+from .unicode_data import LANGUAGE_SCRIPT_RANGES
 
 
 ScriptRanges = tuple[tuple[int, int], ...]

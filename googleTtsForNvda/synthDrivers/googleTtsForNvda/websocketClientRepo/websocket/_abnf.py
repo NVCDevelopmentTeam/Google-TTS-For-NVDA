@@ -27,28 +27,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-try:
-    # If wsaccel is available, use compiled routines to mask data.
-    # wsaccel only provides around a 10% speed boost compared
-    # to the websocket-client _mask() implementation.
-    # Note that wsaccel is unmaintained.
-    from wsaccel.xormask import XorMaskerSimple
+# Keep this vendored client self-contained instead of accepting a shared
+# top-level wsaccel module supplied by another NVDA add-on.
+native_byteorder = sys.byteorder
 
-    def _mask(mask_value: array.array, data_value: array.array) -> bytes:
-        mask_result: bytes = XorMaskerSimple(mask_value).process(data_value)
-        return mask_result
 
-except ImportError:
-    # wsaccel is not available, use websocket-client _mask()
-    native_byteorder = sys.byteorder
-
-    def _mask(mask_value: array.array, data_value: array.array) -> bytes:
-        datalen = len(data_value)
-        int_data_value = int.from_bytes(data_value, native_byteorder)
-        int_mask_value = int.from_bytes(
-            mask_value * (datalen // 4) + mask_value[: datalen % 4], native_byteorder
-        )
-        return (int_data_value ^ int_mask_value).to_bytes(datalen, native_byteorder)
+def _mask(mask_value: array.array, data_value: array.array) -> bytes:
+    datalen = len(data_value)
+    int_data_value = int.from_bytes(data_value, native_byteorder)
+    int_mask_value = int.from_bytes(
+        mask_value * (datalen // 4) + mask_value[: datalen % 4], native_byteorder
+    )
+    return (int_data_value ^ int_mask_value).to_bytes(datalen, native_byteorder)
 
 
 __all__ = [

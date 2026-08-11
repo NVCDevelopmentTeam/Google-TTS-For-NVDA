@@ -35,27 +35,25 @@ from ._url import get_proxy_info, parse_url
 
 __all__ = ["proxy_info", "connect", "read_headers"]
 
-# Import python_socks if available, otherwise define fallback classes
-try:
-    from python_socks._errors import ProxyConnectionError, ProxyError, ProxyTimeoutError
-    from python_socks._types import ProxyType
-    from python_socks.sync import Proxy
+# Google TTS does not bundle python-socks. Do not silently consume a shared
+# top-level copy exposed by another add-on.
+HAVE_PYTHON_SOCKS = False
 
-    HAVE_PYTHON_SOCKS = True
-except ImportError:
-    HAVE_PYTHON_SOCKS = False
 
-    class ProxyError(Exception):  # type: ignore[no-redef]
-        pass
+class ProxyError(Exception):
+    pass
 
-    class ProxyTimeoutError(Exception):  # type: ignore[no-redef]
-        pass
 
-    class ProxyConnectionError(Exception):  # type: ignore[no-redef]
-        pass
+class ProxyTimeoutError(Exception):
+    pass
 
-    class ProxyType:  # type: ignore[no-redef]
-        pass
+
+class ProxyConnectionError(Exception):
+    pass
+
+
+class ProxyType:
+    pass
 
 
 class proxy_info:

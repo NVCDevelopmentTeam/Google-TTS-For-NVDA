@@ -29,7 +29,7 @@ import time
 import zlib
 from urllib.parse import urlparse
 
-import websocket
+from . import ABNF, WebSocketException, create_connection, enableTrace
 
 try:
     import readline  # noqa: F401
@@ -45,7 +45,7 @@ def get_encoding() -> str:
         return encoding.lower()
 
 
-OPCODE_DATA = (websocket.ABNF.OPCODE_TEXT, websocket.ABNF.OPCODE_BINARY)
+OPCODE_DATA = (ABNF.OPCODE_TEXT, ABNF.OPCODE_BINARY)
 ENCODING = get_encoding()
 
 
@@ -141,7 +141,7 @@ def main() -> None:
     start_time = time.time()
     args = parse_args()
     if args.verbose > 1:
-        websocket.enableTrace(True)
+        enableTrace(True)
     options = {}
     if args.proxy:
         p = urlparse(args.proxy)
@@ -156,7 +156,7 @@ def main() -> None:
         opts = {"cert_reqs": ssl.CERT_NONE, "check_hostname": False}
     if args.headers:
         options["header"] = list(map(str.strip, args.headers.split(",")))
-    ws = websocket.create_connection(args.url, sslopt=opts, **options)
+    ws = create_connection(args.url, sslopt=opts, **options)
     if args.raw:
         console = NonInteractive()
     else:
@@ -166,16 +166,16 @@ def main() -> None:
     def recv() -> tuple:
         try:
             frame = ws.recv_frame()
-        except websocket.WebSocketException:
-            return websocket.ABNF.OPCODE_CLOSE, ""
+        except WebSocketException:
+            return ABNF.OPCODE_CLOSE, ""
         if not frame:
-            raise websocket.WebSocketException(f"Not a valid frame {frame}")
+            raise WebSocketException(f"Not a valid frame {frame}")
         elif frame.opcode in OPCODE_DATA:
             return frame.opcode, frame.data
-        elif frame.opcode == websocket.ABNF.OPCODE_CLOSE:
+        elif frame.opcode == ABNF.OPCODE_CLOSE:
             ws.send_close()
             return frame.opcode, ""
-        elif frame.opcode == websocket.ABNF.OPCODE_PING:
+        elif frame.opcode == ABNF.OPCODE_PING:
             ws.pong(frame.data)
             return frame.opcode, frame.data
 
@@ -185,7 +185,7 @@ def main() -> None:
         while True:
             opcode, data = recv()
             msg = None
-            if opcode == websocket.ABNF.OPCODE_TEXT and isinstance(data, bytes):
+            if opcode == ABNF.OPCODE_TEXT and isinstance(data, bytes):
                 data = str(data, "utf-8")
             if (
                 isinstance(data, bytes) and len(data) > 2 and data[:2] == b"\037\213"
@@ -206,7 +206,7 @@ def main() -> None:
                 data = repr(data)
 
             if args.verbose:
-                msg = f"{websocket.ABNF.OPCODE_MAP.get(opcode)}: {data}"
+                msg = f"{ABNF.OPCODE_MAP.get(opcode)}: {data}"
             else:
                 msg = data
 
@@ -216,7 +216,7 @@ def main() -> None:
                 else:
                     console.write(msg)
 
-            if opcode == websocket.ABNF.OPCODE_CLOSE:
+            if opcode == ABNF.OPCODE_CLOSE:
                 break
 
     thread = threading.Thread(target=recv_ws)

@@ -24,6 +24,12 @@ noise floor, arbitrary/odd PCM packet boundaries, hidden-segment finalization,
 bounded lead buffering, whole/segment cache identity, and safe boundary-context
 reuse. The corpus also protects the medium-text fast-first fallback.
 
+`test_dependency_isolation.py` verifies that the browser bridge loads Google TTS
+For NVDA's private vendored WebSocket client even when another add-on has already
+registered a top-level `websocket` module. It also prevents optional third-party
+imports from leaking into the vendored client and checks that CLD2, browser files,
+and the pinned WASM engine stay anchored to this add-on's own directories.
+
 Run all standalone tests without importing NVDA:
 
 ```powershell
