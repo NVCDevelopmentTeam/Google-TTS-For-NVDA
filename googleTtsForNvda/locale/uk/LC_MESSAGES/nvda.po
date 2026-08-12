@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-07-31 09:25+0300\n"
+"PO-Revision-Date: 2026-08-12 20:09+0300\n"
 "Last-Translator: Volodymyr Pyrih <vp88.mobile@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -63,7 +63,7 @@ msgstr "&Відкрити сторінку Microsoft WebView2"
 msgid "&Open voice packages folder"
 msgstr "&Відкрити папку голосових пакетів"
 
-#: synthDrivers/googleTtsForNvda/__init__.py:475
+#: synthDrivers/googleTtsForNvda/__init__.py:119
 msgid "&Pauses"
 msgstr "&Паузи"
 
@@ -113,7 +113,7 @@ msgid "An unexpected error occurred while managing voice packages."
 msgstr "Під час керування голосовими пакетами сталася неочікувана помилка."
 
 #: globalPlugins/googleTtsForNvda/__init__.py:238
-#: synthDrivers/googleTtsForNvda/__init__.py:684
+#: synthDrivers/googleTtsForNvda/__init__.py:328
 msgid "another version"
 msgstr "інша версія"
 
@@ -145,7 +145,7 @@ msgstr ""
 
 #: globalPlugins/googleTtsForNvda/settings.py:390
 #: globalPlugins/googleTtsForNvda/settings.py:395
-#: synthDrivers/googleTtsForNvda/__init__.py:499
+#: synthDrivers/googleTtsForNvda/__init__.py:143
 msgid "Automatic language profiles status"
 msgstr "Стан автоматичних мовних профілів"
 
@@ -345,7 +345,7 @@ msgstr "Чеська"
 msgid "Danish"
 msgstr "Данська"
 
-#: synthDrivers/googleTtsForNvda/__init__.py:489
+#: synthDrivers/googleTtsForNvda/__init__.py:133
 msgid "Do not shorten"
 msgstr "Не скорочувати"
 
@@ -526,15 +526,15 @@ msgstr "Німецька"
 #: globalPlugins/googleTtsForNvda/settings.py:123
 #: globalPlugins/googleTtsForNvda/settings.py:202
 #: globalPlugins/googleTtsForNvda/settings.py:477 manifest.ini:summary
-#: synthDrivers/googleTtsForNvda/__init__.py:472
-#: synthDrivers/googleTtsForNvda/__init__.py:645
-#: synthDrivers/googleTtsForNvda/__init__.py:712
-#: synthDrivers/googleTtsForNvda/__init__.py:725
+#: synthDrivers/googleTtsForNvda/__init__.py:116
+#: synthDrivers/googleTtsForNvda/__init__.py:289
+#: synthDrivers/googleTtsForNvda/__init__.py:356
+#: synthDrivers/googleTtsForNvda/__init__.py:369
 msgid "Google TTS For NVDA"
 msgstr "Google TTS для NVDA"
 
 #: globalPlugins/googleTtsForNvda/__init__.py:250
-#: synthDrivers/googleTtsForNvda/__init__.py:696
+#: synthDrivers/googleTtsForNvda/__init__.py:340
 msgid ""
 "Google TTS For NVDA could not be loaded because the WASM TTS Engine library "
 "is incomplete.\n"
@@ -547,7 +547,7 @@ msgstr ""
 "Перевстановіть Google TTS для NVDA з повною бібліотекою WASM TTS."
 
 #: globalPlugins/googleTtsForNvda/__init__.py:245
-#: synthDrivers/googleTtsForNvda/__init__.py:691
+#: synthDrivers/googleTtsForNvda/__init__.py:335
 msgid ""
 "Google TTS For NVDA could not be loaded because the WASM TTS Engine library "
 "is missing.\n"
@@ -561,7 +561,7 @@ msgstr ""
 "Перевстановіть Google TTS для NVDA з доданою бібліотекою WASM TTS."
 
 #: globalPlugins/googleTtsForNvda/__init__.py:239
-#: synthDrivers/googleTtsForNvda/__init__.py:685
+#: synthDrivers/googleTtsForNvda/__init__.py:329
 msgid ""
 "Google TTS For NVDA could not be loaded because the WASM TTS Engine version "
 "is not supported.\n"
@@ -580,7 +580,7 @@ msgstr ""
 "Встановіть пакет «Google TTS For NVDA», який містить підтримуваний WASM TTS."
 
 #: globalPlugins/googleTtsForNvda/__init__.py:254
-#: synthDrivers/googleTtsForNvda/__init__.py:700
+#: synthDrivers/googleTtsForNvda/__init__.py:344
 msgid ""
 "Google TTS For NVDA could not be loaded because the WASM TTS Engine voice "
 "catalog could not be read.\n"
@@ -592,7 +592,7 @@ msgstr ""
 "\n"
 "Перевстановіть Google TTS для NVDA з підтримуваною бібліотекою WASM TTS."
 
-#: synthDrivers/googleTtsForNvda/bridge.py:1143
+#: synthDrivers/googleTtsForNvda/bridge.py:1149
 msgid ""
 "Google TTS For NVDA could not find its speech page in the Chromium browser "
 "runtime."
@@ -600,22 +600,22 @@ msgstr ""
 "Google TTS для NVDA не вдалося знайти свою сторінку мовлення в середовищі "
 "виконання браузера Chromium."
 
-#: synthDrivers/googleTtsForNvda/bridge.py:1612
+#: synthDrivers/googleTtsForNvda/bridge.py:1618
 msgid "Google TTS For NVDA could not finish loading the browser speech engine."
 msgstr ""
 "Google TTS для NVDA не зміг завершити завантаження механізму мовлення "
 "браузера."
 
-#: synthDrivers/googleTtsForNvda/bridge.py:1696
-#: synthDrivers/googleTtsForNvda/bridge.py:1790
+#: synthDrivers/googleTtsForNvda/bridge.py:1711
+#: synthDrivers/googleTtsForNvda/bridge.py:1821
 msgid "Google TTS For NVDA could not speak this text."
 msgstr "Google TTS для NVDA не зміг промовити цей текст."
 
-#: synthDrivers/googleTtsForNvda/bridge.py:1421
+#: synthDrivers/googleTtsForNvda/bridge.py:1427
 msgid "Google TTS For NVDA could not start its local browser bridge."
 msgstr "Google TTS для NVDA не зміг запустити свій локальний міст браузера."
 
-#: synthDrivers/googleTtsForNvda/bridge.py:1785
+#: synthDrivers/googleTtsForNvda/bridge.py:1815
 msgid ""
 "Google TTS For NVDA could not start speech in the Chromium browser runtime."
 msgstr ""
@@ -626,7 +626,7 @@ msgstr ""
 msgid "Google TTS For NVDA is already checking for updates."
 msgstr "Google TTS для NVDA вже перевіряє наявність оновлень."
 
-#: synthDrivers/googleTtsForNvda/bridge.py:1499
+#: synthDrivers/googleTtsForNvda/bridge.py:1505
 msgid "Google TTS For NVDA is not connected to the Chromium browser runtime."
 msgstr ""
 "Google TTS для NVDA не підключено до середовища виконання браузера Chromium."
@@ -866,7 +866,7 @@ msgstr ""
 msgid "Microsoft Edge WebView2 Runtime is needed"
 msgstr "Потрібне середовище виконання Microsoft Edge WebView2"
 
-#: synthDrivers/googleTtsForNvda/__init__.py:563
+#: synthDrivers/googleTtsForNvda/__init__.py:207
 msgid ""
 "Microsoft Edge WebView2 Runtime was not found. Install it before using "
 "Microsoft Edge as the Google TTS For NVDA Chromium browser runtime."
@@ -875,7 +875,7 @@ msgstr ""
 "перш ніж використовувати Microsoft Edge як середовище виконання Google TTS "
 "для NVDA на базі Chromium."
 
-#: synthDrivers/googleTtsForNvda/bridge.py:984
+#: synthDrivers/googleTtsForNvda/bridge.py:990
 msgid ""
 "Microsoft Edge WebView2 Runtime was not found. Install or repair Microsoft "
 "Edge WebView2 Runtime before using Microsoft Edge as the Google TTS For NVDA "
@@ -901,7 +901,7 @@ msgstr "Для цього оновлення немає журналу змін.
 msgid "No download link is available for voice package {package}."
 msgstr "Немає посилання для завантаження голосового пакета {package}."
 
-#: synthDrivers/googleTtsForNvda/__init__.py:539
+#: synthDrivers/googleTtsForNvda/__init__.py:183
 msgid ""
 "No Google TTS For NVDA voice packages are installed. Open Google TTS Voice "
 "Manager to download a voice package."
@@ -910,7 +910,7 @@ msgstr ""
 "голосів Google TTS, щоб завантажити голосовий пакет."
 
 #: globalPlugins/googleTtsForNvda/__init__.py:277
-#: synthDrivers/googleTtsForNvda/__init__.py:638
+#: synthDrivers/googleTtsForNvda/__init__.py:282
 msgid ""
 "No Google TTS For NVDA voices are installed.\n"
 "\n"
@@ -932,7 +932,7 @@ msgstr ""
 "клавіш NVDA+Ctrl+Shift+G."
 
 #: globalPlugins/googleTtsForNvda/__init__.py:442
-#: synthDrivers/googleTtsForNvda/__init__.py:548
+#: synthDrivers/googleTtsForNvda/__init__.py:192
 msgid ""
 "No installed Google TTS For NVDA voices can be used.\n"
 "\n"
@@ -946,11 +946,11 @@ msgstr ""
 "інший мовний пакет.\n"
 "Натисніть «Скасувати», щоб продовжити використання поточного синтезатора."
 
-#: synthDrivers/googleTtsForNvda/__init__.py:571
-#: synthDrivers/googleTtsForNvda/__init__.py:724
-#: synthDrivers/googleTtsForNvda/bridge.py:1093
-#: synthDrivers/googleTtsForNvda/bridge.py:1182
-#: synthDrivers/googleTtsForNvda/bridge.py:991
+#: synthDrivers/googleTtsForNvda/__init__.py:215
+#: synthDrivers/googleTtsForNvda/__init__.py:368
+#: synthDrivers/googleTtsForNvda/bridge.py:1099
+#: synthDrivers/googleTtsForNvda/bridge.py:1188
+#: synthDrivers/googleTtsForNvda/bridge.py:997
 msgid ""
 "No supported Chromium browser runtime was found. Install Google Chrome, "
 "Microsoft Edge, or Brave, or set CHROME_PATH, EDGE_PATH, or BRAVE_PATH to a "
@@ -1162,11 +1162,11 @@ msgstr ""
 msgid "Serbian"
 msgstr "Сербська"
 
-#: synthDrivers/googleTtsForNvda/__init__.py:494
+#: synthDrivers/googleTtsForNvda/__init__.py:138
 msgid "Shorten all pauses"
 msgstr "Скоротити всі паузи"
 
-#: synthDrivers/googleTtsForNvda/__init__.py:492
+#: synthDrivers/googleTtsForNvda/__init__.py:136
 msgid "Shorten at end of text only"
 msgstr "Скорочувати лише в кінці тексту"
 
@@ -1227,7 +1227,7 @@ msgstr "Телугу"
 msgid "Thai"
 msgstr "Тайська"
 
-#: synthDrivers/googleTtsForNvda/bridge.py:376
+#: synthDrivers/googleTtsForNvda/bridge.py:382
 msgid ""
 "The browser profile used by Google TTS For NVDA is already in use. Restart "
 "NVDA, or close any leftover supported Chromium browser helper processes."
@@ -1244,37 +1244,37 @@ msgstr ""
 "Позначені голосові пакети не підтримуються вбудованим механізмом синтезу "
 "мовлення Google."
 
-#: synthDrivers/googleTtsForNvda/bridge.py:1389
+#: synthDrivers/googleTtsForNvda/bridge.py:1395
 msgid ""
 "The Chromium browser runtime closed before Google TTS For NVDA was ready."
 msgstr ""
 "Середовище виконання браузера Chromium було закрито до того, як Google TTS "
 "для NVDA був готовий."
 
-#: synthDrivers/googleTtsForNvda/bridge.py:1542
+#: synthDrivers/googleTtsForNvda/bridge.py:1548
 msgid "The Chromium browser runtime connection closed unexpectedly."
 msgstr ""
 "З’єднання з середовищем виконання браузера Chromium несподівано завершилося."
 
-#: synthDrivers/googleTtsForNvda/bridge.py:1525
+#: synthDrivers/googleTtsForNvda/bridge.py:1531
 msgid "The Chromium browser runtime did not respond in time."
 msgstr "Середовище виконання браузера Chromium не відреагувало вчасно."
 
-#: synthDrivers/googleTtsForNvda/bridge.py:1414
+#: synthDrivers/googleTtsForNvda/bridge.py:1420
 msgid "The Chromium browser runtime did not start in time."
 msgstr "Середовище виконання браузера Chromium не запустилося вчасно."
 
-#: synthDrivers/googleTtsForNvda/bridge.py:1114
+#: synthDrivers/googleTtsForNvda/bridge.py:1120
 msgid "The Chromium browser runtime is not ready yet."
 msgstr "Середовище виконання браузера Chromium ще не готове."
 
-#: synthDrivers/googleTtsForNvda/bridge.py:1553
+#: synthDrivers/googleTtsForNvda/bridge.py:1559
 msgid "The Chromium browser runtime reported an error while preparing speech."
 msgstr ""
 "Середовище виконання браузера Chromium повідомило про помилку під час "
 "підготовки мовлення."
 
-#: synthDrivers/googleTtsForNvda/bridge.py:1547
+#: synthDrivers/googleTtsForNvda/bridge.py:1553
 msgid "The Chromium browser runtime reported an error while processing speech."
 msgstr ""
 "Середовище виконання браузера Chromium повідомило про помилку під час "
@@ -1295,7 +1295,7 @@ msgstr ""
 "Не вдалося відкрити сторінку завантаження. Будь ласка, перейдіть за цією "
 "адресою вручну:"
 
-#: synthDrivers/googleTtsForNvda/__init__.py:555
+#: synthDrivers/googleTtsForNvda/__init__.py:199
 msgid ""
 "The installed Google TTS For NVDA voice packages do not include any voices "
 "this engine can use. Open Google TTS Voice Manager to install another voice "
@@ -1338,8 +1338,8 @@ msgid ""
 "The voice package file could not be found. Refresh the list and try again."
 msgstr "Файл голосового пакета не знайдено. Оновіть список і повторіть спробу."
 
-#: synthDrivers/googleTtsForNvda/bridge.py:1625
-#: synthDrivers/googleTtsForNvda/bridge.py:1670
+#: synthDrivers/googleTtsForNvda/bridge.py:1631
+#: synthDrivers/googleTtsForNvda/bridge.py:1678
 msgid ""
 "This voice package is not installed. Open Google TTS Voice Manager to "
 "install it."
@@ -1348,8 +1348,8 @@ msgstr ""
 "щоб встановити його."
 
 #: globalPlugins/googleTtsForNvda/voiceManager.py:1053
-#: synthDrivers/googleTtsForNvda/bridge.py:1620
-#: synthDrivers/googleTtsForNvda/bridge.py:1665
+#: synthDrivers/googleTtsForNvda/bridge.py:1626
+#: synthDrivers/googleTtsForNvda/bridge.py:1673
 msgid "This voice package is not supported by the bundled Google TTS engine."
 msgstr ""
 "Цей голосовий пакет не підтримується вбудованим механізмом синтезу мовлення "
@@ -1422,25 +1422,42 @@ msgstr "Використовувати цей мовний профіль"
 
 #: manifest.ini:changelog
 msgid ""
-"Version 0.6:\n"
-"- Added an optional setting to make Google TTS ready faster when switching "
-"from another synthesizer. This setting is off by default; when turned on, it "
-"may use more memory while NVDA is running.\n"
-"- When this setting is enabled, Google TTS updates its background "
-"preparation after you change the selected Chromium browser runtime or "
-"install/remove voice packages.\n"
-"- Improved reliability when switching away from Google TTS, especially while "
-"speech or voice preparation is still stopping."
+"Version 1.0:\n"
+"- Improved reading responsiveness for medium and long text with faster "
+"starts, smoother audio buffering, and reuse of completed audio held "
+"temporarily in RAM.\n"
+"- Improved multilingual sentence and phrase breaks and the Use automatic "
+"language profiles feature using official Unicode 17.0 and CLDR 48.2 data.\n"
+"- Increased default speech loudness and kept volume steadier without "
+"abnormal rises and falls. The Volume setting remains proportional. "
+"Distortion in some male voices comes from the original WASM TTS engine and "
+"is not addressed by this change.\n"
+"- Improved recovery from failures in the Chromium browser runtime, WASM TTS "
+"engine, and NVDA audio output; prevented Keep Google TTS browser runtime "
+"ready in the background from retaining unhealthy runtimes; and reduced "
+"conflicts with other add-ons.\n"
+"- Updated the bundled WASM TTS engine to version 20260806.1.\n"
+"- Updated translations to match version 1.0."
 msgstr ""
-"Версія 0.6:\n"
-"- Додано додатковий параметр для швидшої підготовки Google TTS під час "
-"перемикання з іншого синтезатора. Цей параметр початково вимкнено; якщо його "
-"ввімкнено, він може використовувати більше пам'яті під час роботи NVDA.\n"
-"- Коли цей параметр увімкнено, Google TTS оновлює фонову підготовку після "
-"зміни вибраного середовища виконання браузера Chromium або встановлення/"
-"видалення голосових пакетів.\n"
-"- Покращено надійність під час перемикання з Google TTS, особливо під час "
-"зупинки підготовки мовлення або голосу."
+"Версія 1.0:\n"
+"- Покращено швидкість відгуку під час читання середніх та довгих текстів "
+"завдяки швидшому запуску, плавнішому буферизуванню аудіо та повторному "
+"використанню готових аудіофрагментів, тимчасово збережених в оперативній "
+"пам’яті.\n"
+"- Покращено розбиття речень та фраз у багатомовних текстах, а також роботу "
+"функції «Використовувати автоматичні мовні профілі» з використанням "
+"офіційних даних Unicode 17.0 та CLDR 48.2.\n"
+"- Збільшено гучність мовлення та забезпечено стабільнішу гучність без "
+"аномальних стрибків. Налаштування гучності залишається пропорційним. "
+"Спотворення в деяких чоловічих голосах зумовлені оригінальним двигуном WASM "
+"TTS і не усуваються цією зміною.\n"
+"- Покращено відновлення після збоїв у середовищі виконання браузера "
+"Chromium, двигуні WASM TTS та аудіовиводу NVDA; усунуто збереження "
+"несправних середовищ виконання функцією «Утримувати середовище виконання "
+"Google TTS у фоновому режимі»; а також зменшено конфлікти з іншими "
+"додатками.\n"
+"- Оновлено вбудований двигун WASM TTS до версії 20260806.1.\n"
+"- Оновлено переклади відповідно до версії 1.0."
 
 #: globalPlugins/googleTtsForNvda/voiceManager.py:115
 msgid "Vietnamese"
@@ -1486,7 +1503,7 @@ msgstr ""
 msgid "Voice package {package} did not pass verification after import."
 msgstr "Голосовий пакет {package} не пройшов перевірку після імпорту."
 
-#: synthDrivers/googleTtsForNvda/__init__.py:1981
+#: synthDrivers/googleTtsForNvda/__init__.py:1472
 msgid ""
 "Voice settings are managed by automatic language profiles. Open the Google "
 "TTS for NVDA category in NVDA Settings to configure them."
@@ -1635,6 +1652,28 @@ msgstr "{size:.1f} МБ"
 #: globalPlugins/googleTtsForNvda/settings.py:786
 msgid "{voice} ({package})"
 msgstr "{voice} ({package})"
+
+#~ msgid ""
+#~ "Version 0.6:\n"
+#~ "- Added an optional setting to make Google TTS ready faster when "
+#~ "switching from another synthesizer. This setting is off by default; when "
+#~ "turned on, it may use more memory while NVDA is running.\n"
+#~ "- When this setting is enabled, Google TTS updates its background "
+#~ "preparation after you change the selected Chromium browser runtime or "
+#~ "install/remove voice packages.\n"
+#~ "- Improved reliability when switching away from Google TTS, especially "
+#~ "while speech or voice preparation is still stopping."
+#~ msgstr ""
+#~ "Версія 0.6:\n"
+#~ "- Додано додатковий параметр для швидшої підготовки Google TTS під час "
+#~ "перемикання з іншого синтезатора. Цей параметр початково вимкнено; якщо "
+#~ "його ввімкнено, він може використовувати більше пам'яті під час роботи "
+#~ "NVDA.\n"
+#~ "- Коли цей параметр увімкнено, Google TTS оновлює фонову підготовку після "
+#~ "зміни вибраного середовища виконання браузера Chromium або встановлення/"
+#~ "видалення голосових пакетів.\n"
+#~ "- Покращено надійність під час перемикання з Google TTS, особливо під час "
+#~ "зупинки підготовки мовлення або голосу."
 
 #~ msgid ""
 #~ "Version 0.5.5:\n"
