@@ -712,6 +712,27 @@
 		throw new Error("Timed out waiting for browser speech audio.");
 	}
 
+	async function waitForWasmEnd(timeoutMs) {
+		const startedAt = performance.now();
+		while (performance.now() - startedAt < timeoutMs) {
+			if (synthesisErrorMessage) {
+				throw new Error(synthesisErrorMessage);
+			}
+			if (stopped) {
+				return;
+			}
+			if (sawSynthesisEnd) {
+				return;
+			}
+			await new Promise((resolve) => {
+				currentEndResolver = resolve;
+				setTimeout(resolve, synthesisIdlePollMs);
+			});
+			currentEndResolver = null;
+		}
+		throw new Error("Timed out waiting for WASM engine synthesis to complete.");
+	}
+
 	function isTtsEngineInstance(val) {
 		return val && typeof val === "object"
 			&& typeof val.onSpeak === "function"
@@ -921,11 +942,22 @@
 				if (lastChunkAt > 0) {
 					scheduleWorkletEmpty(currentAudioPort, sessionToken);
 				}
-				await waitForSynthesisComplete(120000);
+				
+				const hasNextSegment = segmentIndex < textSegments.length - 1;
+				
+				if (hasNextSegment) {
+					// Wait for WASM engine to finish generating, but do not wait for the DSP
+					// or audio queue to drain. This eliminates the 80ms gap.
+					await waitForWasmEnd(120000);
+				} else {
+					// Wait for all audio to drain on the final segment.
+					await waitForSynthesisComplete(120000);
+				}
+				
 				if (!isCurrentSession(sessionToken)) {
 					break;
 				}
-				const hasNextSegment = segmentIndex < textSegments.length - 1;
+				
 				finishSegmentAudio(hasNextSegment, sessionToken);
 				if (hasNextSegment) {
 					// Each hidden segment is a separate WASM onSpeak call; expose that boundary so

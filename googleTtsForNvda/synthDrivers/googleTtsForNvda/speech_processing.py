@@ -216,6 +216,7 @@ class PcmSilenceShortener:
 		self._heldSilence = bytearray()
 		self._partialSample = bytearray()
 		self._keepSilenceBytes = pcm_bytes_for_milliseconds(keepSilenceMs, sampleRate, bytesPerSample)
+		self._blockSizeSamples = max(1, sampleRate // 200)  # 5ms blocks
 
 	def _release_held_silence(self, *, final: bool) -> bytes:
 		if not self._heldSilence:
@@ -251,26 +252,26 @@ class PcmSilenceShortener:
 		pcm = pcm[:pcmLength]
 		samples = memoryview(pcm).cast("h")
 		output = bytearray()
-		runStart = 0
-		runIsSilence = -self._noiseFloor <= samples[0] <= self._noiseFloor
-		for sampleIndex in range(1, len(samples)):
-			isSilence = -self._noiseFloor <= samples[sampleIndex] <= self._noiseFloor
-			if isSilence == runIsSilence:
-				continue
-			run = pcm[runStart * self._bytesPerSample : sampleIndex * self._bytesPerSample]
-			if runIsSilence:
+		
+		blockSize = self._blockSizeSamples
+		numSamples = len(samples)
+		
+		for blockStart in range(0, numSamples, blockSize):
+			blockEnd = min(blockStart + blockSize, numSamples)
+			block = samples[blockStart:blockEnd]
+			
+			isSilence = (
+				min(block) >= -self._noiseFloor
+				and max(block) <= self._noiseFloor
+			)
+			
+			run = pcm[blockStart * self._bytesPerSample : blockEnd * self._bytesPerSample]
+			if isSilence:
 				self._hold_silence(run)
 			else:
 				output.extend(self._release_held_silence(final=False))
 				output.extend(run)
-			runStart = sampleIndex
-			runIsSilence = isSilence
-		run = pcm[runStart * self._bytesPerSample : pcmLength]
-		if runIsSilence:
-			self._hold_silence(run)
-		else:
-			output.extend(self._release_held_silence(final=False))
-			output.extend(run)
+				
 		return bytes(output)
 
 	def finish(self) -> bytes:
