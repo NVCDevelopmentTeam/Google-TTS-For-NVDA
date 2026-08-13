@@ -2,21 +2,21 @@
 <html lang="zh-CN">
 <head>
 	<meta charset="UTF-8">
-	<title>Google TTS For NVDA</title>
+	<title>NVDA 版 Google 文字转语音</title>
 </head>
 <body>
-	<h1>Google TTS For NVDA</h1>
+	<h1>NVDA 版 Google 文字转语音</h1>
 	<p><strong>作者：</strong>Nguyen Anh Duc、Dao Duc Trung 和 Pham Hung Vuong</p>
-	<p>长期以来，屏幕阅读器用户一直希望能在 Windows 版 NVDA 中使用熟悉的 Google 文本转语音技术所提供的语音，获得类似于 Android 屏幕阅读器的体验。</p>
-	<p><strong>Google TTS For NVDA</strong> 正是为了实现这一愿望而开发的。本插件通过 WebAssembly（WASM）使用 Google 文本转语音技术，并在 Google Chrome、Microsoft Edge 或 Brave 等受支持的 Chromium 浏览器运行时中于后台运行，为您的日常电脑使用带来熟悉而自然的 Google 语音。</p>
+	<p>长期以来，屏幕阅读器用户一直希望能在 Windows 版 NVDA 中使用熟悉的 Google 文字转语音技术所提供的语音，获得类似于 Android 屏幕阅读器的体验。</p>
+	<p><strong>NVDA 版 Google 文字转语音</strong> 正是为了实现这一愿望而开发的。本插件通过 WebAssembly（WASM）使用 Google 文字转语音技术，并在 Google Chrome、Microsoft Edge 或 Brave 等受支持的 Chromium 浏览器运行时中于后台运行，为您的日常电脑使用带来熟悉而自然的 Google 语音。</p>
 	<p>下载所需的语音包后，本插件便可完全在您的电脑上离线运行，无需持续连接互联网即可快速响应并朗读内容。</p>
 
 	<h2>主要功能</h2>
 	<ul>
 		<li><strong>完全离线运行：</strong>下载所需的语音包后，语音将在本地处理。</li>
-		<li><strong>丰富的语言和语音：</strong>为受支持的语言提供多种 Google TTS 语音包。</li>
+		<li><strong>丰富的语言和语音：</strong>为受支持的语言提供多种适用于 Google 文字转语音引擎的语音包。</li>
 		<li><strong>响应迅速、延迟较低：</strong>通过文本分段和音频缓冲提高 NVDA 的响应速度。</li>
-		<li><strong>Google TTS 语音管理器：</strong>通过无障碍对话框浏览、下载、移除和查看语音包。</li>
+		<li><strong>Google 文字转语音管理器：</strong>通过无障碍对话框浏览、下载、移除和查看语音包。</li>
 		<li><strong>选择 Chromium 浏览器运行时：</strong>可选择 Google Chrome、Microsoft Edge 或 Brave 作为受支持的后台浏览器运行时。</li>
 		<li><strong>自动语言配置文件：</strong>可选择为每种语言使用独立配置文件，让不同语言分别使用各自的语音和语音参数。</li>
 		<li><strong>内置插件更新：</strong>可在 NVDA 设置中检查插件更新，也可选择在每次启动时自动检查一次。</li>
@@ -31,19 +31,19 @@
 
 	<h2>快速入门</h2>
 	<ol>
-		<li>打开 NVDA 的<strong>选择语音合成器</strong>对话框（按 <kbd>NVDA+Ctrl+S</kbd>），然后选择 <strong>Google TTS For NVDA</strong>。</li>
-		<li>如果尚未安装语音包，NVDA 会提示没有可用的 Google TTS For NVDA 语音。按<strong>确定</strong>打开 Google TTS 语音管理器并下载语音包；按<strong>取消</strong>暂时继续使用当前语音合成器。</li>
-		<li>在 Google TTS 语音管理器的<strong>下载</strong>选项卡中，至少下载一个语音包。</li>
+		<li>打开 NVDA 的<strong>选择语音合成器</strong>对话框（按 <kbd>NVDA+Ctrl+S</kbd>），然后选择 <strong>NVDA 版 Google 文字转语音</strong>。</li>
+		<li>如果尚未安装任何语音包，NVDA 会显示消息，提示尚未安装 NVDA 版 Google 文字转语音的语音。按<strong>确定</strong>打开 Google 文字转语音管理器并下载语音包；按<strong>取消</strong>暂时继续使用当前语音合成器。</li>
+		<li>在 Google 文字转语音管理器的<strong>下载</strong>选项卡中，至少下载一个语音包。</li>
 		<li>下载完成后，打开<strong>语音设置</strong>（<kbd>NVDA+Ctrl+V</kbd>），选择您需要的语言和变声。</li>
 	</ol>
 
 	<h2>管理语音</h2>
-	<p>您可以随时打开 Google TTS 语音管理器来添加或移除语音包：</p>
+	<p>您可以随时打开 Google 文字转语音管理器来添加或移除语音包：</p>
 	<ul>
 		<li>按快捷键 <kbd>NVDA+Ctrl+Shift+G</kbd>；或</li>
-		<li>依次打开 <strong>NVDA 菜单 &rarr; 工具 &rarr; Google TTS 语音管理器……</strong></li>
+		<li>依次打开 <strong>NVDA 菜单 &rarr; 工具 &rarr; Google 文字转语音管理器……</strong></li>
 	</ul>
-	<p>Google TTS 语音管理器包含两个选项卡：</p>
+	<p>Google 文字转语音管理器包含两个选项卡：</p>
 	<ul>
 		<li><strong>已安装：</strong>显示已存储在电脑上的语音包。<strong>状态</strong>列会说明每个语音包是否<strong>可用</strong>、是否不受随附引擎支持、是否缺少必需的语音包、是否为其他已安装的语音包所必需，或是否依赖其他语音包。</li>
 		<li><strong>下载：</strong>显示可供下载的语音包。<strong>状态</strong>列会说明语音包是否可以下载、是否需要其他语音包、必需的语音包是否已经安装，或是否为其他可下载语音包所必需。</li>
@@ -51,30 +51,30 @@
 	<p>每个选项卡上的控件依次为：<strong>按语言筛选</strong>、<strong>选中所有语音包</strong>、语音包列表，然后是<strong>移除选中的语音包</strong>或<strong>下载选中的语音包</strong>。对话框中还包含一行<strong>状态</strong>信息，以及<strong>刷新</strong>、<strong>打开语音包文件夹</strong>和<strong>关闭</strong>按钮。</p>
 	<p>要添加语音，请打开<strong>下载</strong>选项卡，选中所需的语音包，然后按<strong>下载选中的语音包</strong>。要移除语音，请打开<strong>已安装</strong>选项卡，选中不再需要的语音包，然后按<strong>移除选中的语音包</strong>。</p>
 	<p>某些语音包依赖其他语音包。下载存在依赖关系的语音包时，语音管理器也可以一并下载必需的语音包。如果要移除的语音包被其他已安装语音包所依赖，语音管理器会将依赖该语音包的其他包一并列入移除范围，以免留下无法使用的语音。</p>
-	<p>语音管理器会防止您误移除最后一个可用的语音包。如果 Google TTS For NVDA 不是当前语音合成器，警告对话框默认选择<strong>否</strong>。如果 Google TTS For NVDA 是当前语音合成器，语音管理器会要求您先切换到其他语音合成器；如果没有完成切换，则会保留最后一个可用的语音包。</p>
+	<p>语音管理器会防止您误移除最后一个可用的语音包。如果 NVDA 版 Google 文字转语音不是当前语音合成器，警告对话框默认选择<strong>否</strong>。如果 NVDA 版 Google 文字转语音是当前语音合成器，语音管理器会要求您先切换到其他语音合成器；如果没有完成切换，则会保留最后一个可用的语音包。</p>
 	<p>您可以在任一选项卡中使用<strong>按语言筛选</strong>下拉框，只显示所需语言（例如英语或越南语）的语音包，以便更快找到语音。您还可以点击<strong>打开语音包文件夹</strong>，查看语音包在电脑上的存储位置。</p>
 	<p>语音包的下载和移除均在后台进行，因此您仍可继续使用 NVDA，不会受到干扰。进度提示只会在主要阶段和操作结束时播报，避免每次百分比发生细微变化时都重复提示。</p>
 
 	<h2>配置</h2>
 	<h3>语音设置</h3>
-	<p>无论是否启用自动语言配置文件，NVDA 的语音设置（<kbd>NVDA+Ctrl+V</kbd>）都会为 Google TTS For NVDA 提供<strong>停顿</strong>选项。关闭自动语言配置文件时，其中还会提供以下选项：</p>
+	<p>无论是否启用自动语言配置文件，NVDA 的语音设置（<kbd>NVDA+Ctrl+V</kbd>）都会为 NVDA 版 Google 文字转语音提供<strong>停顿</strong>选项。关闭自动语言配置文件时，其中还会提供以下选项：</p>
 	<ul>
-		<li><strong>语音：</strong>选择已安装的 Google TTS 语言。</li>
+		<li><strong>语音：</strong>选择已安装语音包所对应的 Google 文字转语音语言。</li>
 		<li><strong>变声：</strong>选择该语言中的语音名称，包括已经安装的 Chrome OS 和 Google Natural 语音。</li>
 		<li><strong>速度：</strong>调整朗读速度。</li>
 		<li><strong>语速加倍：</strong>启用后将语音速度提高一倍，适合高速阅读。</li>
 		<li><strong>音调：</strong>调整语音的音调。</li>
 		<li><strong>音量：</strong>调整语音音量。</li>
 	</ul>
-	<p><strong>停顿：</strong>可选择保持停顿不变、仅缩短文本末尾的停顿，或缩短朗读过程中的所有停顿以加快阅读。此设置适用于所有 Google TTS 语音。</p>
+	<p><strong>停顿：</strong>可选择保持停顿不变、仅缩短文本末尾的停顿，或缩短整个朗读过程中的停顿以加快阅读。此设置适用于 Google 文字转语音的所有朗读内容。</p>
 
 	<h3>插件设置</h3>
-	<p>依次打开 <strong>NVDA 菜单 &rarr; 选项 &rarr; 设置 &rarr; Google TTS For NVDA</strong>，可以配置以下选项：</p>
+	<p>依次打开 <strong>NVDA 菜单 &rarr; 选项 &rarr; 设置 &rarr; NVDA 版 Google 文字转语音</strong>，可以配置以下选项：</p>
 	<ul>
 		<li><strong>Chromium 浏览器运行时：</strong>选择 Google Chrome、Microsoft Edge 或 Brave 作为本插件的后台 Chromium 浏览器运行时。设置面板会显示各浏览器是否可用。</li>
 		<li><strong>Chromium 浏览器运行时状态：</strong>查看所选运行时、浏览器可用性，以及发生回退时实际使用的运行时。</li>
-		<li><strong>让 Google TTS 浏览器运行时在后台保持就绪：</strong>启用后，即使当前正在使用其他语音合成器，Google TTS 也可以提前准备浏览器运行时和当前语音包，从而加快切换回 Google TTS 的速度。此选项默认关闭。启用后按“确定”或“应用”，可能会占用更多内存，并会使运行时文件保持打开，直到您关闭此选项或退出 NVDA。</li>
-		<li><strong>后台浏览器运行时状态：</strong>查看此功能是已关闭、因 Google TTS 已是当前语音合成器而无需运行，还是正在等待您按“确定”或“应用”后启动。</li>
+		<li><strong>让 Google 文字转语音的浏览器运行时在后台保持就绪：</strong>启用后，即使当前正在使用其他语音合成器，Google 文字转语音也可以提前准备浏览器运行时和当前语音包，从而加快切换回 Google 文字转语音的速度。此选项默认关闭。启用后按“确定”或“应用”，可能会占用更多内存，并会使运行时文件保持打开，直到您关闭此选项或退出 NVDA。</li>
+		<li><strong>后台浏览器运行时状态：</strong>查看此功能是已关闭、因 Google 文字转语音已是当前语音合成器而无需运行，还是正在等待您按“确定”或“应用”后启动。</li>
 		<li><strong>使用自动语言配置文件：</strong>启用自动选择配置文件，并显示下文所述的配置文件控件。</li>
 		<li><strong>首选配置文件语言：</strong>选择一个已启用的配置文件语言，在句子语言不明确时使用。在启用至少一个语言配置文件之前，此列表可能为空。</li>
 		<li><strong>自动语言配置文件：</strong>选择要编辑的已安装语言配置文件。</li>
@@ -82,23 +82,23 @@
 		<li><strong>变声、速度、语速加倍、音调、音量、大写时音高变化的百分比、遇到大写字母时先提示“大写”、遇到大写字母时发出提示音、在合成器支持的情况下激活拼读功能：</strong>为所选并已启用的配置文件设置语音参数。</li>
 		<li><strong>自动语言配置文件状态：</strong>查看自动语言配置文件是已关闭、不可用、尚未选择配置文件，还是正在使用。</li>
 		<li><strong>更新：</strong>包含下列插件更新控件。</li>
-		<li><strong>NVDA 启动时自动检查插件更新：</strong>让 Google TTS For NVDA 在下次启动 NVDA 后检查一次更新。此选项默认关闭。</li>
+		<li><strong>NVDA 启动时自动检查插件更新：</strong>让 NVDA 版 Google 文字转语音在下次启动 NVDA 后检查一次更新。此选项默认关闭。</li>
 		<li><strong>插件更新状态：</strong>查看已安装的插件版本、启动时自动检查是开启还是关闭，以及当前是否正在检查。</li>
 		<li><strong>检查更新……：</strong>手动检查最新的稳定版插件。</li>
 	</ul>
-	<p>也可以通过自定义按键或手势打开 Google TTS For NVDA 设置类别。此命令默认没有分配快捷键；请依次打开 <strong>NVDA 菜单 &rarr; 选项 &rarr; 按键与手势</strong>，在 <strong>Google TTS For NVDA</strong> 类别中进行分配。</p>
+	<p>也可以通过自定义按键或手势打开 NVDA 版 Google 文字转语音设置类别。此命令默认没有分配快捷键；请依次打开 <strong>NVDA 菜单 &rarr; 选项 &rarr; 按键与手势</strong>，在 <strong>NVDA 版 Google 文字转语音</strong> 类别中进行分配。</p>
 
 	<h3>插件更新</h3>
-	<p>依次打开 <strong>NVDA 菜单 &rarr; 选项 &rarr; 设置 &rarr; Google TTS For NVDA</strong>，然后按<strong>检查更新……</strong>以检查最新稳定版。如果插件已是最新版本、无法连接互联网或无法识别服务器返回的更新信息，手动检查都会显示一个带“确定”按钮的对话框。</p>
-	<p>有新版本时，Google TTS For NVDA 会显示<strong>更新信息</strong>对话框，其中包含下载大小、NVDA 版本最低要求、最后测试的 NVDA 版本和更新日志。选择<strong>是</strong>可在 NVDA 中下载 <code>.nvda-addon</code> 安装包。下载期间，<strong>正在下载 Google TTS For NVDA 更新</strong>对话框会显示<strong>下载状态</strong>、可在大小已知时显示的进度条，以及<strong>取消</strong>按钮。本插件会根据更新清单中的文件大小和 SHA256 校验值验证下载的文件，然后打开 NVDA 的标准插件安装程序。</p>
-	<p>启动时自动检查更新默认关闭。启用后，Google TTS For NVDA 会在下次启动 NVDA 后检查一次，除非发现新版本，否则不会发出提示。无论自动检查是否开启，您都可以手动检查。如果打开设置类别时后台启动检查仍在进行，手动检查按钮将暂时禁用，直到检查完成。更改<strong>NVDA 启动时自动检查插件更新</strong>复选框只会影响以后启动 NVDA 时的行为，不会中断已经开始的检查。</p>
-	<p>更新程序还可以识别同一公开版本号下的小型修补版本。这样，维护者无需更改显示的版本号即可发布兼容性或可靠性修复；如果发布元数据表明已有较新的构建，NVDA 仍可提供该更新。</p>
+	<p>依次打开 <strong>NVDA 菜单 &rarr; 选项 &rarr; 设置 &rarr; NVDA 版 Google 文字转语音</strong>，然后按<strong>检查更新……</strong>以检查最新稳定版。如果插件已是最新版本、无法连接互联网或无法识别服务器返回的更新信息，手动检查都会显示一个带“确定”按钮的对话框。</p>
+	<p>有新版本时，NVDA 版 Google 文字转语音会显示<strong>更新信息</strong>对话框，其中包含下载大小、NVDA 版本最低要求、最后测试的 NVDA 版本和更新日志。选择<strong>是</strong>可在 NVDA 中下载 <code>.nvda-addon</code> 安装包。下载期间，<strong>正在下载 NVDA 版 Google 文字转语音更新</strong>对话框会显示<strong>下载状态</strong>、可在大小已知时显示的进度条，以及<strong>取消</strong>按钮。本插件会根据更新清单中的文件大小和 SHA256 校验值验证下载的文件，然后打开 NVDA 的标准插件安装程序。</p>
+	<p>启动时自动检查更新默认关闭。启用后，NVDA 版 Google 文字转语音会在下次启动 NVDA 后检查一次，除非发现新版本，否则不会发出提示。无论自动检查是否开启，您都可以手动检查。如果打开设置类别时后台启动检查仍在进行，手动检查按钮将暂时禁用，直到检查完成。更改<strong>NVDA 启动时自动检查插件更新</strong>复选框只会影响以后启动 NVDA 时的行为，不会中断已经开始的检查。</p>
+	<p>更新程序还可以识别同一公开版本号下的小型修补版本。这样，维护者无需更改显示的版本号即可发布兼容性或可靠性修复；如果发布元数据表明已有较新的内部版本，NVDA 仍可提供该更新。</p>
 
 	<h3>自动语言配置文件</h3>
-	<p>启用<strong>使用自动语言配置文件</strong>后，检测到的句子会使用本插件针对各语言设置的配置文件，而不是 NVDA 的常规语音设置。如果只启用了一个语言配置文件，则每个句子都会使用该配置文件。关闭自动语言配置文件后，常规的 Google TTS 语言和变声设置会重新可用。</p>
-	<p>自动语言配置文件在 32 位（x86）和 64 位（x64）NVDA 中分别使用随附的 CLD2 检测器库。只有当 CLD2 的检测结果足够可靠，并且对应某种已启用的语言时，才会采用该结果。如果文本太短或语言不明确，本插件会尽量使用保守的本地语言特征，仍无法确定时则回退到已启用的首选语言。</p>
+	<p>启用<strong>使用自动语言配置文件</strong>后，检测到的句子会使用本插件针对各语言设置的配置文件，而不是 NVDA 的常规语音设置。如果只启用了一个语言配置文件，则每个句子都会使用该配置文件。关闭自动语言配置文件后，Google 文字转语音的常规语言和变声设置会重新可用。</p>
+	<p>自动语言配置文件在 32 位（x86）和 64 位（x64）NVDA 中分别使用随附的 CLD2 检测器库。只有当 CLD2 的检测结果足够可靠，并且对应某种已启用的语言时，才会采用该结果。如果文本太短或语言不明确，本插件会尽量采用较为保守的本地语言特征进行判断；仍无法确定时，则回退到已启用的首选语言。</p>
 	<ol>
-		<li>依次打开 <strong>NVDA 菜单 &rarr; 选项 &rarr; 设置 &rarr; Google TTS For NVDA</strong>。</li>
+		<li>依次打开 <strong>NVDA 菜单 &rarr; 选项 &rarr; 设置 &rarr; NVDA 版 Google 文字转语音</strong>。</li>
 		<li>启用<strong>使用自动语言配置文件</strong>。</li>
 		<li>移动到<strong>首选配置文件语言</strong>。此列表只显示已启用的语言，因此在启用配置文件前可能为空。</li>
 		<li>选择一个<strong>自动语言配置文件</strong>。</li>
@@ -108,18 +108,18 @@
 	</ol>
 	<p>速度、音调和音量使用与 NVDA 语音设置相似的滑块控件。大写时的音高变化使用数字编辑框或微调框，便于精确调整。</p>
 	<p>NVDA 全局设置中的标点符号级别、自动方言切换、读出语言变化、Unicode 规范化、处理字符和符号时包含 Unicode 联盟提供的数据（包括表情符号）、其他符号发音词典、移动光标后读出字符解释和语音模式选项，仍保留在 NVDA 的语音设置中。</p>
-	<p>Google TTS 会忽略 NVDA 自身针对本语音合成器发出的自动语言切换和自动方言切换命令，因此这些全局选项不会强制 Google TTS 切换语音。需要本插件自动选择语音或配置文件时，请使用 Google TTS 的自动语言配置文件。如果启用了 NVDA 的<strong>读出语言变化</strong>选项，则在自动语言配置文件开启时，所报告的语言名称会跟随 Google TTS 的检测结果。关闭自动语言配置文件后，NVDA 仍可使用应用程序提供的语言切换信息来报告语言并处理字符和符号，包括标点符号发音词典，但 Google TTS 不会根据这些命令切换语音。</p>
+	<p>Google 文字转语音会忽略 NVDA 自身针对本语音合成器发出的自动语言切换和自动方言切换命令，因此这些全局选项不会强制 Google 文字转语音切换语音。需要本插件自动选择语音或配置文件时，请使用 Google 文字转语音的自动语言配置文件。如果启用了 NVDA 的<strong>读出语言变化</strong>选项，则在自动语言配置文件开启时，所报告的语言名称会跟随 Google 文字转语音的检测结果。关闭自动语言配置文件后，NVDA 仍可使用应用程序提供的语言切换信息来报告语言并处理字符和符号，包括标点符号发音词典，但 Google 文字转语音不会根据这些命令切换语音。</p>
 	<p>自动语言配置文件会在 NVDA 处理文本之前设置语言上下文，因此 NVDA 的符号读法和语音字典处理仍会在所选语言上下文的常规语音流程中进行。</p>
-	<p>关闭自动语言配置文件时，NVDA 语音字典会照常用于当前选中的 Google TTS 变声。启用自动语言配置文件时，本插件会在 NVDA 处理相应文本段期间，临时使用各已启用语言配置文件所选变声的语音字典。NVDA 的默认字典和临时字典仍按其常规方式工作。</p>
-	<p>启用自动语言配置文件后，NVDA 的语音设置中不会为此语音合成器提供常规的语音、变声、速度、语速加倍、音调和音量控件，而会显示一条可获得焦点的提示，引导您前往 Google TTS For NVDA 设置类别。<strong>停顿</strong>仍保留在语音设置中，并适用于所有 Google TTS 语音。在此模式下，常规的循环切换合成器设置命令（例如台式机键盘上的 <kbd>NVDA+Ctrl+方向键</kbd>，或笔记本键盘上的 <kbd>NVDA+Shift+Ctrl+方向键</kbd>）会读出这条提示，而不会更改 Google TTS 的语音或语音参数。启用自动语言配置文件时，Google TTS 还会使用每个已启用配置文件中的大写字母和拼读选项；关闭该功能后，语音设置中的常规值会重新可用。Google TTS For NVDA 设置类别中的状态信息也可通过 Tab 键获得焦点，以便屏幕阅读器读出。</p>
+	<p>关闭自动语言配置文件时，NVDA 语音字典会照常应用于当前选中的 Google 文字转语音变声。启用自动语言配置文件时，本插件会在 NVDA 处理相应文本段期间，临时使用各已启用语言配置文件所选变声的语音字典。NVDA 的默认字典和临时字典仍按其常规方式工作。</p>
+	<p>启用自动语言配置文件后，NVDA 的语音设置中不会为此语音合成器提供常规的语音、变声、速度、语速加倍、音调和音量控件，而会显示一条可获得焦点的提示，引导您前往 NVDA 版 Google 文字转语音设置类别。<strong>停顿</strong>仍保留在语音设置中，并适用于 Google 文字转语音的所有朗读内容。在此模式下，常规的循环切换合成器设置命令（例如台式机键盘上的 <kbd>NVDA+Ctrl+方向键</kbd>，或笔记本键盘上的 <kbd>NVDA+Shift+Ctrl+方向键</kbd>）会读出这条提示，而不会更改 Google 文字转语音的语音或语音参数。启用自动语言配置文件时，Google 文字转语音还会使用每个已启用配置文件中的大写字母和拼读选项；关闭该功能后，语音设置中的常规值会重新可用。NVDA 版 Google 文字转语音设置类别中的状态信息也可通过 Tab 键获得焦点，以便屏幕阅读器读出。</p>
 
 	<h2>解决 Edge 运行时无声问题</h2>
-	<p>如果选择 <strong>Microsoft Edge</strong> 作为 Chromium 浏览器运行时，Google TTS For NVDA 还会检查 Microsoft Edge WebView2 运行时是否可用。即使已经安装 Edge，WebView2 仍可能缺失或损坏，此时本插件无法通过 Edge 朗读。Google Chrome 和 Brave 不依赖 WebView2。</p>
+	<p>如果选择 <strong>Microsoft Edge</strong> 作为 Chromium 浏览器运行时，NVDA 版 Google 文字转语音还会检查 Microsoft Edge WebView2 运行时是否可用。即使已经安装 Edge，WebView2 仍可能缺失或损坏，此时本插件无法通过 Edge 朗读。Google Chrome 和 Brave 不依赖 WebView2。</p>
 	<p>WebView2 是 Windows 原生应用程序用来承载网页内容的 Microsoft Edge 运行时。它与 Microsoft Edge 有关，但普通 Edge 浏览器可用并不一定意味着应用程序所需的 WebView2 运行时已经安装且状态正常。Microsoft 建议应用程序使用 Evergreen WebView2 运行时，因为它由多个应用共享并会自动更新；体积较小的 Evergreen Bootstrapper 会下载与设备架构匹配的运行时。</p>
-	<p>需要 WebView2 时，Google TTS For NVDA 会提供以下按钮：下载 Microsoft 的在线 Evergreen Bootstrapper、打开 Microsoft WebView2 页面以获取离线安装程序或固定版本包，或者稍后再处理。在 WebView2 可用之前，NVDA 会继续使用先前的语音合成器。</p>
+	<p>需要 WebView2 时，NVDA 版 Google 文字转语音会提供以下按钮：下载 Microsoft 的在线 Evergreen Bootstrapper、打开 Microsoft WebView2 页面以获取离线安装程序或固定版本包，或者稍后再处理。在 WebView2 可用之前，NVDA 会继续使用先前的语音合成器。</p>
 	<p>如果 Windows 无法打开下载页面，本插件会在带有标签的只读编辑框中显示下载地址，并提供<strong>复制链接</strong>按钮，以便您将地址手动粘贴到浏览器中。</p>
 	<p>如果电脑可以联网，请从以下地址下载 Microsoft Edge WebView2 Evergreen Bootstrapper：<a href="https://go.microsoft.com/fwlink/p/?LinkId=2124703">下载 Microsoft Edge WebView2 运行时</a>。</p>
-	<p>运行安装程序，重启 NVDA，然后重新选择 <strong>Google TTS For NVDA</strong>。如需离线安装程序或固定版本的 WebView2 运行时包，请打开 Microsoft WebView2 页面：<a href="https://developer.microsoft.com/microsoft-edge/webview2">Microsoft Edge WebView2</a>。</p>
+	<p>运行安装程序，重启 NVDA，然后重新选择 <strong>NVDA 版 Google 文字转语音</strong>。如需离线安装程序或固定版本的 WebView2 运行时包，请打开 Microsoft WebView2 页面：<a href="https://developer.microsoft.com/microsoft-edge/webview2">Microsoft Edge WebView2</a>。</p>
 
 	<h2>注意事项</h2>
 	<ul>
@@ -162,8 +162,8 @@
 		</li>
 		<li><strong>提高可靠性：</strong>
 			<ul>
-				<li>如果 Chromium 浏览器运行时或 WASM TTS 引擎在输出音频前发生故障，Google TTS 会丢弃异常的运行时，并使用新运行时重试一次。如果音频已经开始播放，本插件不会重试，以免重复朗读不完整的内容。</li>
-				<li><strong>让 Google TTS 浏览器运行时在后台保持就绪</strong>设置不再保留正忙、连接已断开或状态异常的运行时。</li>
+				<li>如果 Chromium 浏览器运行时或 WASM TTS 引擎在输出音频前发生故障，Google 文字转语音会丢弃异常的运行时，并使用新运行时重试一次。如果音频已经开始播放，本插件不会重试，以免重复朗读不完整的内容。</li>
+				<li><strong>让 Google 文字转语音的浏览器运行时在后台保持就绪</strong>设置不再保留正忙、连接已断开或状态异常的运行时。</li>
 				<li>本插件现在只加载自身随附的组件，从而减少与其他 NVDA 插件中同名组件发生冲突的情况。</li>
 				<li>在受支持的 NVDA 版本中，如果 NVDA 音频输出设备发生变化或进入错误状态，本插件可以更可靠地恢复。</li>
 			</ul>
@@ -178,22 +178,22 @@
 
 	<h3>0.6 版（2026-07-30）</h3>
 	<ul>
-		<li><strong>更快地切换语音合成器：</strong>新增可选设置，使用户从其他语音合成器切换到 Google TTS 时能够更快就绪。此设置默认关闭；开启后，NVDA 运行期间可能会占用更多内存。</li>
-		<li><strong>后台准备：</strong>启用此设置后，如果您更改所选 Chromium 浏览器运行时，或者安装或移除语音包，Google TTS 会重新进行后台准备。</li>
-		<li><strong>提高切换可靠性：</strong>提高从 Google TTS 切换到其他语音合成器时的可靠性，尤其是在朗读或语音准备任务尚未完全停止时。</li>
+		<li><strong>更快地切换语音合成器：</strong>新增可选设置，使用户从其他语音合成器切换到 Google 文字转语音时能够更快就绪。此设置默认关闭；开启后，NVDA 运行期间可能会占用更多内存。</li>
+		<li><strong>后台准备：</strong>启用此设置后，如果您更改所选 Chromium 浏览器运行时，或者安装或移除语音包，Google 文字转语音会重新进行后台准备。</li>
+		<li><strong>提高切换可靠性：</strong>提高从 Google 文字转语音切换到其他语音合成器时的可靠性，尤其是在朗读或语音准备任务尚未完全停止时。</li>
 	</ul>
 
 	<h3>0.5.5 版（2026-07-23）</h3>
 	<ul>
-		<li><strong>自动语言配置文件：</strong>改进 CLD2 与 Google TTS 语言代码别名之间的自动语言配置文件匹配，包括菲律宾语/他加禄语、爪哇语、旧版希伯来语代码、挪威语变体、阿拉伯语，以及简体中文、繁体中文和粤语的映射。</li>
+		<li><strong>自动语言配置文件：</strong>改进 CLD2 与 Google 文字转语音语言代码别名之间的自动语言配置文件匹配，包括菲律宾语/他加禄语、爪哇语、旧版希伯来语代码、挪威语变体、阿拉伯语，以及简体中文、繁体中文和粤语的映射。</li>
 		<li><strong>CLD2 Windows DLL：</strong>改用 MSVC 而非 MinGW-w64 重新构建随附的 CLD2 Windows DLL，使打包后的插件不再触发此前 VirusTotal 检测中的误报。</li>
 	</ul>
 
 	<h3>0.5 版（2026-07-19）</h3>
 	<ul>
-		<li><strong>插件更新：</strong>在 Google TTS For NVDA 设置类别中新增内置更新检查，包括可选的启动时检查、本地化更新信息、在 NVDA 内下载安装包、交由 NVDA 标准插件安装程序处理，以及支持同一公开版本号下的小型修补版本。</li>
-		<li><strong>Chromium 运行时回退：</strong>改进 Chrome、Edge 和 Brave 之间的回退机制。如果所选浏览器运行时无法启动或尚未就绪，Google TTS For NVDA 可以尝试其他受支持的运行时。如果 Edge 缺少 WebView2，而其他受支持的运行时可用，现在可以跳过 Edge。Google TTS For NVDA 还会在浏览器仍在完成启动时等待并重试，从而减少少见的启动无声或浏览器连接失败。</li>
-		<li><strong>NVDA 兼容性：</strong>改进新旧 NVDA 版本中的语音、拼读、语音字典、设置、语音合成器切换、全局插件和语音合成器驱动兼容性。Google TTS 还会阻止 NVDA 或应用程序的语言切换命令改变 Google 语音；关闭自动语言配置文件时，这些命令仍可用于报告语言以及处理字符和符号。</li>
+		<li><strong>插件更新：</strong>在 NVDA 版 Google 文字转语音设置类别中新增内置更新检查，包括可选的启动时检查、本地化更新信息、在 NVDA 内下载安装包、交由 NVDA 标准插件安装程序处理，以及支持同一公开版本号下的小型修补版本。</li>
+		<li><strong>Chromium 运行时回退：</strong>改进 Chrome、Edge 和 Brave 之间的回退机制。如果所选浏览器运行时无法启动或尚未就绪，NVDA 版 Google 文字转语音可以尝试其他受支持的运行时。如果 Edge 缺少 WebView2，而其他受支持的运行时可用，现在可以跳过 Edge。NVDA 版 Google 文字转语音还会在浏览器仍在完成启动时等待并重试，从而减少少见的启动无声或浏览器连接失败。</li>
+		<li><strong>NVDA 兼容性：</strong>改进新旧 NVDA 版本中的语音、拼读、语音字典、设置、语音合成器切换、全局插件和语音合成器驱动兼容性。Google 文字转语音还会阻止 NVDA 或应用程序的语言切换命令改变 Google 语音；关闭自动语言配置文件时，这些命令仍可用于报告语言以及处理字符和符号。</li>
 		<li><strong>简体中文、繁体中文和俄语本地化：</strong>新增简体中文、繁体中文和俄语界面翻译及用户文档。两个中文区域设置还包含本地化的插件元数据。</li>
 		<li><strong>语音可靠性：</strong>修复语音中断后偶尔重复播放不完整内容的问题，恢复 SeaNet 语音的音调控制，并避免切换到其他语音合成器后偶尔出现语音设置错误。新增可选的<strong>停顿</strong>缩短设置；可在 NVDA 语音设置（<kbd>NVDA+Ctrl+V</kbd>）中启用，详情请参阅“配置”一节。</li>
 		<li><strong>状态字段无障碍改进：</strong>使运行时、自动语言配置文件、更新、语音设置提示和手动网址回退等状态字段更容易获得焦点和查看，且不会延迟重复播报。</li>
@@ -201,22 +201,22 @@
 
 	<h3>0.4 版（2026-07-16）</h3>
 	<ul>
-		<li><strong>自动语言配置文件：</strong>新增受 Android 上 <a href="https://play.google.com/store/apps/details?id=com.vnspeak.autotts">Auto TTS</a> 启发的 Google TTS 分语言配置文件。可在 Google TTS For NVDA 设置类别中进行配置；每种已启用的语言都可使用自己的变声、速度、语速加倍、音调、音量、大写字母处理和拼读方式；关闭此功能后，NVDA 的常规语音设置仍可使用。</li>
+		<li><strong>自动语言配置文件：</strong>新增受 Android 上 <a href="https://play.google.com/store/apps/details?id=com.vnspeak.autotts">Auto TTS</a> 启发的 Google 文字转语音分语言配置文件。可在 NVDA 版 Google 文字转语音设置类别中进行配置；每种已启用的语言都可使用自己的变声、速度、语速加倍、音调、音量、大写字母处理和拼读方式；关闭此功能后，NVDA 的常规语音设置仍可使用。</li>
 		<li><strong>NVDA 兼容性：</strong>改进对 NVDA 2024.1 至 2026 的兼容性，包括更安全地切换语音合成器和使用语音处理钩子；其他插件封装 NVDA 的语音合成器选择功能时也能更可靠地工作。</li>
 		<li><strong>多语言长文本朗读：</strong>改进使用非 ASCII 标点或词间空格较少的文字系统中的句子和短语分段，扩大基于 Unicode 的标点处理范围，以支持更多语言。</li>
-		<li><strong>Chromium 运行时支持：</strong>新增 Brave 浏览器运行时支持，改进 Google TTS For NVDA 设置类别中 Chrome、Edge 和 Brave 的回退行为，并明确说明只有使用 Microsoft Edge 时才需要 Microsoft Edge WebView2 运行时。</li>
+		<li><strong>Chromium 运行时支持：</strong>新增 Brave 浏览器运行时支持，改进 NVDA 版 Google 文字转语音设置类别中 Chrome、Edge 和 Brave 的回退行为，并明确说明只有使用 Microsoft Edge 时才需要 Microsoft Edge WebView2 运行时。</li>
 		<li><strong>文档改进：</strong>在 GitHub README 中新增自定义 Chrome、Edge 和 Brave 可执行文件路径的说明，包括无障碍 Windows 图形界面操作步骤；同时扩展插件帮助和 GitHub 文档中的 Edge WebView2 故障排除内容。</li>
-		<li><strong>设置无障碍改进：</strong>新增一个默认未分配的“按键与手势”命令，可直接打开 Google TTS For NVDA 设置；改进状态字段，使屏幕阅读器能够更可靠地读出标签和完整信息；启用自动语言配置文件后，循环切换合成器设置命令会读出相关提示，而不是更改语音参数。这可以让配置文件管理的语音参数与 NVDA 的常规语音设置保持兼容。</li>
-		<li><strong>语音选择和可靠性：</strong>使语音与变声的选择更加清晰，更安全地预热语音，改进语音管理器的语音包处理、语音中断响应和语音包导入安全性，并修正英语（尼日利亚）等区域语言名称。</li>
+		<li><strong>设置无障碍改进：</strong>新增一个默认未分配的“按键与手势”命令，可直接打开 NVDA 版 Google 文字转语音设置；改进状态字段，使屏幕阅读器能够更可靠地读出标签和完整信息；启用自动语言配置文件后，循环切换合成器设置命令会读出相关提示，而不是更改语音参数。这可以让配置文件管理的语音参数与 NVDA 的常规语音设置保持兼容。</li>
+		<li><strong>语音选择和可靠性：</strong>使语音与变声的选择更加清晰，更安全地预热语音包，改进语音管理器的语音包处理、语音中断响应和语音包导入安全性，并修正英语（尼日利亚）等区域语言名称。</li>
 	</ul>
 
 	<h3>0.3 版（2026-07-12）</h3>
 	<ul>
-		<li><strong>选择 Chromium 浏览器运行时：</strong>新增可直接在 NVDA 设置（<kbd>NVDA 菜单 &rarr; 选项 &rarr; 设置 &rarr; Google TTS For NVDA</kbd>）中选择受支持 Chromium 浏览器运行时的选项，包括 Google Chrome 和 Microsoft Edge。</li>
+		<li><strong>选择 Chromium 浏览器运行时：</strong>新增可直接在 NVDA 设置（<kbd>NVDA 菜单 &rarr; 选项 &rarr; 设置 &rarr; NVDA 版 Google 文字转语音</kbd>）中选择受支持 Chromium 浏览器运行时的选项，包括 Google Chrome 和 Microsoft Edge。</li>
 		<li><strong>连接和缓存稳定性：</strong>将浏览器配置文件存储位置移至 <code>AppData\Local</code>，以便 NVDA 重启后保留已编译的 WASM 缓存，并自动隐藏后台浏览器辅助窗口。</li>
-		<li><strong>Google TTS 语音管理器改进：</strong>新增<strong>按语言筛选</strong>下拉框、语音包可用性和依赖状态；更安全地处理可能导致没有可用语音的移除操作；减少进度提示；改进屏幕阅读器的键盘导航和焦点管理；并自动检测和清理孤立的语音包。</li>
+		<li><strong>Google 文字转语音管理器改进：</strong>新增<strong>按语言筛选</strong>下拉框、语音包可用性和依赖状态；更安全地处理可能导致没有可用语音的移除操作；减少进度提示；改进屏幕阅读器的键盘导航和焦点管理；并自动检测和清理孤立的语音包。</li>
 		<li><strong>语音响应和可靠性：</strong>修复 NVDA 启动后或切换语音合成器后的第一次朗读被截断的问题，降低语音合成延迟，并改进语音中断处理。</li>
-		<li><strong>扩展语音目录：</strong>集成 180 个 Google TTS 语音包并统一语言代码，其中 160 个语音包可以直接下载并正常使用，另有 20 个目前尚不兼容 WASM 引擎。</li>
+		<li><strong>扩展语音目录：</strong>集成 180 个用于 Google 文字转语音的语音包，并统一语言代码。其中 160 个语音包可以直接下载并立即使用，另有 20 个目前尚不兼容 WASM 引擎。</li>
 		<li><strong>本地化和越南语翻译：</strong>实现完整的本地化系统，并新增完整的越南语界面和文档翻译。</li>
 	</ul>
 
@@ -231,6 +231,6 @@
 	<ul>
 		<li>首次发布。</li>
 	</ul>
-	<p>最后编辑日期：2026-08-13</p>
+	<p>最后编辑日期：2026-08-11</p>
 </body>
 </html>
