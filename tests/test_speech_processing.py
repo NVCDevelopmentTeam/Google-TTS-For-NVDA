@@ -64,16 +64,40 @@ class PcmSilenceShortenerTests(unittest.TestCase):
                     self._process(self.processing.PAUSE_MODE_SHORTEN_ALL, pcm, chunks=chunks),
                 )
 
-    def test_hidden_segment_boundary_shortens_each_segment_end(self) -> None:
+    def test_incomplete_detection_block_is_flushed_at_finish(self) -> None:
+        shortener = self.processing.create_pcm_silence_shortener(
+            self.processing.PAUSE_MODE_SHORTEN_ALL,
+            1000,
+        )
+        pcm = _pcm(700, 700, 0, 0)
+        self.assertEqual(b"", shortener.feed(pcm))
+        self.assertEqual(pcm, shortener.finish())
+
+    def test_end_only_preserves_hidden_boundary_and_shortens_final_end(self) -> None:
         shortener = self.processing.create_pcm_silence_shortener(
             self.processing.PAUSE_MODE_SHORTEN_END_ONLY,
             1000,
         )
         self.assertIsNotNone(shortener)
-        first = shortener.feed(_pcm(*([700] * 3), *([0] * 90))) + shortener.finish()
+        first = shortener.feed(_pcm(*([700] * 3), *([0] * 90))) + shortener.flush_boundary(
+            shortenPause=False,
+        )
         second = shortener.feed(_pcm(*([900] * 2), *([0] * 80))) + shortener.finish()
-        self.assertEqual((*([700] * 3), *([0] * 35)), _samples(first))
+        self.assertEqual((*([700] * 3), *([0] * 90)), _samples(first))
         self.assertEqual((*([900] * 2), *([0] * 35)), _samples(second))
+
+    def test_shorten_all_shortens_hidden_boundary_and_final_end(self) -> None:
+        shortener = self.processing.create_pcm_silence_shortener(
+            self.processing.PAUSE_MODE_SHORTEN_ALL,
+            1000,
+        )
+        self.assertIsNotNone(shortener)
+        first = shortener.feed(_pcm(*([700] * 3), *([0] * 90))) + shortener.flush_boundary(
+            shortenPause=True,
+        )
+        second = shortener.feed(_pcm(*([900] * 2), *([0] * 80))) + shortener.finish()
+        self.assertEqual((*([700] * 3), *([0] * 25)), _samples(first))
+        self.assertEqual((*([900] * 2), *([0] * 25)), _samples(second))
 
     def test_unknown_pause_mode_is_rejected(self) -> None:
         with self.assertRaises(ValueError):
@@ -155,17 +179,24 @@ class ShortAudioCacheKeyTests(unittest.TestCase):
     def test_cache_key_covers_audio_and_segmentation_inputs(self) -> None:
         self.assertEqual(self.expected_option_fields, self.processing.SHORT_AUDIO_CACHE_OPTION_FIELDS)
         baseline = self.processing.short_audio_cache_key("hello", self.options)
-        changed_mode = self.processing.short_audio_cache_key(
-            "hello",
-            self.options,
-            pauseShorteningMode=self.processing.PAUSE_MODE_SHORTEN_ALL,
-        )
+        pause_mode_keys = {
+            self.processing.short_audio_cache_key(
+                "hello",
+                self.options,
+                pauseShorteningMode=pause_mode,
+            )
+            for pause_mode in (
+                self.processing.PAUSE_MODE_DO_NOT_SHORTEN,
+                self.processing.PAUSE_MODE_SHORTEN_END_ONLY,
+                self.processing.PAUSE_MODE_SHORTEN_ALL,
+            )
+        }
         changed_hidden_segments = self.processing.short_audio_cache_key("hello", self.options, ["hel", "lo"])
         changed_pitch_options = dict(self.options, postPitch=1.1)
         changed_pitch = self.processing.short_audio_cache_key("hello", changed_pitch_options)
 
         self.assertIsNotNone(baseline)
-        self.assertNotEqual(baseline, changed_mode)
+        self.assertEqual(3, len(pause_mode_keys))
         self.assertNotEqual(baseline, changed_hidden_segments)
         self.assertNotEqual(baseline, changed_pitch)
         for option_name in self.options:

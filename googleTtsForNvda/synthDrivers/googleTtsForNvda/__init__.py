@@ -1095,7 +1095,11 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 
 		def on_segment_end() -> None:
 			if silenceShortener is not None and not cancelEvent.is_set():
-				feed_processed_audio(silenceShortener.finish())
+				feed_processed_audio(
+					silenceShortener.flush_boundary(
+						shortenPause=pauseShorteningMode == _PAUSE_MODE_SHORTEN_ALL,
+					)
+				)
 			if collectSegmentAudio:
 				completedSegmentAudio.append(b"".join(segmentAudioParts))
 				segmentAudioParts.clear()

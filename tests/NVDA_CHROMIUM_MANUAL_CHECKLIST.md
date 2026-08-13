@@ -31,9 +31,10 @@ language profiles are enabled, and relevant NVDA log/audio captures.
 - [ ] Listen to representative base and SeaNet packages, including Multi, AFH, FIS, MultiSeaNet, AFHSeaNet, and FISSeaNet where installed.
 - [ ] At volume 100, compare perceived level with eSpeak/IBM and listen for clipping, pumping, sudden level changes, harshness, or lost beginnings/endings.
 - [ ] Distinguish known distortion produced by the original WASM voice from distortion introduced by add-on PCM processing.
-- [ ] Verify **Do not shorten**, **Shorten at end of text only**, and **Shorten all pauses** on short and long utterances.
+- [ ] Compare the same short and hidden-multi-segment utterances in all three pause modes: **Do not shorten** preserves internal and final engine pauses; **Shorten at end of text only** preserves internal pauses but shortens the final pause; **Shorten all pauses** shortens both internal and final pauses.
 - [ ] Exercise PCM arriving in many small packets and verify no clicks or sample loss at packet boundaries.
 - [ ] Exercise hidden browser segments and verify continuity, boundary pauses, cancellation, and completion events.
+- [ ] Read a medium or long sentence whose first hidden segment ends with a spoken word immediately before punctuation; verify the boundary word is complete on both the first synthesis and a RAM-cache replay.
 - [ ] Speak representative corpus cases: localized punctuation/quotes, abbreviations, URLs, emoji, CJK/Thai without spaces, and very long sentences.
 - [ ] Change voice, rate, pitch, volume, pause mode, post-processing pitch, and hidden segments; verify cached audio from the previous configuration is not reused.
 

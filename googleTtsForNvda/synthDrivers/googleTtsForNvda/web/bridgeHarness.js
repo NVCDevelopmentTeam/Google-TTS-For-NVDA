@@ -27,8 +27,6 @@
 	const tempoSearchSamples = 120;
 	const tempoSearchStep = 6;
 	const boundaryHoldSamples = 3600;
-	const boundaryMaxLeadingTrimSamples = 3600;
-	const boundarySilenceThreshold = 0.003;
 	let emittedAudioPackets = 0;
 	let pendingAudioBuffers = [];
 	let pendingAudioSampleCount = 0;
@@ -40,8 +38,6 @@
 	let tempoStarted = false;
 	let heldBoundarySamples = new Float32Array(0);
 	let smoothSegmentBoundaries = false;
-	let trimLeadingBoundarySilence = false;
-	let leadingBoundaryTrimBudget = 0;
 	let sawSynthesisEnd = false;
 	let synthesisEndAt = 0;
 	let synthesisErrorMessage = "";
@@ -274,8 +270,6 @@
 		resetPitchProcessor();
 		resetTempoProcessor();
 		heldBoundarySamples = new Float32Array(0);
-		trimLeadingBoundarySilence = false;
-		leadingBoundaryTrimBudget = 0;
 	}
 
 	function resetPitchProcessor() {
@@ -470,31 +464,6 @@
 		return joined;
 	}
 
-	function trimLeadingSilence(samples) {
-		if (!trimLeadingBoundarySilence || !samples.length) {
-			return samples;
-		}
-		const limit = Math.min(samples.length, leadingBoundaryTrimBudget);
-		let index = 0;
-		while (index < limit && Math.abs(samples[index]) < boundarySilenceThreshold) {
-			index++;
-		}
-		leadingBoundaryTrimBudget -= index;
-		if (index < samples.length || leadingBoundaryTrimBudget <= 0) {
-			trimLeadingBoundarySilence = false;
-			leadingBoundaryTrimBudget = 0;
-		}
-		return samples.subarray(index);
-	}
-
-	function trimTrailingSilence(samples) {
-		let index = samples.length - 1;
-		while (index >= 0 && Math.abs(samples[index]) < boundarySilenceThreshold) {
-			index--;
-		}
-		return index < 0 ? new Float32Array(0) : samples.subarray(0, index + 1);
-	}
-
 	function audioPacketSampleTarget() {
 		if (emittedAudioPackets === 0) {
 			return firstAudioPacketSamples;
@@ -589,11 +558,7 @@
 			queueAudioPacket(samples, sessionToken);
 			return;
 		}
-		const trimmedSamples = trimLeadingSilence(samples);
-		if (!trimmedSamples.length) {
-			return;
-		}
-		const joinedSamples = appendSamples(heldBoundarySamples, trimmedSamples);
+		const joinedSamples = appendSamples(heldBoundarySamples, samples);
 		if (joinedSamples.length <= boundaryHoldSamples) {
 			heldBoundarySamples = joinedSamples;
 			return;
@@ -626,16 +591,9 @@
 		}
 		let samples = heldBoundarySamples;
 		heldBoundarySamples = new Float32Array(0);
-		if (hasNextSegment) {
-			samples = trimTrailingSilence(samples);
-		}
 		queueAudioPacket(samples, sessionToken);
 		if (hasNextSegment) {
 			flushAudioQueue(sessionToken);
-		}
-		if (hasNextSegment) {
-			trimLeadingBoundarySilence = true;
-			leadingBoundaryTrimBudget = boundaryMaxLeadingTrimSamples;
 		}
 	}
 
@@ -656,7 +614,10 @@
 						return;
 					}
 					if (message.command === "clearBuffers") {
-						resetAudioQueue();
+						// The engine sends clearBuffers from its normal end path as well as from
+						// cancellation. Session cancellation already resets the bridge queue in
+						// stopActiveSynthesis(); clearing it here would discard the boundary hold
+						// and DSP tail before finishSegmentAudio() can emit the final word.
 						if (this._emptyTimer) {
 							clearTimeout(this._emptyTimer);
 							this._emptyTimer = null;
@@ -912,8 +873,6 @@
 			currentPostPitchFactor = postPitchFactorFromPayload(payload);
 			currentTempoRate = tempoRateFromPayload(payload);
 			smoothSegmentBoundaries = hasBoundaryContext;
-			trimLeadingBoundarySilence = hasPreviousSegment;
-			leadingBoundaryTrimBudget = hasPreviousSegment ? boundaryMaxLeadingTrimSamples : 0;
 			emit({ type: "started" }, sessionToken);
 			for (let segmentIndex = 0; segmentIndex < textSegments.length; segmentIndex++) {
 				if (stopped || !isCurrentSession(sessionToken)) {
@@ -946,11 +905,10 @@
 				const hasNextSegment = segmentIndex < textSegments.length - 1;
 				
 				if (hasNextSegment) {
-					// Wait for WASM engine to finish generating, but do not wait for the DSP
-					// or audio queue to drain. This eliminates the 80ms gap.
+					// The normal engine end path has already settled its worklet buffers. Avoid
+					// adding another queue-idle delay before starting the next hidden segment.
 					await waitForWasmEnd(120000);
 				} else {
-					// Wait for all audio to drain on the final segment.
 					await waitForSynthesisComplete(120000);
 				}
 				
