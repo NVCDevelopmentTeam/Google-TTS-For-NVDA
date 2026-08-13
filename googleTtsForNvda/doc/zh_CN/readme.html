@@ -1,537 +1,236 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-	<title></title>
-	<meta name="generator" content="LibreOffice 26.2.4.2 (Linux)"/>
-	<meta name="created" content="00:00:00"/>
-	<meta name="changed" content="00:00:00"/>
-	<style type="text/css">
-		@page { size: 8.27in 11.69in; margin: 0.79in }
-		p { margin-bottom: 0.1in; line-height: 115%; background: transparent }
-		h1 { margin-bottom: 0.08in; background: transparent; page-break-after: avoid }
-		h1.western { font-weight: bold; font-size: 18pt; font-family: "Liberation Sans", sans-serif }
-		h1.cjk { font-weight: bold; font-size: 18pt; font-family: "AR PL SungtiL GB" }
-		h1.ctl { font-weight: bold; font-family: "Noto Sans Devanagari"; font-size: 18pt }
-		h2 { margin-top: 0.14in; margin-bottom: 0.08in; background: transparent; page-break-after: avoid }
-		h2.western { font-weight: bold; font-size: 16pt; font-family: "Liberation Sans", sans-serif }
-		h2.cjk { font-weight: bold; font-size: 16pt; font-family: "AR PL SungtiL GB" }
-		h2.ctl { font-weight: bold; font-family: "Noto Sans Devanagari"; font-size: 16pt }
-		h3 { margin-top: 0.1in; margin-bottom: 0.08in; background: transparent; page-break-after: avoid }
-		h3.western { font-weight: bold; font-size: 14pt; font-family: "Liberation Sans", sans-serif }
-		h3.cjk { font-weight: bold; font-size: 14pt; font-family: "AR PL SungtiL GB" }
-		h3.ctl { font-weight: bold; font-family: "Noto Sans Devanagari"; font-size: 14pt }
-		a:link { color: #000080; text-decoration: underline }
-	</style>
+	<meta charset="UTF-8">
+	<title>Google TTS For NVDA</title>
 </head>
-<body lang="en-US" link="#000080" vlink="#800000" dir="ltr"><h1 class="western">
-Google TTS <font face="AR PL SungtiL GB"><span lang="zh-CN">适用于
-</span></font>NVDA</h1>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">作者：
-</span></font></font>Nguyen Anh Duc<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">、</span></font></font>Dao
-Duc Trung <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">和
-</span></font></font>Pham Hung Vuong</p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">长期以来，屏幕阅读器用户一直希望能够使用他们熟悉的语言。&nbsp;</span></font></font>Windows
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">版
-</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">上的
-</span></font></font>Google <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">文本转语音技术的声音&nbsp;与安卓屏幕阅读器的体验类似。</span></font></font></p>
-<p><b>Google TTS For NVDA</b> <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的创建正是为了满足这一需求。它利用了&nbsp;</span></font></font>Google
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">通过
-</span></font></font>WebAssembly (WASM) <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">实现的文本转语音技术正在运行&nbsp;在受支持的后台
-</span></font></font>Chromium <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器运行时环境中，例如
-</span></font></font>Google <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器。&nbsp;无论使用
-</span></font></font>Chrome<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">、</span></font></font>Microsoft
-Edge <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">还是
-</span></font></font>Brave <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器，这款插件都能带来熟悉而自然的体验。&nbsp;使用
-</span></font></font>Google Voices <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">来增强您的日常电脑使用体验。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">下载完所需的语音包后，该插件即可运行。&nbsp;完全离线运行于您的电脑上，无需任何操作即可提供响应式语音功能&nbsp;需要持续的网络连接。</span></font></font></p>
-<h2 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">主要特点</span></font></h2>
-<ul>
-	<li><p>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">完全离线操作：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音在本地处理。&nbsp;已下载所需的语音包。</span></font></font></p></li>
-	<li><p>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">多种语言和语音：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">提供多种
-	</span></font></font>Google TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音&nbsp;支持语言的软件包。</span></font></font></p></li>
-	<li><p>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">响应速度快，延迟低：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">采用文本分割和音频技术&nbsp;缓冲以提高</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">响应速度。</span></font></font></p></li>
-	<li><p>**Google TTS<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音管理器：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览、下载、移除和检查&nbsp;来自无障碍对话的语音包。</span></font></font></p></li>
-	<li><p><b>Chromium</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器运行时选择：
-	选择谷歌</span></font></font>Chrome<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器&nbsp;支持的后台浏览器为
-	</span></font></font>Microsoft Edge <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">或
-	</span></font></font>Brave&nbsp;<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">运行时。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">自动语言配置文件：
-	可选择使用按语言设置&nbsp;不同的语言可以拥有各自的声音和语言配置文件，从而实现不同的语言表达方式。&nbsp;价值观。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">内置插件更新：
-	请从 </span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">检查插件更新。&nbsp;设置，可选择每次启动时自动检查一次。</span></font></font></p></li>
-</ul>
-<h2 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">系统要求</span></font></h2>
-<ul>
-	<li><p>**NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">版本
-	</span></font></font>2024.1 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">或更高版本。该插件支持
-	</span></font></font>NVDA 2024<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">。&nbsp;截至
-	</span></font></font>2026 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">年，</span></font></font>32
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">位
-	</span></font></font>(x86) <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">和
-	</span></font></font>64 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">位
-	</span></font></font>(x64) NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">版本均支持此功能。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">基于
-	</span></font></font><b>Chromium </b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">内核的浏览器：
-	</span></font></font>Google Chrome<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">、</span></font></font>Microsoft
-	Edge <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">或
-	</span></font></font>Brave&nbsp;<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">已安装在您的计算机上。如果您使用
-	</span></font></font>Microsoft Edge <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">作为浏览器&nbsp;同时，</span></font></font>Microsoft
-	Edge WebView2 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">运行时也必须可用。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">交互式
-	</span></font></font><b>Windows </b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">用户会话：
-	请勿依赖此插件&nbsp;</span></font></font>Chromium
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器运行时无法启动的情况，例如
-	</span></font></font>Windows&nbsp;<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">登录屏幕、安全桌面环境、</span></font></font>Windows
-	PE<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">、恢复&nbsp;环境或其他最小
-	</span></font></font>Windows <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">会话。</span></font></font></p></li>
-</ul>
-<h2 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">快速入门指南</span></font></h2>
-<ol>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">按下按钮打开
-	</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的“选择合成器”对话框&nbsp;</span></font></font>[NVDA+Ctrl+S]{.kbd}
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">并选择
-	</span></font></font><b>Google TTS For NVDA</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">如果未安装任何语音软件包，</span></font></font>NVDA
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">将显示一条消息&nbsp;表示未安装
-	</span></font></font>Google TTS For NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音。按&nbsp;好的，打开
-	</span></font></font>Google TTS
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音管理器并下载语音&nbsp;软件包。按取消按钮可继续使用您当前的合成器。&nbsp;现在。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">在
-	</span></font></font>Google TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音管理器中，下载至少一个语音包&nbsp;从下载选项卡中。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">下载完成后，打开语音设置（</span></font></font>[NVDA+Ctrl+V]{.kbd}<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">）&nbsp;请选择您偏好的语言和版本。</span></font></font></p></li>
-</ol>
-<h2 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">管理声音</span></font></h2>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">您可以随时打开
-</span></font></font>Google TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音管理器来添加或删除语音。&nbsp;包裹：</span></font></font></p>
-<ul>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">按下快捷键
-	</span></font></font>[NVDA+Ctrl+Shift+G]{.kbd}<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">，或</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">前往</span></font></font><b>NVDA
-	</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">菜单
-	→ 工具 → </span></font></font><b>Google TTS </b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音管理器</span></font></font><b>...</b></p></li>
-</ul>
-<p>Google TTS<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音管理器有两个标签页：</span></font></font></p>
-<ul>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">已安装：
-	显示已存储在您设备上的语音包&nbsp;计算机。“状态”列会告诉您每个包裹是否已送达。&nbsp;可用，但捆绑引擎不支持，缺少必需组件&nbsp;软件包，是另一个已安装软件包所必需的，或者依赖于&nbsp;又一个包裹。</span></font></font></p></li>
-	<li><p>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">下载：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">显示可下载的软件包。状态：&nbsp;此列说明软件包是否可供下载，需要&nbsp;另一个软件包，其所需的软件包已经安装，或者&nbsp;其他可下载软件包需要用到它。</span></font></font></p></li>
-</ul>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">在每个标签页上，控件按以下顺序显示：按语言筛选&nbsp;检查所有语音套餐，查看套餐列表，然后移除&nbsp;已勾选的语音包或下载已勾选的语音包</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">。&nbsp;对话框还包含“状态”栏和“刷新”、“打开”按钮。&nbsp;语音包文件夹</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">，以及关闭。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">要添加语音，请使用下载选项卡，勾选您需要的音轨包。&nbsp;然后点击“下载已勾选的语音包”。要移除语音，请使用以下命令。&nbsp;在“已安装”选项卡中，选中您不再需要的软件包，然后按&nbsp;移除已勾选的语音套餐。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">某些语音套餐依赖于其他套餐。当您下载一个&nbsp;依赖软件包，语音管理器也可以下载所需的软件包。&nbsp;当您删除其他已安装软件包所依赖的软件包时，语音功能可能会受到影响。&nbsp;管理器会包含这些依赖包，这样您就不会留下无法使用的软件包。&nbsp;幕后声音。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音管理器可防止您意外删除最后一个可用的语音。&nbsp;语音包。如果当前使用的语音合成器不是
-</span></font></font>Google TTS For NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">，&nbsp;警告默认设置为否。如果当前使用的是
-</span></font></font>Google TTS For
-NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">。&nbsp;语音管理器提示您切换到另一个合成器。&nbsp;首先，如果您不切换，则保留最后安装的可用软件包。&nbsp;离开。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">您可以使用任一选项卡上的“按语言筛选”下拉框。&nbsp;仅显示您所需语言（例如，英语）的语音包。&nbsp;（或越南语）以更快地找到语音。此外，您还可以点击&nbsp;如果您想查看语音包的位置，请打开语音包文件夹。&nbsp;存储在您的计算机上。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音下载和删除操作均在后台进行，因此您可以&nbsp;请继续使用</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">，不会中断。进度公告如下：&nbsp;坚持设定宽泛的里程碑和最终结果，这样他们就不会重复每个步骤。&nbsp;微小的变化。</span></font></font></p>
-<h2 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">配置</span></font></h2>
-<h3 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">语音设置</span></font></h3>
-<p>NVDA
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的语音设置对话框（</span></font></font>[NVDA+Ctrl+V]{.kbd}<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">）提供暂停功能。&nbsp;谷歌</span></font></font>TTS<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">和</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">是否启用了自动语言配置文件？&nbsp;关闭。当自动语言配置文件关闭时，对话框还会显示：</span></font></font></p>
-<ul>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音：
-	选择已安装的 </span></font></font>Google TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语言。</span></font></font></p></li>
-	<li><p>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">变体：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">选择该语言中的语音名称，包括&nbsp;安装
-	</span></font></font>Chrome OS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">和
-	</span></font></font>Google Natural <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音后即可使用。</span></font></font></p></li>
-	<li><p>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">速率：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">调整阅读速度。</span></font></font></p></li>
-	<li><p>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语速提升：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">启用后，语速可提高一倍，适用于高速通话。&nbsp;阅读。</span></font></font></p></li>
-	<li><p>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">音调：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">调整声音的音调。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">音量：调整语音音量。</span></font></font></p></li>
-</ul>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">停顿：
-选择停顿是否保持不变，或仅在以下情况下缩短：&nbsp;文本末尾，或者在语音中为了加快阅读速度而缩短。&nbsp;此设置适用于所有
-</span></font></font>Google TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音。</span></font></font></p>
-<h3 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">附加设置</span></font></h3>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">在</span></font></font><b>NVDA</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">菜单→首选项→设置→</span></font></font><b>Google
-TTS For NVDA</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">下，您&nbsp;可配置：</span></font></font></p>
-<ul>
-	<li><p><b>Chromium </b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器运行时：
-	选择 </span></font></font>Google Chrome<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">、</span></font></font>Microsoft
-	Edge<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">、&nbsp;或者使用
-	</span></font></font>Brave <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">作为插件的后台
-	</span></font></font>Chromium <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器运行时。&nbsp;设置面板显示浏览器可用性。</span></font></font></p></li>
-	<li><p><b>Chromium</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器运行时状态：
-	查看所选运行时，&nbsp;浏览器可用性，以及当浏览器不可用时的活动备用运行时环境&nbsp;用过的。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">保持
-	</span></font></font><b>Google TTS </b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器运行时在后台运行：
-	开启&nbsp;让 </span></font></font>Google TTS
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">准备浏览器运行时和当前语音&nbsp;当另一个合成器处于活动状态时，软件包会切换回&nbsp;</span></font></font>Google
-	TTS
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">速度更快。此设置默认关闭。&nbsp;打开电源并按确定或应用，这可能会占用更多内存并保留&nbsp;运行时文件会一直保持打开状态，直到您将其关闭或退出
-	</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">后台浏览器运行时状态：
-	检查此设置是否有效&nbsp;已关闭，没有必要，因为
-	</span></font></font>Google TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">已经是当前版本。&nbsp;合成器，或者在按下
-	</span></font></font>OK <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">或
-	</span></font></font>Apply <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">后等待启动。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">使用自动语言配置文件：
-	启用自动配置文件&nbsp;选择并打开如下所述的配置文件控件。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">首选配置文件语言：
-	选择已启用的配置文件语言&nbsp;用于句子表达不清晰时。此列表可以一直为空，直到……&nbsp;至少启用了一种语言配置文件。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">自动语言配置文件：
-	选择已安装的语言&nbsp;待编辑的个人资料。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">使用此语言配置文件：
-	启用所选语言配置文件。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">变体、费率、费率提升、音调、音量、资本音调变化&nbsp;百分比，大写字母前请读小写，大写字母有提示音，请正确拼写&nbsp;如果支持此功能：
-	配置语音值&nbsp;已选择启用配置文件。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">自动语言配置文件状态：
-	检查配置文件是否已启用&nbsp;关闭、不可用、缺少选定的配置文件或已激活。</span></font></font></p></li>
-	<li><p>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">更新：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">包含以下附加更新控件。</span></font></font></p></li>
-	<li><p><b>NVDA</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">启动时自动检查插件更新：&nbsp;</span></font></font>Google
-	TTS For NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">会在下次
-	</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">启动后检查一次。这是&nbsp;默认关闭。</span></font></font></p></li>
-	<li><p>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">插件更新状态：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">请查看已安装的插件版本，&nbsp;是否启用自动启动检查，以及是否进行检查&nbsp;正在运行。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">检查更新</span></font></font><b>...</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">：手动检查是否有最新的稳定版本&nbsp;附加组件发布。</span></font></font></p></li>
-</ul>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">也可以使用以下方式打开
-</span></font></font>Google TTS For NVDA
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">设置类别：&nbsp;自定义输入手势。默认情况下未分配快捷键；请分配一个。&nbsp;在</span></font></font><b>NVDA</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">菜单→首选项→输入手势下的</span></font></font><b>Google
-TTS</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">中&nbsp;适用于
-</span></font></font>NVDA** <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">类别。</span></font></font></p>
-<h3 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">附加更新</span></font></h3>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">打开</span></font></font><b>NVDA</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">菜单→首选项→设置→</span></font></font><b>Google
-TTS For
-NVDA</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">，&nbsp;按</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">检查更新</span></font></font>...**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">以查看最新的稳定版本。&nbsp;手动检查显示，当插件已是最新版本时，会弹出“确定”对话框。&nbsp;当无法连接到互联网，或更新时&nbsp;无法理解回复。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">当有新版本可用时，</span></font></font>Google
-TTS For NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">会显示“更新”提示。&nbsp;信息对话框，显示下载大小、最低
-</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">版本、最后版本等信息。&nbsp;已测试
-</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">版本，以及变更日志。选择是下载。&nbsp;</span></font></font><font face="Liberation Mono, monospace">.nvda-addon</font>
-NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">内部软件包。下载过程中，正在下载&nbsp;</span></font></font>Google
-TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">为
-</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">更新</span></font></font>**
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">对话框显示下载状态，&nbsp;当尺寸已知时，会显示进度条，以及“取消”按钮。该插件会进行验证。&nbsp;将下载的文件与更新清单的大小和
-</span></font></font>SHA256 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">值进行比较&nbsp;检查校验和，然后打开
-</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的普通插件安装程序。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">自动启动检查默认是关闭的。如果您开启此功能，</span></font></font>Google
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">将会启动自动检查。&nbsp;</span></font></font>TTS
-For NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">会在下次
-</span></font></font>NVDA
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">启动后检查一次，之后保持静默状态。&nbsp;除非有更新的版本可用。手动检查仍然可用。&nbsp;无论自动检查是否开启。如果后台启动检查是&nbsp;当设置类别打开时，手动检查已在运行。&nbsp;按钮在检查完成前处于禁用状态。更改&nbsp;</span></font></font><b>NVDA
-</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">启动时自动检查插件更新
-复选框&nbsp;这会影响未来的 </span></font></font>NVDA
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">启动，但不会中断正在进行的检查。&nbsp;已经在运行。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">更新程序还可以识别同一版本内的小型热修复版本。&nbsp;公开版本。这允许维护者发布兼容性或&nbsp;在不更改显示的版本号的情况下修复可靠性问题，&nbsp;即使发布元数据显示为“一个”，</span></font></font>NVDA
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">仍然可以提供较新的版本。&nbsp;有货。</span></font></font></p>
-<h3 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">自动语言配置文件</span></font></h3>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">启用“使用自动语言配置文件”后，检测到的句子&nbsp;使用该插件的每种语言的配置文件，而不是普通的</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">配置文件。&nbsp;语音设置。如果只启用一个语言配置文件，则该配置文件&nbsp;每个句子都使用。您常用的
-</span></font></font>Google TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语言和变体&nbsp;当自动语言配置文件可用时，设置仍然可用。&nbsp;已关闭。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">自动语言配置文件使用捆绑的
-</span></font></font>CLD2 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">检测器库来实现这两个功能。&nbsp;</span></font></font>32
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">位
-</span></font></font>(x86) <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">和
-</span></font></font>64 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">位
-</span></font></font>(x64) NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">版本。</span></font></font>CLD2
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">测试结果已被接受。&nbsp;仅当它们对已启用的语言之一足够可靠时才有效。如果&nbsp;文本过短或不够清晰，该插件使用保守的本地化&nbsp;语言信号可用时优先使用，否则回退到首选语言。&nbsp;已启用语言。</span></font></font></p>
-<ol>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">打开</span></font></font><b>NVDA</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">菜单→首选项→设置→</span></font></font><b>Google
-	TTS For NVDA</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">启用使用自动语言配置文件。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">切换到首选配置文件语言。仅限已启用语言&nbsp;会出现在此列表中，因此在您启用个人资料之前，此列表可能为空。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">选择自动语言配置文件。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">为每种语言选中“使用此语言配置文件”复选框&nbsp;您希望使用自动语言配置文件。语言配置文件是&nbsp;选中此复选框后才会关闭。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">对于每种已启用的语言，设置变体、速率、速率&nbsp;提升</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">、推杆、音量、资本推杆变化百分比&nbsp;</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">大写字母前请说“</span></font></font>cap”<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">，</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">大写字母会发出哔声，使用&nbsp;如果支持拼写功能。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">返回“首选配置文件语言”并选择已启用的语言。&nbsp;用于表达不清晰意思的语言。</span></font></font></p></li>
-</ol>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语速、音调和音量使用类似
-</span></font></font>NVDA
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音控制的滑块控件。&nbsp;设置。大写字母音调使用数字编辑</span></font></font>/<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">旋转控制，因此您&nbsp;可以进行精确调节。</span></font></font></p>
-<p>NVDA
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">全局设置，例如标点符号和符号级别，自动&nbsp;方言切换、语言变更报告、</span></font></font>Unicode<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">规范化&nbsp;</span></font></font>Unicode<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">联盟数据，包括表情符号、额外符号词典&nbsp;延迟的角色描述和语音模式选择仍然存在&nbsp;</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的语音设置。</span></font></font></p>
-<p>Google TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">会忽略
-</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">自身的自动语言和方言切换功能。&nbsp;此合成器的命令，因此这些全局选项不会强制执行。&nbsp;使用
-</span></font></font>Google TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">改变声音。使用
-</span></font></font>Google TTS
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">自动语言配置文件&nbsp;当您希望此插件自动选择语音</span></font></font>/<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">配置文件时。&nbsp;</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的“阅读时报告语言更改”选项已启用。&nbsp;报告的语言名称遵循
-</span></font></font>Google TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">自动语言配置文件&nbsp;启用配置文件时可以进行检测。禁用配置文件后，</span></font></font>NVDA
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">仍然可以进行检测。&nbsp;使用应用程序提供的语言更改进行语言报告和&nbsp;字符</span></font></font>/<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">符号处理，包括标点符号和符号&nbsp;词典，但
-</span></font></font>Google TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">不会根据这些命令改变语音。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">自动语言配置文件在
-</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">之前设置语言上下文&nbsp;处理文本，因此
-</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的符号发音和语音词典&nbsp;处理过程保持在所选语言的正常语流中&nbsp;语境。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">当自动语言配置文件关闭时，</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音词典可以正常工作。&nbsp;通常情况下，适用于当前选定的
-</span></font></font>Google TTS
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">版本。自动&nbsp;语言配置文件已启用，该插件暂时使用语音&nbsp;为每个已启用语言配置文件的选定变体创建词典&nbsp;</span></font></font>NVDA
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">处理该段。</span></font></font>NVDA
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的默认字典和临时字典&nbsp;仍然遵循英伟达的正常行为。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">启用自动语言配置文件后，</span></font></font>NVDA
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的语音设置&nbsp;对话将不提供普通语音、变体、速率、速率提升等选项。&nbsp;这款合成器的音高和音量控制。它会显示一个&nbsp;可聚焦的通知，引导您进入
-</span></font></font>Google TTS For NVDA
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">设置&nbsp;改为使用类别。暂停功能仍然可在语音设置中使用，并且&nbsp;适用于所有
-</span></font></font>Google TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音。常规合成器设置环&nbsp;例如，桌面键盘上的
-</span></font></font>[NVDA+Ctrl+<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">方向键</span></font></font>]{.kbd}
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">命令&nbsp;在笔记本电脑键盘上，按下
-</span></font></font>[NVDA+Shift+Ctrl+<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">方向键</span></font></font>]{.kbd}<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">，即可宣布此消息&nbsp;请注意，不要更改此
-</span></font></font>Google TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音或语音值。&nbsp;模式。</span></font></font>Google
-TTS
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">还使用每个已启用配置文件的首字母大写和首字母大写。&nbsp;启用自动语言配置文件时的拼写选项；正常&nbsp;自动语言设置值在自动语言模式下仍然可用&nbsp;配置文件已关闭。</span></font></font>Google
-TTS For NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">中的状态消息&nbsp;设置类别也可以通过
-</span></font></font>Tab <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">键访问，因此屏幕阅读器可以&nbsp;宣布他们。</span></font></font></p>
-<h2 class="western">Edge <font face="AR PL SungtiL GB"><span lang="zh-CN">运行时静默故障排除</span></font></h2>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">如果您选择
-</span></font></font><b>Microsoft Edge</b> <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">作为
-</span></font></font>Chromium <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器运行时，</span></font></font>Google&nbsp;NVDA
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的
-</span></font></font>TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">还会检查
-</span></font></font>Microsoft Edge WebView2 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">运行时是否已启用。&nbsp;可用。即使
-</span></font></font>WebView2 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">缺失或损坏，</span></font></font>Edge
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">也可以安装。&nbsp;在这种情况下，该插件无法使用
-</span></font></font>Edge <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器进行语音朗读。谷歌浏览器&nbsp;</span></font></font>Brave<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器不依赖于</span></font></font>WebView2<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">。</span></font></font></p>
-<p>WebView2 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">是原生
-</span></font></font>Windows <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">使用的
-</span></font></font>Microsoft Edge <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">运行时环境。&nbsp;用于托管网页内容的应用程序。它与
-</span></font></font>Microsoft Edge
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">有关，但是&nbsp;拥有普通的</span></font></font>Edge<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器并不总是意味着&nbsp;</span></font></font>WebView2
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">运行时已安装并适用于应用程序场景。&nbsp;建议应用程序使用
-</span></font></font>Evergreen WebView2
-Runtime<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">，因为它&nbsp;共享、自动更新，以及小型常青引导程序&nbsp;下载与设备架构匹配的运行时环境。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">当需要使用
-</span></font></font>WebView2 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">时，</span></font></font>Google
-TTS For NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">会提供下载按钮。&nbsp;微软的在线
-</span></font></font>Evergreen Bootstrapper<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">，打开微软的
-</span></font></font>WebView2&nbsp;<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">此页面提供离线安装程序或固定版本软件包，或者离开。&nbsp;稍后更改。</span></font></font>NVDA
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">将继续使用之前的合成器，直到&nbsp;</span></font></font>WebView2
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">可用。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">如果
-</span></font></font>Windows
-<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">无法打开下载页面，该插件会显示下载链接。&nbsp;地址位于一个带标签的只读字段中，并包含一个“复制链接”按钮。&nbsp;所以你可以手动将地址粘贴到浏览器中。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">对于联网电脑，请下载
-</span></font></font>Microsoft Edge WebView2 Evergreen<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">。&nbsp;引导程序在此：</span></font></font>[<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">下载
-</span></font></font>Microsoft Edge
-WebView2]&nbsp;<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">运行时</span></font></font>](<a href="https://go.microsoft.com/fwlink/p/?LinkId=2124703">https://go.microsoft.com/fwlink/p/?LinkId=2124703</a>)<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">。</span></font></font></p>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">运行安装程序，重启
-</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">，然后选择适用于
-</span></font></font><b>NVDA </b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的
-</span></font></font><b>Google TTS</b>&nbsp;<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">再次强调。适用于离线安装程序或固定版本的
-</span></font></font>WebView2 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">运行时。&nbsp;软件包，打开
-</span></font></font>Microsoft <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的
-</span></font></font>WebView2 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">页面：</span></font></font>[Microsoft
-Edge]&nbsp;WebView2](<a href="https://developer.microsoft.com/microsoft-edge/webview2">https://developer.microsoft.com/microsoft-edge/webview2</a>)<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">。</span></font></font></p>
-<h2 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">笔记</span></font></h2>
-<ul>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">您无需保留
-	</span></font></font>Google Chrome<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">、</span></font></font>Microsoft
-	Edge <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">或
-	</span></font></font>Brave <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器。&nbsp;使用
-	</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">时浏览器窗口会自动打开。该插件会自动启动。&nbsp;在后台连接和处理语音。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">英伟达
-	</span></font></font>(NVDA) <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">启动后首次发声时，声音可能会短暂中断。&nbsp;初始化。</span></font></font></p></li>
-</ul>
-<h2 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">社区贡献</span></font></h2>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">我们重视来自社区的拉取请求。贡献方式可以是……&nbsp;当代码运行可靠且符合插件现有逻辑时，即可接受。&nbsp;并且界面设计得当，避免在其他附加功能中引入回归问题。&nbsp;不会干扰其他</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">插件或</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">本身，不会&nbsp;削弱插件安全性，且未经许可不得收集用户数据。&nbsp;允许。</span></font></font></p>
-<h2 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">支持与联系</span></font></h2>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">如果您有任何疑问、反馈或需要帮助，请随时联系我。&nbsp;联系开发团队：</span></font></font></p>
-<ul>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">阮英德：
-	</span></font></font><a href="mailto:ducna1803@gmail.com">ducna1803@gmail.com</a>
-	|&nbsp;<a href="https://t.me/anhduc1803">t.me/anhduc1803</a></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">陶德忠：
-	</span></font></font><a href="mailto:trung@ddt.one">trung@ddt.one</a>
-	|&nbsp;<a href="https://t.me/Daoductrung">t.me/Daoductrung</a></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">范雄王：
-	</span></font></font><a href="mailto:hungvuong106206@gmail.com">hungvuong106206@gmail.com</a>
-	|&nbsp;<a href="https://t.me/phamhungvuong302">t.me/phamhungvuong302</a></p></li>
-</ul>
-<h2 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">变更日志</span></font></h2>
-<h3 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">版本
-</span></font>1.0 (2026-08-11)</h3>
-<ul>
-	<li><p style="margin-bottom: 0in"><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">阅读速度更快、更流畅：</span></font></font></p>
-	<ul>
-		<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">对于中等长度和较长的文本，该插件现在使用较短的首字母。&nbsp;先处理一部分，以便演讲能够更快开始，然后再处理剩余部分。&nbsp;文本分段显示。</span></font></font></p></li>
-		<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">该插件可以重用临时保存的已完成语音音频。&nbsp;</span></font></font>RAM<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">。播放前还会缓冲少量音频。&nbsp;减少朗读长文本时的干扰&nbsp;时间。</span></font></font></p></li>
-	</ul>
-	<li><p style="margin-bottom: 0in"><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">更佳的多语言文本处理能力：</span></font></font></p>
-	<ul>
-		<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">句子和短语分隔符现在使用更广泛的官方
-		</span></font></font>Unicode 17.0 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">标准。&nbsp;以及
-		</span></font></font>CLDR 48.2
-		<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">标点符号和书写系统数据。这改进了&nbsp;处理本地化标点符号、缩写、网址&nbsp;表情符号、中文、日文、韩文、泰文以及其他可能包含的文本&nbsp;不要经常使用空格。</span></font></font></p></li>
-		<li><p>“<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">使用自动语言配置文件”功能可以使用此功能&nbsp;更广泛的书写系统覆盖范围，以便选择最有可能的&nbsp;当文本较短或语言较浅时，分析结果会更准确。&nbsp;不清楚。</span></font></font></p></li>
-		<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">暂停设置和章节之间的过渡更加&nbsp;无论音频是从
-		</span></font></font>RAM <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">中重新使用还是新生成，结果都保持一致。</span></font></font></p></li>
-	</ul>
-	<li><p style="margin-bottom: 0in"><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">更响亮、更稳定的语速：</span></font></font></p>
-	<ul>
-		<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">该插件现在使用固定放大倍率来增加默认值&nbsp;响度控制，防止音量异常波动&nbsp;语音。音量设置保持比例，并且&nbsp;保留了对过大峰值的保护功能。</span></font></font></p></li>
-		<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">输出中已经存在一些男性声音的失真。&nbsp;由于它源自原版
-		</span></font></font>WASM TTS
-		<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">引擎，因此该插件无法进行修正。&nbsp;通过后期处理。这些改变提高了响度，并且&nbsp;体积一致性；它们并非旨在减少这种一致性。&nbsp;失真。</span></font></font></p></li>
-	</ul>
-	<li><p style="margin-bottom: 0in"><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">可靠性提升：</span></font></font></p>
-	<ul>
-		<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">如果
-		</span></font></font>Chromium <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器运行时或
-		</span></font></font>WASM TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">引擎在发生故障之前&nbsp;在进行音频处理时，</span></font></font>Google
-		TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">会丢弃失败的运行时。&nbsp;使用新的运行时环境重试一次。如果音频已经开始播放，&nbsp;该插件不会重试，从而防止重复播放部分语音。</span></font></font></p></li>
-		<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">保持
-		</span></font></font><b>Google TTS
-		</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器运行时在后台运行&nbsp;不再保留忙碌、脱节或不健康的环境&nbsp;运行时。</span></font></font></p></li>
-		<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">该插件现在只加载自身捆绑的组件，从而减少了&nbsp;与其他
-		</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">加载的同名组件存在冲突&nbsp;附加组件。</span></font></font></p></li>
-		<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">现在，当</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的音频输出出现问题时，该插件的恢复更加可靠。&nbsp;设备在支持的</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">上发生更改或进入错误状态&nbsp;版本。</span></font></font></p></li>
-	</ul>
-	<li><p style="margin-bottom: 0in"><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">已更新组件和翻译：</span></font></font></p>
-	<ul>
-		<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">将捆绑的
-		</span></font></font>WASM TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">引擎更新到版本
-		</span></font></font>20260806.1<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">。</span></font></font></p></li>
-		<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">已更新翻译以匹配
-		</span></font></font>1.0 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">版本。</span></font></font></p></li>
-	</ul>
-</ul>
-<h3 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">版本
-</span></font>0.6 (2026-07-30)</h3>
-<ul>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">更快的合成器切换：
-	添加了一个可选设置，使其&nbsp;从其他合成器切换到
-	</span></font></font>Google TTS
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">时，速度更快。&nbsp;此设置默认关闭；开启后，可能会占用更多资源。&nbsp;</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">运行时内存占用情况。</span></font></font></p></li>
-	<li><p>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">背景准备：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">启用此设置后，</span></font></font>Google
-	TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">将启动。&nbsp;更改所选内容后，它会更新后台准备工作。&nbsp;</span></font></font>Chromium<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器运行时或安装</span></font></font>/<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">移除语音包。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">切换可靠性：
-	切换离开时的可靠性得到提升&nbsp;来自 </span></font></font>Google
-	TTS<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">，尤其是在语音或嗓音准备期间&nbsp;还在停。</span></font></font></p></li>
-</ul>
-<h3 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">版本
-</span></font>0.5.5 (2026-07-23)</h3>
-<ul>
-	<li><p>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">自动语言配置文件：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">改进的自动语言配置文件&nbsp;匹配
-	</span></font></font>CLD2 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">和
-	</span></font></font>Google TTS
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语言代码别名，包括&nbsp;菲律宾语</span></font></font>/<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">他加禄语、爪哇语、旧式希伯来语代码、挪威语变体、&nbsp;阿拉伯语、简体中文、繁体中文和粤语的地图。</span></font></font></p></li>
-	<li><p><b>CLD2 Windows DLL</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">：
-	使用以下命令重新构建了捆绑的 </span></font></font>CLD2
-	Windows DLL&nbsp;<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">使用
-	</span></font></font>MSVC <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">而不是
-	</span></font></font>MinGW-w64<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">，因此打包的附加组件不再触发&nbsp;</span></font></font>VirusTotal
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">中先前的假阳性抗病毒检测结果&nbsp;测试。</span></font></font></p></li>
-</ul>
-<h3 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">版本
-</span></font>0.5 (2026-07-19)</h3>
-<ul>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">附加组件更新：
-	添加了来自 </span></font></font>Google <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的内置更新检查&nbsp;</span></font></font>TTS
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">用于
-	</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">设置类别，并带有可选的启动检查&nbsp;本地化更新信息、</span></font></font>NVDA
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">程序包下载、移交&nbsp;</span></font></font>NVDA
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的标准插件安装程序，以及对小型热修复程序的支持&nbsp;在同一个公开版本内构建。</span></font></font></p></li>
-	<li><p>**Chromium <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">运行时回退：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">改进了
-	</span></font></font>Chrome<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">、</span></font></font>Edge
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">和
-	</span></font></font>Brave <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器&nbsp;备用方案是让
-	</span></font></font>Google TTS For NVDA
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">尝试使用其他受支持的浏览器。&nbsp;当所选进程无法启动或尚未准备就绪时，运行时</span></font></font>Edge<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">可以&nbsp;如果缺少
-	</span></font></font>WebView2 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">且有其他受支持的
-	</span></font></font>WebView2<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">，则会跳过此步骤。&nbsp;运行时可用。</span></font></font>Google
-	TTS For NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">也会等待并重试。&nbsp;浏览器仍在完成启动，减少了罕见的静默启动。&nbsp;或浏览器连接故障。</span></font></font></p></li>
-	<li><p><b>NVDA </b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">兼容性：
-	提高了与新旧型号的兼容性&nbsp;</span></font></font>NVDA
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">版本涵盖语音、拼写、语音词典、设置等多个方面。&nbsp;合成器切换、全局插件和合成器驱动程序。</span></font></font>Google
-	TTS&nbsp;<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">还能防止
-	</span></font></font>NVDA/<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">应用程序语言更改命令切换到
-	</span></font></font>Google
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语言&nbsp;在保留语言报道所需的声音的同时，也保留这些声音。&nbsp;自动语言配置文件中的字符</span></font></font>/<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">符号处理&nbsp;离开。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">简体中文、繁体中文和俄语&nbsp;本地化：</span></font></font>**
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">添加了简体中文、繁体中文和&nbsp;俄语用户界面翻译和用户文档。中文本地化&nbsp;同时包含本地化的附加组件元数据。</span></font></font></p></li>
-	<li><p>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音可靠性：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">修复了极少数语音中断的情况&nbsp;可以不完整地重放，恢复了</span></font></font>SeaNet<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的音调控制&nbsp;切换语音后，避免了罕见的语音设置错误。&nbsp;来自
-	</span></font></font>Google TTS<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">。新增了“暂停”设置，可选择暂停。&nbsp;缩短语音；在
-	</span></font></font>NVDA
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的语音设置对话框中启用此功能&nbsp;（</span></font></font>[NVDA+Ctrl+V]{.kbd}<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">），详情请参见配置部分。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">状态字段可访问性：
-	运行时自动语言&nbsp;个人资料、更新、语音设置通知和手动
-	</span></font></font>URL <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">回退&nbsp;状态字段更容易集中查看，无需延迟重复操作。&nbsp;公告。</span></font></font></p></li>
-</ul>
-<h3 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">版本
-</span></font>0.4 (2026-07-16)</h3>
-<ul>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">自动语言配置文件：
-	添加了针对每种语言的 </span></font></font>Google <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">文本转语音功能&nbsp;受
-	</span></font></font>[Auto]
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">启发的个人资料&nbsp;</span></font></font>TTS](<a href="https://play.google.com/store/apps/details?id=com.vnspeak.autotts">https://play.google.com/store/apps/details?id=com.vnspeak.autotts</a>)&nbsp;<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">在
-	</span></font></font>Android <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">系统上，请从
-	</span></font></font>Google TTS For NVDA
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">设置中进行配置。&nbsp;类别；每种启用的语言都可以使用自己的变体、速率、速率&nbsp;增强、音调、音量、大写字母行为和拼写行为&nbsp;当此功能开启时，正常的
-	</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音设置仍然可用。&nbsp;已关闭。</span></font></font></p></li>
-	<li><p><b>NVDA </b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">兼容性：
-	提高了与 </span></font></font>NVDA 2024.1 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的兼容性&nbsp;到
-	</span></font></font>2026
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">年，包括更安全的合成器切换，更安全&nbsp;语音处理接口，以及与其他插件交互时的更好行为&nbsp;涵盖了</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的合成器选择。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">多语言长文本阅读：
-	改进的句子和短语&nbsp;对使用非 </span></font></font>ASCII
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">标点符号或脚本的文本进行拆分&nbsp;有限的字间距，包括更宽泛的基于</span></font></font>Unicode<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的标点符号&nbsp;支持多种语言。</span></font></font></p></li>
-	<li><p><b>Chromium </b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">运行时支持：
-	新增对 </span></font></font>Brave <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器的支持&nbsp;运行时，改进了
-	</span></font></font>Chrome/Edge/Brave <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的回退行为&nbsp;</span></font></font>Google
-	TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">适用于
-	</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">设置类别，并澄清了微软&nbsp;仅当使用
-	</span></font></font>Microsoft Edge <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">时才需要
-	</span></font></font>Edge WebView2 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">运行时。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">文档改进：
-	添加了 </span></font></font>GitHub README <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">指南&nbsp;设置自定义
-	</span></font></font>Chrome<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">、</span></font></font>Edge
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">和
-	</span></font></font>Brave <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">可执行文件路径，包括&nbsp;可访问的
-	</span></font></font>Windows GUI <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">步骤，以及扩展的
-	</span></font></font>Edge WebView2&nbsp;<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">故障排除方法请参考插件帮助和
-	</span></font></font>GitHub <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">文档。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">设置辅助功能：
-	添加了未分配的输入手势&nbsp;直接打开 </span></font></font>Google
-	TTS For NVDA
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">设置的命令已改进&nbsp;状态字段，以便屏幕阅读器播报其标签和完整信息。&nbsp;消息传递更加可靠，并且合成器设置响铃也更加醒目。&nbsp;自动语言配置文件通知，而不是改变语音&nbsp;启用此功能时，这些值将保持不变。这将保持配置文件管理的状态。&nbsp;语音参数与</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">的正常语音设置兼容。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音选择与可靠性：
-	增加了更清晰的语音和变体&nbsp;选择、更安全的语音预热、改进的语音管理器包&nbsp;处理能力更强，语音消除响应更灵敏，语音包更安全&nbsp;导入并更正了区域语言名称，例如英语&nbsp;（尼日利亚）。</span></font></font></p></li>
-</ul>
-<h3 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">版本
-</span></font>0.3 (2026-07-12)</h3>
-<ul>
-	<li><p><b>Chromium</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器运行时选择：
-	添加了一个选项，可以选择一个&nbsp;</span></font></font>NVDA
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">设置中直接支持
-	</span></font></font>Chromium <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器运行时（</span></font></font>[NVDA&nbsp;<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">菜单
-	→ 首选项 → 设置 → </span></font></font>Google TTS For
-	NVDA]{.kbd})&nbsp;<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">包括谷歌</span></font></font>Chrome<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器和微软</span></font></font>Edge<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">浏览器。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">连接和缓存稳定性：
-	已将浏览器配置文件存储位置移至&nbsp;</span></font></font><font face="Liberation Mono, monospace">AppData\Local</font>
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">为了在
-	</span></font></font>NVDA <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">重启后保留已编译的
-	</span></font></font>WASM <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">缓存&nbsp;自动隐藏后台浏览器辅助窗口。</span></font></font></p></li>
-	<li><p><b>Google TTS</b><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音管理器增强功能：
-	新增了按以下条件筛选的功能&nbsp;语言下拉菜单、软件包可用性和依赖状态、更安全&nbsp;移除那些会消除所有可用声音的包裹，使之更加安静。&nbsp;进度公告、改进的键盘导航和焦点&nbsp;屏幕阅读器管理、自动检测和清理&nbsp;孤立的语音包。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音响应性和可靠性：
-	固定语音截止点&nbsp;</span></font></font>NVDA<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">启动或合成器切换后的首次语音，减少&nbsp;语音合成延迟降低，语音中断处理能力提升。</span></font></font></p></li>
-	<li><p>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">扩展语音库：</span></font></font>**<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">集成
-	</span></font></font>180 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">个
-	</span></font></font>Google TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音包&nbsp;以及规范化的语言代码（</span></font></font>160
-	<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">个软件包可完全下载）&nbsp;其中一些可以立即使用，而目前还有
-	</span></font></font>20 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">个软件包尚未准备好。&nbsp;与
-	</span></font></font>WASM <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">引擎兼容）。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">本地化和越南语翻译：
-	已完成全部本地化和越南语翻译工作。&nbsp;本地化系统，并添加了完整的越南语翻译。&nbsp;用户界面和文档。</span></font></font></p></li>
-</ul>
-<h3 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">版本
-</span></font>0.2 (2026-07-03)</h3>
-<ul>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">语音库扩展至
-	</span></font></font>100 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">多种语音选项，新增
-	</span></font></font>40 <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">多种。&nbsp;语言</span></font></font>/<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">方言包和谷歌自然语音变体。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">将
-	</span></font></font>WASM TTS <font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">引擎升级到版本
-	</span></font></font>20260625.1<font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">。</span></font></font></p></li>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">为了方便起见，已按区域代码的字母顺序重新排列语音包。&nbsp;导航。</span></font></font></p></li>
-</ul>
-<h3 class="western"><font face="AR PL SungtiL GB"><span lang="zh-CN">版本
-</span></font>0.1.5 (2026-07-02)</h3>
-<ul>
-	<li><p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">初始版本。</span></font></font></p></li>
-</ul>
-<p><font face="AR PL SungtiL GB"><font size="2" style="font-size: 10pt"><span lang="zh-CN">最后编辑于
-</span></font></font>2026-08-11</p>
-<p><br/>
-<br/>
+<body>
+	<h1>Google TTS For NVDA</h1>
+	<p><strong>作者：</strong>Nguyen Anh Duc、Dao Duc Trung 和 Pham Hung Vuong</p>
+	<p>长期以来，屏幕阅读器用户一直希望能在 Windows 版 NVDA 中使用熟悉的 Google 文本转语音技术所提供的语音，获得类似于 Android 屏幕阅读器的体验。</p>
+	<p><strong>Google TTS For NVDA</strong> 正是为了实现这一愿望而开发的。本插件通过 WebAssembly（WASM）使用 Google 文本转语音技术，并在 Google Chrome、Microsoft Edge 或 Brave 等受支持的 Chromium 浏览器运行时中于后台运行，为您的日常电脑使用带来熟悉而自然的 Google 语音。</p>
+	<p>下载所需的语音包后，本插件便可完全在您的电脑上离线运行，无需持续连接互联网即可快速响应并朗读内容。</p>
 
-</p>
+	<h2>主要功能</h2>
+	<ul>
+		<li><strong>完全离线运行：</strong>下载所需的语音包后，语音将在本地处理。</li>
+		<li><strong>丰富的语言和语音：</strong>为受支持的语言提供多种 Google TTS 语音包。</li>
+		<li><strong>响应迅速、延迟较低：</strong>通过文本分段和音频缓冲提高 NVDA 的响应速度。</li>
+		<li><strong>Google TTS 语音管理器：</strong>通过无障碍对话框浏览、下载、移除和查看语音包。</li>
+		<li><strong>选择 Chromium 浏览器运行时：</strong>可选择 Google Chrome、Microsoft Edge 或 Brave 作为受支持的后台浏览器运行时。</li>
+		<li><strong>自动语言配置文件：</strong>可选择为每种语言使用独立配置文件，让不同语言分别使用各自的语音和语音参数。</li>
+		<li><strong>内置插件更新：</strong>可在 NVDA 设置中检查插件更新，也可选择在每次启动时自动检查一次。</li>
+	</ul>
+
+	<h2>系统要求</h2>
+	<ul>
+		<li><strong>NVDA：</strong>2024.1 或更高版本。本插件支持 NVDA 2024 至 2026，包括 32 位（x86）和 64 位（x64）版本。</li>
+		<li><strong>Chromium 浏览器：</strong>电脑上需安装 Google Chrome、Microsoft Edge 或 Brave。如果使用 Microsoft Edge 作为浏览器运行时，还必须安装 Microsoft Edge WebView2 运行时。</li>
+		<li><strong>交互式 Windows 用户会话：</strong>请勿在 Chromium 浏览器运行时无法启动的环境中依赖本插件，例如 Windows 登录界面、安全桌面、Windows PE、恢复环境或其他精简 Windows 会话。</li>
+	</ul>
+
+	<h2>快速入门</h2>
+	<ol>
+		<li>打开 NVDA 的<strong>选择语音合成器</strong>对话框（按 <kbd>NVDA+Ctrl+S</kbd>），然后选择 <strong>Google TTS For NVDA</strong>。</li>
+		<li>如果尚未安装语音包，NVDA 会提示没有可用的 Google TTS For NVDA 语音。按<strong>确定</strong>打开 Google TTS 语音管理器并下载语音包；按<strong>取消</strong>暂时继续使用当前语音合成器。</li>
+		<li>在 Google TTS 语音管理器的<strong>下载</strong>选项卡中，至少下载一个语音包。</li>
+		<li>下载完成后，打开<strong>语音设置</strong>（<kbd>NVDA+Ctrl+V</kbd>），选择您需要的语言和变声。</li>
+	</ol>
+
+	<h2>管理语音</h2>
+	<p>您可以随时打开 Google TTS 语音管理器来添加或移除语音包：</p>
+	<ul>
+		<li>按快捷键 <kbd>NVDA+Ctrl+Shift+G</kbd>；或</li>
+		<li>依次打开 <strong>NVDA 菜单 &rarr; 工具 &rarr; Google TTS 语音管理器……</strong></li>
+	</ul>
+	<p>Google TTS 语音管理器包含两个选项卡：</p>
+	<ul>
+		<li><strong>已安装：</strong>显示已存储在电脑上的语音包。<strong>状态</strong>列会说明每个语音包是否<strong>可用</strong>、是否不受随附引擎支持、是否缺少必需的语音包、是否为其他已安装的语音包所必需，或是否依赖其他语音包。</li>
+		<li><strong>下载：</strong>显示可供下载的语音包。<strong>状态</strong>列会说明语音包是否可以下载、是否需要其他语音包、必需的语音包是否已经安装，或是否为其他可下载语音包所必需。</li>
+	</ul>
+	<p>每个选项卡上的控件依次为：<strong>按语言筛选</strong>、<strong>选中所有语音包</strong>、语音包列表，然后是<strong>移除选中的语音包</strong>或<strong>下载选中的语音包</strong>。对话框中还包含一行<strong>状态</strong>信息，以及<strong>刷新</strong>、<strong>打开语音包文件夹</strong>和<strong>关闭</strong>按钮。</p>
+	<p>要添加语音，请打开<strong>下载</strong>选项卡，选中所需的语音包，然后按<strong>下载选中的语音包</strong>。要移除语音，请打开<strong>已安装</strong>选项卡，选中不再需要的语音包，然后按<strong>移除选中的语音包</strong>。</p>
+	<p>某些语音包依赖其他语音包。下载存在依赖关系的语音包时，语音管理器也可以一并下载必需的语音包。如果要移除的语音包被其他已安装语音包所依赖，语音管理器会将依赖该语音包的其他包一并列入移除范围，以免留下无法使用的语音。</p>
+	<p>语音管理器会防止您误移除最后一个可用的语音包。如果 Google TTS For NVDA 不是当前语音合成器，警告对话框默认选择<strong>否</strong>。如果 Google TTS For NVDA 是当前语音合成器，语音管理器会要求您先切换到其他语音合成器；如果没有完成切换，则会保留最后一个可用的语音包。</p>
+	<p>您可以在任一选项卡中使用<strong>按语言筛选</strong>下拉框，只显示所需语言（例如英语或越南语）的语音包，以便更快找到语音。您还可以点击<strong>打开语音包文件夹</strong>，查看语音包在电脑上的存储位置。</p>
+	<p>语音包的下载和移除均在后台进行，因此您仍可继续使用 NVDA，不会受到干扰。进度提示只会在主要阶段和操作结束时播报，避免每次百分比发生细微变化时都重复提示。</p>
+
+	<h2>配置</h2>
+	<h3>语音设置</h3>
+	<p>无论是否启用自动语言配置文件，NVDA 的语音设置（<kbd>NVDA+Ctrl+V</kbd>）都会为 Google TTS For NVDA 提供<strong>停顿</strong>选项。关闭自动语言配置文件时，其中还会提供以下选项：</p>
+	<ul>
+		<li><strong>语音：</strong>选择已安装的 Google TTS 语言。</li>
+		<li><strong>变声：</strong>选择该语言中的语音名称，包括已经安装的 Chrome OS 和 Google Natural 语音。</li>
+		<li><strong>速度：</strong>调整朗读速度。</li>
+		<li><strong>语速加倍：</strong>启用后将语音速度提高一倍，适合高速阅读。</li>
+		<li><strong>音调：</strong>调整语音的音调。</li>
+		<li><strong>音量：</strong>调整语音音量。</li>
+	</ul>
+	<p><strong>停顿：</strong>可选择保持停顿不变、仅缩短文本末尾的停顿，或缩短朗读过程中的所有停顿以加快阅读。此设置适用于所有 Google TTS 语音。</p>
+
+	<h3>插件设置</h3>
+	<p>依次打开 <strong>NVDA 菜单 &rarr; 选项 &rarr; 设置 &rarr; Google TTS For NVDA</strong>，可以配置以下选项：</p>
+	<ul>
+		<li><strong>Chromium 浏览器运行时：</strong>选择 Google Chrome、Microsoft Edge 或 Brave 作为本插件的后台 Chromium 浏览器运行时。设置面板会显示各浏览器是否可用。</li>
+		<li><strong>Chromium 浏览器运行时状态：</strong>查看所选运行时、浏览器可用性，以及发生回退时实际使用的运行时。</li>
+		<li><strong>让 Google TTS 浏览器运行时在后台保持就绪：</strong>启用后，即使当前正在使用其他语音合成器，Google TTS 也可以提前准备浏览器运行时和当前语音包，从而加快切换回 Google TTS 的速度。此选项默认关闭。启用后按“确定”或“应用”，可能会占用更多内存，并会使运行时文件保持打开，直到您关闭此选项或退出 NVDA。</li>
+		<li><strong>后台浏览器运行时状态：</strong>查看此功能是已关闭、因 Google TTS 已是当前语音合成器而无需运行，还是正在等待您按“确定”或“应用”后启动。</li>
+		<li><strong>使用自动语言配置文件：</strong>启用自动选择配置文件，并显示下文所述的配置文件控件。</li>
+		<li><strong>首选配置文件语言：</strong>选择一个已启用的配置文件语言，在句子语言不明确时使用。在启用至少一个语言配置文件之前，此列表可能为空。</li>
+		<li><strong>自动语言配置文件：</strong>选择要编辑的已安装语言配置文件。</li>
+		<li><strong>使用此语言配置文件：</strong>启用所选的语言配置文件。</li>
+		<li><strong>变声、速度、语速加倍、音调、音量、大写时音高变化的百分比、遇到大写字母时先提示“大写”、遇到大写字母时发出提示音、在合成器支持的情况下激活拼读功能：</strong>为所选并已启用的配置文件设置语音参数。</li>
+		<li><strong>自动语言配置文件状态：</strong>查看自动语言配置文件是已关闭、不可用、尚未选择配置文件，还是正在使用。</li>
+		<li><strong>更新：</strong>包含下列插件更新控件。</li>
+		<li><strong>NVDA 启动时自动检查插件更新：</strong>让 Google TTS For NVDA 在下次启动 NVDA 后检查一次更新。此选项默认关闭。</li>
+		<li><strong>插件更新状态：</strong>查看已安装的插件版本、启动时自动检查是开启还是关闭，以及当前是否正在检查。</li>
+		<li><strong>检查更新……：</strong>手动检查最新的稳定版插件。</li>
+	</ul>
+	<p>也可以通过自定义按键或手势打开 Google TTS For NVDA 设置类别。此命令默认没有分配快捷键；请依次打开 <strong>NVDA 菜单 &rarr; 选项 &rarr; 按键与手势</strong>，在 <strong>Google TTS For NVDA</strong> 类别中进行分配。</p>
+
+	<h3>插件更新</h3>
+	<p>依次打开 <strong>NVDA 菜单 &rarr; 选项 &rarr; 设置 &rarr; Google TTS For NVDA</strong>，然后按<strong>检查更新……</strong>以检查最新稳定版。如果插件已是最新版本、无法连接互联网或无法识别服务器返回的更新信息，手动检查都会显示一个带“确定”按钮的对话框。</p>
+	<p>有新版本时，Google TTS For NVDA 会显示<strong>更新信息</strong>对话框，其中包含下载大小、NVDA 版本最低要求、最后测试的 NVDA 版本和更新日志。选择<strong>是</strong>可在 NVDA 中下载 <code>.nvda-addon</code> 安装包。下载期间，<strong>正在下载 Google TTS For NVDA 更新</strong>对话框会显示<strong>下载状态</strong>、可在大小已知时显示的进度条，以及<strong>取消</strong>按钮。本插件会根据更新清单中的文件大小和 SHA256 校验值验证下载的文件，然后打开 NVDA 的标准插件安装程序。</p>
+	<p>启动时自动检查更新默认关闭。启用后，Google TTS For NVDA 会在下次启动 NVDA 后检查一次，除非发现新版本，否则不会发出提示。无论自动检查是否开启，您都可以手动检查。如果打开设置类别时后台启动检查仍在进行，手动检查按钮将暂时禁用，直到检查完成。更改<strong>NVDA 启动时自动检查插件更新</strong>复选框只会影响以后启动 NVDA 时的行为，不会中断已经开始的检查。</p>
+	<p>更新程序还可以识别同一公开版本号下的小型修补版本。这样，维护者无需更改显示的版本号即可发布兼容性或可靠性修复；如果发布元数据表明已有较新的构建，NVDA 仍可提供该更新。</p>
+
+	<h3>自动语言配置文件</h3>
+	<p>启用<strong>使用自动语言配置文件</strong>后，检测到的句子会使用本插件针对各语言设置的配置文件，而不是 NVDA 的常规语音设置。如果只启用了一个语言配置文件，则每个句子都会使用该配置文件。关闭自动语言配置文件后，常规的 Google TTS 语言和变声设置会重新可用。</p>
+	<p>自动语言配置文件在 32 位（x86）和 64 位（x64）NVDA 中分别使用随附的 CLD2 检测器库。只有当 CLD2 的检测结果足够可靠，并且对应某种已启用的语言时，才会采用该结果。如果文本太短或语言不明确，本插件会尽量使用保守的本地语言特征，仍无法确定时则回退到已启用的首选语言。</p>
+	<ol>
+		<li>依次打开 <strong>NVDA 菜单 &rarr; 选项 &rarr; 设置 &rarr; Google TTS For NVDA</strong>。</li>
+		<li>启用<strong>使用自动语言配置文件</strong>。</li>
+		<li>移动到<strong>首选配置文件语言</strong>。此列表只显示已启用的语言，因此在启用配置文件前可能为空。</li>
+		<li>选择一个<strong>自动语言配置文件</strong>。</li>
+		<li>为希望自动使用的每种语言选中<strong>使用此语言配置文件</strong>复选框。未选中此复选框时，该语言配置文件处于关闭状态。</li>
+		<li>为每种已启用的语言设置<strong>变声</strong>、<strong>速度</strong>、<strong>语速加倍</strong>、<strong>音调</strong>、<strong>音量</strong>、<strong>大写时音高变化的百分比</strong>、<strong>遇到大写字母时先提示“大写”</strong>、<strong>遇到大写字母时发出提示音</strong>和<strong>在合成器支持的情况下激活拼读功能</strong>。</li>
+		<li>返回<strong>首选配置文件语言</strong>，选择在句子语言不明确时使用的已启用语言。</li>
+	</ol>
+	<p>速度、音调和音量使用与 NVDA 语音设置相似的滑块控件。大写时的音高变化使用数字编辑框或微调框，便于精确调整。</p>
+	<p>NVDA 全局设置中的标点符号级别、自动方言切换、读出语言变化、Unicode 规范化、处理字符和符号时包含 Unicode 联盟提供的数据（包括表情符号）、其他符号发音词典、移动光标后读出字符解释和语音模式选项，仍保留在 NVDA 的语音设置中。</p>
+	<p>Google TTS 会忽略 NVDA 自身针对本语音合成器发出的自动语言切换和自动方言切换命令，因此这些全局选项不会强制 Google TTS 切换语音。需要本插件自动选择语音或配置文件时，请使用 Google TTS 的自动语言配置文件。如果启用了 NVDA 的<strong>读出语言变化</strong>选项，则在自动语言配置文件开启时，所报告的语言名称会跟随 Google TTS 的检测结果。关闭自动语言配置文件后，NVDA 仍可使用应用程序提供的语言切换信息来报告语言并处理字符和符号，包括标点符号发音词典，但 Google TTS 不会根据这些命令切换语音。</p>
+	<p>自动语言配置文件会在 NVDA 处理文本之前设置语言上下文，因此 NVDA 的符号读法和语音字典处理仍会在所选语言上下文的常规语音流程中进行。</p>
+	<p>关闭自动语言配置文件时，NVDA 语音字典会照常用于当前选中的 Google TTS 变声。启用自动语言配置文件时，本插件会在 NVDA 处理相应文本段期间，临时使用各已启用语言配置文件所选变声的语音字典。NVDA 的默认字典和临时字典仍按其常规方式工作。</p>
+	<p>启用自动语言配置文件后，NVDA 的语音设置中不会为此语音合成器提供常规的语音、变声、速度、语速加倍、音调和音量控件，而会显示一条可获得焦点的提示，引导您前往 Google TTS For NVDA 设置类别。<strong>停顿</strong>仍保留在语音设置中，并适用于所有 Google TTS 语音。在此模式下，常规的循环切换合成器设置命令（例如台式机键盘上的 <kbd>NVDA+Ctrl+方向键</kbd>，或笔记本键盘上的 <kbd>NVDA+Shift+Ctrl+方向键</kbd>）会读出这条提示，而不会更改 Google TTS 的语音或语音参数。启用自动语言配置文件时，Google TTS 还会使用每个已启用配置文件中的大写字母和拼读选项；关闭该功能后，语音设置中的常规值会重新可用。Google TTS For NVDA 设置类别中的状态信息也可通过 Tab 键获得焦点，以便屏幕阅读器读出。</p>
+
+	<h2>解决 Edge 运行时无声问题</h2>
+	<p>如果选择 <strong>Microsoft Edge</strong> 作为 Chromium 浏览器运行时，Google TTS For NVDA 还会检查 Microsoft Edge WebView2 运行时是否可用。即使已经安装 Edge，WebView2 仍可能缺失或损坏，此时本插件无法通过 Edge 朗读。Google Chrome 和 Brave 不依赖 WebView2。</p>
+	<p>WebView2 是 Windows 原生应用程序用来承载网页内容的 Microsoft Edge 运行时。它与 Microsoft Edge 有关，但普通 Edge 浏览器可用并不一定意味着应用程序所需的 WebView2 运行时已经安装且状态正常。Microsoft 建议应用程序使用 Evergreen WebView2 运行时，因为它由多个应用共享并会自动更新；体积较小的 Evergreen Bootstrapper 会下载与设备架构匹配的运行时。</p>
+	<p>需要 WebView2 时，Google TTS For NVDA 会提供以下按钮：下载 Microsoft 的在线 Evergreen Bootstrapper、打开 Microsoft WebView2 页面以获取离线安装程序或固定版本包，或者稍后再处理。在 WebView2 可用之前，NVDA 会继续使用先前的语音合成器。</p>
+	<p>如果 Windows 无法打开下载页面，本插件会在带有标签的只读编辑框中显示下载地址，并提供<strong>复制链接</strong>按钮，以便您将地址手动粘贴到浏览器中。</p>
+	<p>如果电脑可以联网，请从以下地址下载 Microsoft Edge WebView2 Evergreen Bootstrapper：<a href="https://go.microsoft.com/fwlink/p/?LinkId=2124703">下载 Microsoft Edge WebView2 运行时</a>。</p>
+	<p>运行安装程序，重启 NVDA，然后重新选择 <strong>Google TTS For NVDA</strong>。如需离线安装程序或固定版本的 WebView2 运行时包，请打开 Microsoft WebView2 页面：<a href="https://developer.microsoft.com/microsoft-edge/webview2">Microsoft Edge WebView2</a>。</p>
+
+	<h2>注意事项</h2>
+	<ul>
+		<li>使用 NVDA 时，无需让 Google Chrome、Microsoft Edge 或 Brave 浏览器窗口保持打开。本插件会自动在后台连接并处理语音。</li>
+		<li>NVDA 启动后首次朗读时，语音初始化可能需要片刻时间。</li>
+	</ul>
+
+	<h2>社区贡献</h2>
+	<p>我们重视社区提交的拉取请求。如果贡献中的代码运行可靠、符合本插件现有的逻辑和界面、不在其他功能中引入回归、不干扰其他 NVDA 插件或 NVDA 本身、不削弱插件安全性，并且未经许可不收集用户数据，该贡献即可被接受。</p>
+
+	<h2>支持与联系</h2>
+	<p>如果您有任何问题、反馈或需要帮助，欢迎联系插件开发团队：</p>
+	<ul>
+		<li><strong>Nguyen Anh Duc：</strong><a href="mailto:ducna1803@gmail.com">ducna1803@gmail.com</a> | <a href="https://t.me/anhduc1803">t.me/anhduc1803</a></li>
+		<li><strong>Dao Duc Trung：</strong><a href="mailto:trung@ddt.one">trung@ddt.one</a> | <a href="https://t.me/Daoductrung">t.me/Daoductrung</a></li>
+		<li><strong>Pham Hung Vuong：</strong><a href="mailto:hungvuong106206@gmail.com">hungvuong106206@gmail.com</a> | <a href="https://t.me/phamhungvuong302">t.me/phamhungvuong302</a></li>
+	</ul>
+
+	<h2>更新日志</h2>
+	<h3>1.0 版（2026-08-11）</h3>
+	<ul>
+		<li><strong>朗读启动更快、过程更顺畅：</strong>
+			<ul>
+				<li>对于中长文本，本插件会先处理较短的首段，让语音更快开始，然后以较大的分段继续处理剩余文本。</li>
+				<li>本插件可以复用暂存在 RAM 中的已生成音频。在开始播放前也会缓冲少量音频，以减少首次朗读长文本时出现的中断。</li>
+			</ul>
+		</li>
+		<li><strong>更好地处理多语言文本：</strong>
+			<ul>
+				<li>句子和短语分段现在使用范围更广的 Unicode 17.0 和 CLDR 48.2 官方标点及书写系统数据，从而改进对本地化标点、缩写、网址、表情符号、中日韩文字、泰语，以及其他通常不以空格分词的文本的处理。</li>
+				<li><strong>使用自动语言配置文件</strong>功能可以利用更广泛的书写系统覆盖，在文本较短或语言不明确时更准确地选择最可能的配置文件。</li>
+				<li>无论音频是从 RAM 中复用还是重新生成，<strong>停顿</strong>设置和各分段之间的衔接都更加一致。</li>
+			</ul>
+		</li>
+		<li><strong>音量更大、更稳定：</strong>
+			<ul>
+				<li>本插件现在使用固定增益提高默认音量，防止朗读过程中音量异常地忽高忽低。<strong>音量</strong>设置仍按比例调节，并继续防止过高的峰值。</li>
+				<li>部分男声的失真已经存在于原始 WASM TTS 引擎的输出中，因此本插件无法通过后期处理加以修复。这些更改旨在改善音量大小和稳定性，并非为了降低此类失真。</li>
+			</ul>
+		</li>
+		<li><strong>提高可靠性：</strong>
+			<ul>
+				<li>如果 Chromium 浏览器运行时或 WASM TTS 引擎在输出音频前发生故障，Google TTS 会丢弃异常的运行时，并使用新运行时重试一次。如果音频已经开始播放，本插件不会重试，以免重复朗读不完整的内容。</li>
+				<li><strong>让 Google TTS 浏览器运行时在后台保持就绪</strong>设置不再保留正忙、连接已断开或状态异常的运行时。</li>
+				<li>本插件现在只加载自身随附的组件，从而减少与其他 NVDA 插件中同名组件发生冲突的情况。</li>
+				<li>在受支持的 NVDA 版本中，如果 NVDA 音频输出设备发生变化或进入错误状态，本插件可以更可靠地恢复。</li>
+			</ul>
+		</li>
+		<li><strong>更新组件和翻译：</strong>
+			<ul>
+				<li>将随附的 WASM TTS 引擎更新至 20260806.1 版。</li>
+				<li>更新翻译，使其与 1.0 版保持一致。</li>
+			</ul>
+		</li>
+	</ul>
+
+	<h3>0.6 版（2026-07-30）</h3>
+	<ul>
+		<li><strong>更快地切换语音合成器：</strong>新增可选设置，使用户从其他语音合成器切换到 Google TTS 时能够更快就绪。此设置默认关闭；开启后，NVDA 运行期间可能会占用更多内存。</li>
+		<li><strong>后台准备：</strong>启用此设置后，如果您更改所选 Chromium 浏览器运行时，或者安装或移除语音包，Google TTS 会重新进行后台准备。</li>
+		<li><strong>提高切换可靠性：</strong>提高从 Google TTS 切换到其他语音合成器时的可靠性，尤其是在朗读或语音准备任务尚未完全停止时。</li>
+	</ul>
+
+	<h3>0.5.5 版（2026-07-23）</h3>
+	<ul>
+		<li><strong>自动语言配置文件：</strong>改进 CLD2 与 Google TTS 语言代码别名之间的自动语言配置文件匹配，包括菲律宾语/他加禄语、爪哇语、旧版希伯来语代码、挪威语变体、阿拉伯语，以及简体中文、繁体中文和粤语的映射。</li>
+		<li><strong>CLD2 Windows DLL：</strong>改用 MSVC 而非 MinGW-w64 重新构建随附的 CLD2 Windows DLL，使打包后的插件不再触发此前 VirusTotal 检测中的误报。</li>
+	</ul>
+
+	<h3>0.5 版（2026-07-19）</h3>
+	<ul>
+		<li><strong>插件更新：</strong>在 Google TTS For NVDA 设置类别中新增内置更新检查，包括可选的启动时检查、本地化更新信息、在 NVDA 内下载安装包、交由 NVDA 标准插件安装程序处理，以及支持同一公开版本号下的小型修补版本。</li>
+		<li><strong>Chromium 运行时回退：</strong>改进 Chrome、Edge 和 Brave 之间的回退机制。如果所选浏览器运行时无法启动或尚未就绪，Google TTS For NVDA 可以尝试其他受支持的运行时。如果 Edge 缺少 WebView2，而其他受支持的运行时可用，现在可以跳过 Edge。Google TTS For NVDA 还会在浏览器仍在完成启动时等待并重试，从而减少少见的启动无声或浏览器连接失败。</li>
+		<li><strong>NVDA 兼容性：</strong>改进新旧 NVDA 版本中的语音、拼读、语音字典、设置、语音合成器切换、全局插件和语音合成器驱动兼容性。Google TTS 还会阻止 NVDA 或应用程序的语言切换命令改变 Google 语音；关闭自动语言配置文件时，这些命令仍可用于报告语言以及处理字符和符号。</li>
+		<li><strong>简体中文、繁体中文和俄语本地化：</strong>新增简体中文、繁体中文和俄语界面翻译及用户文档。两个中文区域设置还包含本地化的插件元数据。</li>
+		<li><strong>语音可靠性：</strong>修复语音中断后偶尔重复播放不完整内容的问题，恢复 SeaNet 语音的音调控制，并避免切换到其他语音合成器后偶尔出现语音设置错误。新增可选的<strong>停顿</strong>缩短设置；可在 NVDA 语音设置（<kbd>NVDA+Ctrl+V</kbd>）中启用，详情请参阅“配置”一节。</li>
+		<li><strong>状态字段无障碍改进：</strong>使运行时、自动语言配置文件、更新、语音设置提示和手动网址回退等状态字段更容易获得焦点和查看，且不会延迟重复播报。</li>
+	</ul>
+
+	<h3>0.4 版（2026-07-16）</h3>
+	<ul>
+		<li><strong>自动语言配置文件：</strong>新增受 Android 上 <a href="https://play.google.com/store/apps/details?id=com.vnspeak.autotts">Auto TTS</a> 启发的 Google TTS 分语言配置文件。可在 Google TTS For NVDA 设置类别中进行配置；每种已启用的语言都可使用自己的变声、速度、语速加倍、音调、音量、大写字母处理和拼读方式；关闭此功能后，NVDA 的常规语音设置仍可使用。</li>
+		<li><strong>NVDA 兼容性：</strong>改进对 NVDA 2024.1 至 2026 的兼容性，包括更安全地切换语音合成器和使用语音处理钩子；其他插件封装 NVDA 的语音合成器选择功能时也能更可靠地工作。</li>
+		<li><strong>多语言长文本朗读：</strong>改进使用非 ASCII 标点或词间空格较少的文字系统中的句子和短语分段，扩大基于 Unicode 的标点处理范围，以支持更多语言。</li>
+		<li><strong>Chromium 运行时支持：</strong>新增 Brave 浏览器运行时支持，改进 Google TTS For NVDA 设置类别中 Chrome、Edge 和 Brave 的回退行为，并明确说明只有使用 Microsoft Edge 时才需要 Microsoft Edge WebView2 运行时。</li>
+		<li><strong>文档改进：</strong>在 GitHub README 中新增自定义 Chrome、Edge 和 Brave 可执行文件路径的说明，包括无障碍 Windows 图形界面操作步骤；同时扩展插件帮助和 GitHub 文档中的 Edge WebView2 故障排除内容。</li>
+		<li><strong>设置无障碍改进：</strong>新增一个默认未分配的“按键与手势”命令，可直接打开 Google TTS For NVDA 设置；改进状态字段，使屏幕阅读器能够更可靠地读出标签和完整信息；启用自动语言配置文件后，循环切换合成器设置命令会读出相关提示，而不是更改语音参数。这可以让配置文件管理的语音参数与 NVDA 的常规语音设置保持兼容。</li>
+		<li><strong>语音选择和可靠性：</strong>使语音与变声的选择更加清晰，更安全地预热语音，改进语音管理器的语音包处理、语音中断响应和语音包导入安全性，并修正英语（尼日利亚）等区域语言名称。</li>
+	</ul>
+
+	<h3>0.3 版（2026-07-12）</h3>
+	<ul>
+		<li><strong>选择 Chromium 浏览器运行时：</strong>新增可直接在 NVDA 设置（<kbd>NVDA 菜单 &rarr; 选项 &rarr; 设置 &rarr; Google TTS For NVDA</kbd>）中选择受支持 Chromium 浏览器运行时的选项，包括 Google Chrome 和 Microsoft Edge。</li>
+		<li><strong>连接和缓存稳定性：</strong>将浏览器配置文件存储位置移至 <code>AppData\Local</code>，以便 NVDA 重启后保留已编译的 WASM 缓存，并自动隐藏后台浏览器辅助窗口。</li>
+		<li><strong>Google TTS 语音管理器改进：</strong>新增<strong>按语言筛选</strong>下拉框、语音包可用性和依赖状态；更安全地处理可能导致没有可用语音的移除操作；减少进度提示；改进屏幕阅读器的键盘导航和焦点管理；并自动检测和清理孤立的语音包。</li>
+		<li><strong>语音响应和可靠性：</strong>修复 NVDA 启动后或切换语音合成器后的第一次朗读被截断的问题，降低语音合成延迟，并改进语音中断处理。</li>
+		<li><strong>扩展语音目录：</strong>集成 180 个 Google TTS 语音包并统一语言代码，其中 160 个语音包可以直接下载并正常使用，另有 20 个目前尚不兼容 WASM 引擎。</li>
+		<li><strong>本地化和越南语翻译：</strong>实现完整的本地化系统，并新增完整的越南语界面和文档翻译。</li>
+	</ul>
+
+	<h3>0.2 版（2026-07-03）</h3>
+	<ul>
+		<li>将语音目录扩展至 100 多种语音，新增 40 多个语言或方言语音包以及 Google Natural 语音变体。</li>
+		<li>将 WASM TTS 引擎升级至 20260625.1 版。</li>
+		<li>按区域设置代码的字母顺序重新排列语音包，以便浏览。</li>
+	</ul>
+
+	<h3>0.1.5 版（2026-07-02）</h3>
+	<ul>
+		<li>首次发布。</li>
+	</ul>
+	<p>最后编辑日期：2026-08-13</p>
 </body>
 </html>
