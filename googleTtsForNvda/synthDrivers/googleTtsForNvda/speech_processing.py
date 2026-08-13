@@ -197,7 +197,7 @@ def pcm_has_audible_sample(
 
 
 class PcmSilenceShortener:
-	"""Shorten final or all silent PCM runs without copying individual samples."""
+	"""Shorten final or all silent PCM runs with a streaming block fast path."""
 
 	def __init__(
 		self,
@@ -215,7 +215,10 @@ class PcmSilenceShortener:
 		self._bytesPerSample = bytesPerSample
 		self._heldSilence = bytearray()
 		self._partialSample = bytearray()
+		self._pendingBlock = bytearray()
 		self._keepSilenceBytes = pcm_bytes_for_milliseconds(keepSilenceMs, sampleRate, bytesPerSample)
+		self._blockSizeSamples = max(1, sampleRate // 200)  # 5ms blocks
+		self._blockSizeBytes = self._blockSizeSamples * bytesPerSample
 
 	def _release_held_silence(self, *, final: bool) -> bytes:
 		if not self._heldSilence:
@@ -237,19 +240,16 @@ class PcmSilenceShortener:
 		if bytesNeeded > 0:
 			self._heldSilence.extend(pcm[:bytesNeeded])
 
-	def feed(self, pcm: bytes) -> bytes:
+	def _process_block(self, pcm: bytes) -> bytes:
 		if not pcm:
 			return b""
-		if self._partialSample:
-			pcm = bytes(self._partialSample) + pcm
-			self._partialSample.clear()
-		pcmLength = align_pcm_bytes(len(pcm), self._bytesPerSample)
-		if pcmLength < len(pcm):
-			self._partialSample.extend(pcm[pcmLength:])
-		if pcmLength <= 0:
-			return b""
-		pcm = pcm[:pcmLength]
 		samples = memoryview(pcm).cast("h")
+		if min(samples) >= -self._noiseFloor and max(samples) <= self._noiseFloor:
+			self._hold_silence(pcm)
+			return b""
+
+		# Mixed blocks contain a silence/audio transition. Preserve sample-accurate
+		# boundaries here while uniform silence blocks use the cheaper fast path above.
 		output = bytearray()
 		runStart = 0
 		runIsSilence = -self._noiseFloor <= samples[0] <= self._noiseFloor
@@ -265,7 +265,7 @@ class PcmSilenceShortener:
 				output.extend(run)
 			runStart = sampleIndex
 			runIsSilence = isSilence
-		run = pcm[runStart * self._bytesPerSample : pcmLength]
+		run = pcm[runStart * self._bytesPerSample :]
 		if runIsSilence:
 			self._hold_silence(run)
 		else:
@@ -273,10 +273,46 @@ class PcmSilenceShortener:
 			output.extend(run)
 		return bytes(output)
 
-	def finish(self) -> bytes:
+	def feed(self, pcm: bytes) -> bytes:
+		if not pcm:
+			return b""
+		if self._partialSample:
+			pcm = bytes(self._partialSample) + pcm
+			self._partialSample.clear()
+		pcmLength = align_pcm_bytes(len(pcm), self._bytesPerSample)
+		if pcmLength < len(pcm):
+			self._partialSample.extend(pcm[pcmLength:])
+		if pcmLength <= 0:
+			return b""
+		pcm = pcm[:pcmLength]
+		if self._pendingBlock:
+			pcm = bytes(self._pendingBlock) + pcm
+			self._pendingBlock.clear()
+		completeLength = len(pcm) - (len(pcm) % self._blockSizeBytes)
+		if completeLength < len(pcm):
+			self._pendingBlock.extend(pcm[completeLength:])
+		output = bytearray()
+		for blockStart in range(0, completeLength, self._blockSizeBytes):
+			blockEnd = blockStart + self._blockSizeBytes
+			output.extend(self._process_block(pcm[blockStart:blockEnd]))
+		return bytes(output)
+
+	def _flush(self, *, shortenPause: bool) -> bytes:
 		# A partial 16-bit sample is malformed input and cannot be sent to WavePlayer.
 		self._partialSample.clear()
-		return self._release_held_silence(final=True)
+		output = bytearray()
+		if self._pendingBlock:
+			output.extend(self._process_block(bytes(self._pendingBlock)))
+			self._pendingBlock.clear()
+		output.extend(self._release_held_silence(final=shortenPause))
+		return bytes(output)
+
+	def flush_boundary(self, *, shortenPause: bool) -> bytes:
+		"""Flush a hidden-segment boundary without treating it as the end of all text."""
+		return self._flush(shortenPause=shortenPause)
+
+	def finish(self) -> bytes:
+		return self._flush(shortenPause=True)
 
 
 class PcmLeadBuffer:
@@ -362,7 +398,7 @@ def segment_audio_cache_key(
 	hasNextSegment: bool,
 	maxChars: int = SHORT_CACHE_MAX_CHARS,
 ) -> tuple[Any, ...] | None:
-	"""Build a cache key for PCM whose boundary trimming context is complete."""
+	"""Build a cache key for PCM whose hidden-boundary context is complete."""
 	if not text or len(text) > maxChars:
 		return None
 	# Tempo and post-pitch processors carry overlap state across hidden segment

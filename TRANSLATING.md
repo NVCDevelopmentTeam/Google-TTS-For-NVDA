@@ -14,7 +14,7 @@ Documentation is translated separately:
 googleTtsForNvda/doc/<language>/readme.html
 ```
 
-The English source-string template lives at:
+The English source-string template is generated at:
 
 ```text
 googleTtsForNvda/locale/nvda.pot
@@ -154,6 +154,14 @@ On WSL/Linux, use `python3` instead of `python`:
 python3 build_i18n.py --extract-template
 ```
 
+The generated template is written to:
+
+```text
+googleTtsForNvda/locale/nvda.pot
+```
+
+`nvda.pot` is intentionally ignored by Git, so it is not present in a fresh clone and should not be included in a pull request. Generate it locally, then use your translation editor's **Update from POT file** command to merge its current source strings into the existing `nvda.po`. Do not replace an existing translated `.po` file with the `.pot` file, because that would discard its translations.
+
 After editing a translation, check it first:
 
 ```powershell
@@ -182,7 +190,7 @@ googleTtsForNvda/locale
 
 For Vietnamese specifically, replace `<language>` with `vi`.
 
-`build.bat` runs `python build_i18n.py --all-languages` automatically before packaging the add-on, so packaging does not stop at the interactive menu. `build.sh`, the WSL/Linux equivalent of `build.bat`, does the same thing with `python3 build_i18n.py --all-languages`.
+Translation work is intentionally separate from add-on packaging. `build.bat` and `build.sh` do not generate `nvda.pot`, check translations, or build localized files. This prevents add-on packaging from failing merely because another locale is still being updated. Translators should run `build_i18n.py` explicitly for their own locale; release maintainers should validate and build the required locales before running the package build script.
 
 For the interactive numbered menu, run:
 
@@ -269,4 +277,4 @@ On WSL, NVDA itself is installed on the Windows side, not inside the Linux files
 python3 build_i18n.py --check --strict --language vi --nvda-locale-dir "/mnt/c/Program Files/NVDA/locale"
 ```
 
-`build.sh` does this automatically: it checks whether `/mnt/c/Program Files/NVDA/locale` exists and, if so, passes it as `--nvda-locale-dir` before running `--all-languages`. If that path is not found (a different Windows drive letter, a portable NVDA install, or a non-WSL Linux machine with no Windows side at all), `build_i18n.py` prints `[WARN] NVDA locale folder was not found; language-code support check is skipped.` and continues without failing the build.
+`build.sh` does not run the translation workflow, so pass `--nvda-locale-dir` explicitly when running `build_i18n.py` from WSL. If no readable NVDA locale folder is found, `build_i18n.py` prints `[WARN] NVDA locale folder was not found; language-code support check is skipped.` and continues without failing the translation check or build.
